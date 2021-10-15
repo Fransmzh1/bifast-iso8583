@@ -1,0 +1,40 @@
+<assembly>
+    <id>dir</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <baseDirectory>/</baseDirectory>
+    <includeSiteDirectory>false</includeSiteDirectory>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <useProjectArtifact>false</useProjectArtifact>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>config/*.properties</include>
+                <include>run.bat</include>
+                <include>config/*.xml</include>
+                <include>config/*.txt</include>
+                <include>config/deploy/*.xml</include>
+                <include>config/packager/*.xml</include>
+                <include>logs/q2.log</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+    <files>
+        <file>
+            <source>target/${artifactId}.jar.original</source>
+            <fileMode>0644</fileMode>
+        </file>
+    </files>
+</assembly>

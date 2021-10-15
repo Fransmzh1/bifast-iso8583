@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<srv name="komi-iso8583" class="org.jpos.q2.iso.QServer" logger="Q2">
+    <attr name="port" type="java.lang.Integer">10001</attr>
+    <attr name="minSessions" type="java.lang.Integer">1</attr>
+    <attr name="maxSessions" type="java.lang.Integer">100</attr>
+    <channel class="org.jpos.iso.channel.NACChannel" packager="org.jpos.iso.packager.GenericPackager" logger="Q2">
+       <property name="packager-config" value="src/main/resources/config/packager/iso87ascii.xml" />
+    </channel>
+    <property name="allow" value="127.0.0.1"/>
+    <in>komi-iso8583-in</in>
+    <out>komi-iso8583-out</out>
+</srv>
+
