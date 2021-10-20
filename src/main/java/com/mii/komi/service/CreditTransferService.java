@@ -42,7 +42,7 @@ public class CreditTransferService implements InboundService {
         String destinationDateTime = dt2.format(dateTime);
         
         ISOMsg iso = isoService.buildFinancialMsg(
-                requestMsg.getTransactionId(), destinationDateTime, "000");
+                "389100", requestMsg.getNoRef(), "000");
         iso.set(48, sb.toString());
         return iso;
     }
@@ -54,11 +54,11 @@ public class CreditTransferService implements InboundService {
         CreditTransferInboundResponse rsp = new CreditTransferInboundResponse();
         int cursor = 0;
         int endCursor = 4;
-        rsp.setStatus(privateData.substring(cursor, endCursor));
+        //rsp.setResponseCode(privateData.substring(cursor, endCursor));
         
         cursor = cursor + endCursor;
         endCursor = cursor + 35;
-        rsp.setReason(privateData.substring(cursor, endCursor));
+        //rsp.setResponseMessage(privateData.substring(cursor, endCursor));
         
         cursor = cursor + endCursor;
         endCursor = cursor + 140;

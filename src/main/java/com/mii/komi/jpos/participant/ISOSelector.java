@@ -26,7 +26,7 @@ public class ISOSelector implements GroupSelector, Configurable {
     @Override
     public String select(long l, Serializable serializable) {
         Context ctx = (Context) serializable;
-        ISOMsg resIsoMsg = (ISOMsg) ctx.get(Constants.REQUEST_KEY);
+        ISOMsg resIsoMsg = (ISOMsg) ctx.get(Constants.ISO_REQUEST);
         String selector = "";
         String fieldNumber = configuration.get("fieldNumber");
         try {

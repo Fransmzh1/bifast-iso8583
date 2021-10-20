@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<txnmgr name="inbound-txn" logger="Q2" class="org.jpos.transaction.TransactionManager">
+    <property name="queue" value="txnmgr-as400" />
+    <property name="sessions" value="5" />
+    <property name="debug" value="true" />
+    <participant class="com.mii.komi.jpos.participant.RESTSelector" name="Selector" logger="Q2">
+        <property name="AccountEnquiryRequest" value="AccountEnquiry SendAndReceiveToCore" />
+    </participant>
+    <participant class="com.mii.komi.jpos.participant.RESTResponseParticipant" logger="Q2"/>
+    
+    <group name="AccountEnquiry">
+        <participant class="com.mii.komi.jpos.participant.AccountEnquiryInboundParticipant" logger="Q2" />
+    </group>
+    
+    <group name="SendAndReceiveToCore">
+        <participant class="com.mii.komi.jpos.participant.SendAndReceiveIso8583" logger="Q2" />
+    </group>
+    
+</txnmgr>

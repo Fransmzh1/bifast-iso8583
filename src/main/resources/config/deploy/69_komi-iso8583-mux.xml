@@ -4,7 +4,7 @@
     <key>11</key>
     <unhandled>unhandled</unhandled>
     <request-listener class="com.mii.komi.jpos.ISORequestHandler" logger="Q2" realm="myrealm">
-        <property name="queue" value="txnmgr" />
+        <property name="queue" value="txnmgr-komi" />
         <property name="timeout" value="60000" />
     </request-listener>
 </mux>

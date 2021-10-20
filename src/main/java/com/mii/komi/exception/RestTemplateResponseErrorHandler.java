@@ -18,7 +18,6 @@ public class RestTemplateResponseErrorHandler
 
     @Override
     public boolean hasError(ClientHttpResponse httpResponse) throws IOException {
-
         return (httpResponse.getStatusCode().series() == CLIENT_ERROR
                 || httpResponse.getStatusCode().series() == SERVER_ERROR);
     }
@@ -32,6 +31,8 @@ public class RestTemplateResponseErrorHandler
             // handle CLIENT_ERROR
             if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new DataNotFoundException();
+            } else if(httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                throw new HttpRequestException();
             }
         }
     }

@@ -18,13 +18,13 @@ public class NetworkManagementParticipant implements TransactionParticipant{
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context)context;
-        ISOMsg reqMsg = (ISOMsg)ctx.get(Constants.REQUEST_KEY);
+        ISOMsg reqMsg = (ISOMsg)ctx.get(Constants.ISO_REQUEST);
         try {
             ISOMsg rspMsg = (ISOMsg) reqMsg.clone();
             rspMsg.setDirection(ISOMsg.OUTGOING);
             rspMsg.setResponseMTI();
             rspMsg.set(39, "00");
-            ctx.put(Constants.RESPONSE_KEY, rspMsg);
+            ctx.put(Constants.ISO_RESPONSE, rspMsg);
         } catch (ISOException ex) {
             Logger.getLogger(NetworkManagementParticipant.class.getName()).log(Level.SEVERE, null, ex);
         }

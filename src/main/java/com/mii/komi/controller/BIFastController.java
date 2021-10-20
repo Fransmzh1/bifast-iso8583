@@ -1,23 +1,28 @@
 package com.mii.komi.controller;
 
-import com.mii.komi.dto.AccountEnquiryRequest;
-import com.mii.komi.dto.AccountEnquiryResponse;
+import com.mii.komi.dto.BaseRequestDTO;
+import com.mii.komi.dto.RestResponse;
+import com.mii.komi.dto.RootAccountEnquiryRequest;
 import com.mii.komi.dto.inbound.CreditTransferInboundRequest;
 import com.mii.komi.dto.inbound.CreditTransferInboundResponse;
-import com.mii.komi.service.AccountEnquiryInboundService;
 import com.mii.komi.service.CreditTransferService;
 import com.mii.komi.service.ISO8583Service;
+import com.mii.komi.service.RESTLoggingService;
 import com.mii.komi.util.Constants;
+import com.mii.komi.util.Direction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import javax.servlet.http.HttpServletRequest;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
 import org.jpos.transaction.Context;
 import org.jpos.util.NameRegistrar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -32,15 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @author vinch
  */
 @RestController
-@RequestMapping("/iso8583")
+@RequestMapping("/komi-inbound/service")
 @Api(tags = {"ISO8583 Adapter API"})
 public class BIFastController {
 
     @Autowired
     private ISO8583Service iso8583Service;
-
-    @Autowired
-    private AccountEnquiryInboundService accountEnquiryService;
 
     @Autowired
     private CreditTransferService creditTransferService;
@@ -50,6 +52,11 @@ public class BIFastController {
     
     @Value("${txnmgr.timeout}")
     private Long txnmgrTimeout;
+    
+    @Autowired
+    private RESTLoggingService loggingService;
+    
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ApiOperation(value = "Network Management", nickname = "ISO8583 Network Management API")
     @ApiResponses(value = {
@@ -61,12 +68,13 @@ public class BIFastController {
     @PostMapping(path = "/netman", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity echoTest() throws ISOException, NameRegistrar.NotFoundException {
         ISOMsg isoMsg = iso8583Service.buildNetworkMsg("001");
-        ISOMsg rsp = queryTxnMgr(isoMsg);
-        if ("00".equals(rsp.getBytes(39))) {
+        //ISOMsg rsp = queryTxnMgr(isoMsg);
+        /*if ("00".equals(rsp.getBytes(39))) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.internalServerError().build();
-        }
+        }*/
+        return null;
     }
 
     @ApiOperation(value = "Account Enquiry", nickname = "Account Enquiry API")
@@ -76,12 +84,24 @@ public class BIFastController {
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Page Not Found")
     })
-    @PostMapping(path = "/account/enquiry", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AccountEnquiryResponse> accountEnquiry(@RequestBody AccountEnquiryRequest request) throws ISOException, NameRegistrar.NotFoundException {
-        ISOMsg isoMsg = accountEnquiryService.buildRequestMsg(request);
-        ISOMsg rsp = queryTxnMgr(isoMsg);
-        AccountEnquiryResponse httpRsp = (AccountEnquiryResponse) accountEnquiryService.buildResponseMsg(rsp);
-        return ResponseEntity.ok().body(httpRsp);
+    @PostMapping(path = "/AccountEnquiryRequest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RestResponse> accountEnquiry(
+            @RequestBody RootAccountEnquiryRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        /*loggingService.log(Direction.INCOMING, 
+                request.toString(), 
+                httpServletRequest.getMethod(), 
+                httpServletRequest.getRemoteAddr(), 
+                httpServletRequest.getRequestURI(), 
+                "Request");*/
+        ResponseEntity<RestResponse> rsp = queryTxnMgr(request.getAccountEnquiryRequest(), "AccountEnquiryRequest");
+        /*loggingService.log(Direction.OUTGOING, 
+                rsp.getBody().toString(), 
+                httpServletRequest.getMethod(), 
+                httpServletRequest.getRemoteAddr(), 
+                httpServletRequest.getRequestURI(), 
+                "Response");*/
+        return rsp;
     }
 
     @ApiOperation(value = "Credit Transfer", nickname = "Core Banking Credit Transfer")
@@ -91,24 +111,21 @@ public class BIFastController {
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Page Not Found")
     })
-    @PostMapping(path = "/account/credit", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/CreditTransferRequest", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreditTransferInboundResponse> creditTransfer(
             @RequestBody CreditTransferInboundRequest request) throws ISOException, NameRegistrar.NotFoundException {
-        ISOMsg isoMsg = creditTransferService.buildRequestMsg(request);
-        ISOMsg rsp = iso8583Service.sendMessage("corebanking", isoMsg);
-        CreditTransferInboundResponse httpRsp = (CreditTransferInboundResponse) creditTransferService.buildResponseMsg(rsp);
-        return ResponseEntity.ok().body(httpRsp);
+        return null;
     }
     
-    private ISOMsg queryTxnMgr(ISOMsg isoMsg) {
-        String queueKey = isoMsg.getString(7) + isoMsg.getString(11);
+    private ResponseEntity<RestResponse> queryTxnMgr(BaseRequestDTO requestDTO, String basepath) {
+        String queueKey = requestDTO.getNoRef();
         Context context = new Context();
-        context.put(Constants.REQUEST_KEY, isoMsg);
+        context.put(Constants.SELECTOR_KEY, basepath);
+        context.put(Constants.HTTP_REQUEST, requestDTO);
         Space space = SpaceFactory.getSpace();
         space.out(txnmgrQueue, context, txnmgrTimeout);
         Context rspContext = (Context) space.in(queueKey, txnmgrTimeout);
-
-        ISOMsg rsp = rspContext.get(Constants.RESPONSE_KEY);
+        ResponseEntity<RestResponse> rsp = rspContext.get(Constants.HTTP_RESPONSE);
         return rsp;
     }
 

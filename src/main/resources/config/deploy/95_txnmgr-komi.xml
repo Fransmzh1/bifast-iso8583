@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <txnmgr name="outbound-txn" logger="Q2" class="org.jpos.transaction.TransactionManager">
-    <property name="queue" value="txnmgr" />
-    <property name="sessions" value="1" />
+    <property name="queue" value="txnmgr-komi" />
+    <property name="sessions" value="5" />
     <property name="debug" value="true" />
     <participant class="com.mii.komi.jpos.participant.ISOSelector" name="Selector" logger="Q2">
         <property name="fieldNumber" value="0" />
@@ -9,20 +9,20 @@
         <property name="0600" value="Proxy" />
         <property name="0800" value="Network" />
     </participant>
-    <participant class="com.mii.komi.jpos.participant.SenderResponseParticipant" logger="Q2"/>
+    <participant class="com.mii.komi.jpos.participant.ISOResponseParticipant" logger="Q2"/>
     
     <group name="Financial">
         <participant class="com.mii.komi.jpos.participant.ISOSelector" name="Selector" logger="Q2">
             <property name="fieldNumber" value="3" />
-            <property name="109000" value="Debit" />
-            <property name="109100" value="DebitReversal" />
-            <property name="209000" value="Credit" />
-            <property name="209100" value="CreditReversal" />
-            <property name="310000" value="BalanceInquiry" />
+            <property name="109000" value="SendAndReceiveToCore" />
+            <property name="109100" value="SendAndReceiveToCore" />
+            <property name="209000" value="SendAndReceiveToCore" />
+            <property name="209100" value="SendAndReceiveToCore" />
+            <property name="310000" value="SendAndReceiveToCore" />
             <property name="389000" value="OutboundAccountInquiry" />
-            <property name="389100" value="InboundAccountInquiry" />
+            <property name="389100" value="SendAndReceiveToCore" />
             <property name="489000" value="CreditTransfer" />
-            <property name="489100" value="SettlementConfirmation" />
+            <property name="489100" value="SendAndReceiveToCore" />
             <property name="489200" value="PaymentStatus" />
         </participant>
     </group>
@@ -38,6 +38,10 @@
     
     <group name="OutboundAccountInquiry">
         <participant class="com.mii.komi.jpos.participant.AccountEnquiryOutboundParticipant" logger="Q2" />
+    </group>
+    
+    <group name="SendAndReceiveToCore">
+        <participant class="com.mii.komi.jpos.participant.SendAndReceiveIso8583" logger="Q2" />
     </group>
     
     <group name="Network">

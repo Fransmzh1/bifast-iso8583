@@ -1,5 +1,6 @@
 package com.mii.komi.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
 
 /**
@@ -8,22 +9,23 @@ import java.util.Optional;
  */
 public class BaseRequestDTO {
     
-    private String transactionId;
+    @JsonProperty("NoRef")
+    private String noRef;
     
     private String dateTime;
 
     /**
-     * @return the transactionId
+     * @return the noRef
      */
-    public String getTransactionId() {
-        return Optional.ofNullable(transactionId).orElse("");
+    public String getNoRef() {
+        return Optional.ofNullable(noRef).orElse("");
     }
 
     /**
-     * @param transactionId the transactionId to set
+     * @param noRef the noRef to set
      */
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
+    public void setNoRef(String noRef) {
+        this.noRef = noRef;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.mii.komi.dto;
 
-import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  *
@@ -8,41 +9,47 @@ import java.util.Optional;
  */
 public class AccountEnquiryResponse extends BaseResponseDTO {
     
-    private String transactionId;
+    private String noRef;
     
     private String accountNumber;
     
+    @JsonInclude(Include.NON_NULL)
     private String accountType;
     
+    @JsonInclude(Include.NON_NULL)
     private String creditorName;
     
+    @JsonInclude(Include.NON_NULL)
     private String creditorId;
     
+    @JsonInclude(Include.NON_NULL)
     private String creditorType;
     
+    @JsonInclude(Include.NON_NULL)
     private String residentStatus;
     
+    @JsonInclude(Include.NON_NULL)
     private String townName;
 
     /**
-     * @return the transactionId
+     * @return the noRef
      */
-    public String getTransactionId() {
-        return Optional.ofNullable(transactionId).orElse("");
+    public String getNoRef() {
+        return noRef;
     }
 
     /**
-     * @param transactionId the transactionId to set
+     * @param noRef the noRef to set
      */
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
+    public void setNoRef(String noRef) {
+        this.noRef = noRef;
     }
 
     /**
      * @return the accountNumber
      */
     public String getAccountNumber() {
-        return Optional.ofNullable(accountNumber).orElse("");
+        return accountNumber;
     }
 
     /**
@@ -56,7 +63,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the accountType
      */
     public String getAccountType() {
-        return Optional.ofNullable(accountType).orElse("");
+        return accountType;
     }
 
     /**
@@ -70,7 +77,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the creditorName
      */
     public String getCreditorName() {
-        return Optional.ofNullable(creditorName).orElse("");
+        return creditorName;
     }
 
     /**
@@ -84,7 +91,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the creditorId
      */
     public String getCreditorId() {
-        return Optional.ofNullable(creditorId).orElse("");
+        return creditorId;
     }
 
     /**
@@ -98,7 +105,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the creditorType
      */
     public String getCreditorType() {
-        return Optional.ofNullable(creditorType).orElse("");
+        return creditorType;
     }
 
     /**
@@ -112,7 +119,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the residentStatus
      */
     public String getResidentStatus() {
-        return Optional.ofNullable(residentStatus).orElse("");
+        return residentStatus;
     }
 
     /**
@@ -126,7 +133,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the townName
      */
     public String getTownName() {
-        return Optional.ofNullable(townName).orElse("");
+        return townName;
     }
 
     /**

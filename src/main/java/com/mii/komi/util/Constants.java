@@ -6,10 +6,15 @@ package com.mii.komi.util;
  */
 public class Constants {
     
-    public static String REQUEST_KEY = "ISO_REQUEST";
+    public static String HTTP_REQUEST = "HTTP_REQUEST";
     
-    public static String RESPONSE_KEY = "ISO_RESPONSE";
+    public static String HTTP_RESPONSE = "HTTP_RESPONSE";
+    
+    public static String ISO_REQUEST = "ISO_REQUEST";
+    
+    public static String ISO_RESPONSE = "ISO_RESPONSE";
     
     public static String SOURCE_KEY = "ISO_SOURCE";
     
+    public static String SELECTOR_KEY = "SELECTOR_KEY";
 }

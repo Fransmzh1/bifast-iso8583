@@ -1,5 +1,6 @@
 package com.mii.komi.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
 
 /**
@@ -8,29 +9,20 @@ import java.util.Optional;
  */
 public class AccountEnquiryRequest extends BaseRequestDTO {
     
-    private String channel;
-    
+    @JsonProperty("RecipientBank")
     private String recipientBank;
     
+    @JsonProperty("Amount")
     private String amount;
     
+    @JsonProperty("CategoryPurpose")
     private String categoryPurpose;
     
+    @JsonProperty("AccountNumber")
     private String accountNumber;
-
-    /**
-     * @return the channel
-     */
-    public String getChannel() {
-        return Optional.ofNullable(channel).orElse("");
-    }
-
-    /**
-     * @param channel the channel to set
-     */
-    public void setChannel(String channel) {
-        this.channel = channel;
-    }
+    
+    @JsonProperty("ProxyId")
+    private String proxyId;
 
     /**
      * @return the recipientBank
@@ -86,6 +78,20 @@ public class AccountEnquiryRequest extends BaseRequestDTO {
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    /**
+     * @return the proxyId
+     */
+    public String getProxyId() {
+        return Optional.ofNullable(proxyId).orElse("");
+    }
+
+    /**
+     * @param proxyId the proxyId to set
+     */
+    public void setProxyId(String proxyId) {
+        this.proxyId = proxyId;
     }
     
 }

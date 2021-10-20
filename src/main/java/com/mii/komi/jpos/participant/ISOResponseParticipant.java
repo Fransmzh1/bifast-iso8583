@@ -10,18 +10,23 @@ import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOSource;
 import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
+import org.jpos.transaction.AbortParticipant;
 import org.jpos.transaction.Context;
-import org.jpos.transaction.TransactionParticipant;
 
 /**
  *
  * @author vinch
  */
-public class SenderResponseParticipant implements TransactionParticipant {
+public class ISOResponseParticipant implements AbortParticipant {
 
     @Override
     public int prepare(long id, Serializable context) {
         return PREPARED;
+    }
+    
+    @Override
+    public int prepareForAbort(long id, Serializable context) {
+        return ABORTED;
     }
 
     @Override
@@ -36,7 +41,7 @@ public class SenderResponseParticipant implements TransactionParticipant {
 
     private void sendResponse(long id, Serializable context) {
         Context ctx = (Context) context;
-        ISOMsg rspMsg = (ISOMsg) ctx.get(Constants.RESPONSE_KEY);
+        ISOMsg rspMsg = (ISOMsg) ctx.get(Constants.ISO_RESPONSE);
         ISOSource sourceKey = (ISOSource) ctx.get(Constants.SOURCE_KEY);
         if (sourceKey != null) {
             try {
@@ -46,9 +51,9 @@ public class SenderResponseParticipant implements TransactionParticipant {
                     System.out.println("Source is not connected, cannot send response");
                 }
             } catch (ISOException ex) {
-                Logger.getLogger(SenderResponseParticipant.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ISOResponseParticipant.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(SenderResponseParticipant.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ISOResponseParticipant.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             Space space = SpaceFactory.getSpace();

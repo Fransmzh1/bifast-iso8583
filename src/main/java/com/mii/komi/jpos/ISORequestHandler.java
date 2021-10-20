@@ -29,7 +29,7 @@ public class ISORequestHandler implements ISORequestListener, Configurable {
         Context context = new Context();
         try {
             if (isoMsg.isRequest()) {
-                context.put(Constants.REQUEST_KEY, isoMsg);
+                context.put(Constants.ISO_REQUEST, isoMsg);
                 context.put(Constants.SOURCE_KEY, isos);
                 Space space = SpaceFactory.getSpace();
                 space.out(queueName, context, spaceTimeout);
