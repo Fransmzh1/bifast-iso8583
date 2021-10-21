@@ -16,6 +16,8 @@ import org.jpos.iso.packager.ISO87APackager;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.q2.iso.QMUX;
 import org.jpos.space.LocalSpace;
+import org.jpos.space.Space;
+import org.jpos.space.SpaceFactory;
 import org.jpos.space.SpaceListener;
 import org.jpos.util.NameRegistrar;
 import org.jpos.util.NameRegistrar.NotFoundException;
@@ -106,6 +108,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
      */
     private void sendSignOnRequest(ISOMsg m) {
         ISOMsg reply = null;
+        Space space = SpaceFactory.getSpace();
         try {
             ISOMsg msg = (ISOMsg) m.clone();
             msg.setMTI("0800");
@@ -114,20 +117,25 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
             msg.set(70, "001");
             msg.setPackager(new ISO87APackager());
             byte[] messageBody = msg.pack();
-
             ChannelManager.logISOMsg(msg);
             try {
                 reply = sendMsg(msg);
                 if (reply != null) {
                     if (reply.getValue(39).equals("00")) {
-                        //DatabaseManager.setIsConnected("true");
+                        space.out(mux.getName() + "-signed-on", true);
+                    } else {
+                        space.in(mux.getName() + "-signed-on");
                     }
+                } else {
+                    space.in(mux.getName() + "-signed-on");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                space.in(mux.getName() + "-signed-on");
             }
         } catch (ISOException e) {
             logger.error(e.getMessage());
+            space.in(mux.getName() + "-signed-on");
         }
     }
 
@@ -136,9 +144,16 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
+                Space space = SpaceFactory.getSpace();
                 if (mux.isConnected()) {
-                    sendEchoTest();
-                    sendSignOnRequest(m);
+                    Object signedOnObject = space.rd(mux.getName() + "-signed-on", 10000);
+                    if (signedOnObject != null) {
+                        sendEchoTest();
+                    } else {
+                        sendSignOnRequest(m);
+                    }
+                } else {
+                    space.in(mux.getName() + "-signed-on");
                 }
             }
         }, 0, 60000);
