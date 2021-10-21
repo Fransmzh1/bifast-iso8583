@@ -1,8 +1,7 @@
 <?xml version="1.0" ?>
 <qbean name="as400-loginmanager" logger="Q2" realm="as400-loginmanager"
        class="com.mii.komi.jpos.qbean.ChannelManager">
-    <!-- <property name="echo-interval" value="10000" />
-    <property name="logon-interval" value="86400" /> -->
+    <property name="interval" value="120000" />
     <property name="mux" value="komi-iso8583-mux" />
     <property name="channel" value="channel.komi-iso8583" />
     <property name="channel-ready" value="komi-iso8583" />

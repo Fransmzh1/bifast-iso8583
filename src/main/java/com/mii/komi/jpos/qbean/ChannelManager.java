@@ -168,7 +168,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                     space.in(mux.getName() + "-signed-on");
                 }
             }
-        }, 0, 60000);
+        }, 0, cfg.getLong("interval"));
     }
 
     public ISOMsg sendMsg(ISOMsg m) throws Exception {
