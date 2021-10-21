@@ -33,6 +33,19 @@ public class RestTemplateResponseErrorHandler
             throws IOException {
         if (httpResponse.getStatusCode().series() == HttpStatus.Series.SERVER_ERROR) {
             // handle SERVER_ERROR
+            if (httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                if (httpResponse.getBody() != null) {
+                    InputStream is = httpResponse.getBody();
+                    StringBuilder textBuilder = new StringBuilder();
+                    try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
+                        int c = 0;
+                        while ((c = reader.read()) != -1) {
+                            textBuilder.append((char) c);
+                        }
+                    }
+                    throw new HttpRequestException(textBuilder.toString());
+                }
+            }
         } else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
             // handle CLIENT_ERROR
             if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
