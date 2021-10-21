@@ -41,7 +41,6 @@
     <group name="Network">
         <participant class="com.mii.komi.jpos.participant.NetworkManagementParticipant" logger="Q2" />
     </group>
-    
 </txnmgr>
 
 

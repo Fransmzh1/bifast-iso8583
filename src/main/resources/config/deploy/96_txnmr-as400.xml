@@ -4,7 +4,7 @@
     <property name="sessions" value="5" />
     <property name="debug" value="true" />
     <participant class="com.mii.komi.jpos.participant.RESTSelector" name="Selector" logger="Q2">
-        <property name="AccountEnquiryRequest" value="AccountEnquiry SendAndReceiveToCore" />
+        <property name="AccountEnquiryRequest" value="AccountEnquiry SendAndReceiveToCoreBanking" />
     </participant>
     <participant class="com.mii.komi.jpos.participant.RESTResponseParticipant" logger="Q2"/>
     
@@ -12,8 +12,7 @@
         <participant class="com.mii.komi.jpos.participant.AccountEnquiryInboundParticipant" logger="Q2" />
     </group>
     
-    <group name="SendAndReceiveToCore">
+    <group name="SendAndReceiveToCoreBanking">
         <participant class="com.mii.komi.jpos.participant.SendAndReceiveIso8583" logger="Q2" />
     </group>
-    
 </txnmgr>
