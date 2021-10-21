@@ -10,4 +10,8 @@ public class HttpRequestException extends RuntimeException {
         super("Request Error");
     }
     
+    public HttpRequestException(String responseBody) {
+        super(responseBody);
+    }
+    
 }

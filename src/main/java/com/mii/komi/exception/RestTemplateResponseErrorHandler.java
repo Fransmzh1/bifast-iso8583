@@ -1,6 +1,12 @@
 package com.mii.komi.exception;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.springframework.http.HttpStatus;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
@@ -31,8 +37,18 @@ public class RestTemplateResponseErrorHandler
             // handle CLIENT_ERROR
             if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new DataNotFoundException();
-            } else if(httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
-                throw new HttpRequestException();
+            } else if (httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                if (httpResponse.getBody() != null) {
+                    InputStream is = httpResponse.getBody();
+                    StringBuilder textBuilder = new StringBuilder();
+                    try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
+                        int c = 0;
+                        while ((c = reader.read()) != -1) {
+                            textBuilder.append((char) c);
+                        }
+                    }
+                    throw new HttpRequestException(textBuilder.toString());
+                }
             }
         }
     }

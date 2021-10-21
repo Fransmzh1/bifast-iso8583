@@ -1,5 +1,7 @@
 package com.mii.komi.jpos.participant.outbound;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mii.komi.dto.AccountEnquiryRequest;
 import com.mii.komi.dto.AccountEnquiryResponse;
 import com.mii.komi.dto.BaseResponseDTO;
@@ -8,8 +10,6 @@ import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.exception.RestTemplateResponseErrorHandler;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jpos.core.Configurable;
 import org.jpos.core.Configuration;
 import org.jpos.core.ConfigurationException;
@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 public class AccountEnquiryOutboundParticipant implements TransactionParticipant, BaseOutboundParticipant, Configurable {
 
     private Configuration cfg;
-    
+
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
@@ -48,7 +48,16 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
             ex.printStackTrace();
             return ABORTED;
         } catch (HttpRequestException ex) {
-            ex.printStackTrace();
+            if (ex.getMessage() != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                AccountEnquiryResponse accountEnquiryResponse;
+                try {
+                    accountEnquiryResponse = objectMapper.readValue(ex.getMessage(), AccountEnquiryResponse.class);
+                    ctx.put(Constants.HTTP_RESPONSE, accountEnquiryResponse);
+                } catch (JsonProcessingException ex1) {
+                    ex1.printStackTrace();
+                }
+            }
             return ABORTED;
         }
     }
@@ -62,7 +71,7 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
             ISOMsg rsp = buildResponseMsg(req, httpRsp);
             ctx.put(Constants.ISO_RESPONSE, rsp);
         } catch (ISOException ex) {
-            Logger.getLogger(AccountEnquiryOutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
