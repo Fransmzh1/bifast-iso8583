@@ -157,15 +157,15 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
                 cursor = cursor + endCursor;
                 endCursor = cursor + 35;
                 rsp.setAccountType(privateData.substring(cursor, endCursor));
-                rr = RestResponse.failed(rm, rc);
+                rr = RestResponse.failed(rm, rm, rc);
             } else {
-                rr = RestResponse.failed("Endpoint Error", "U904");
+                rr = RestResponse.failed("RJCT", "Error Undefined" , "U904");
             }
             list.add(rsp);
             rr.setContent(list);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rr);
         } else {
-            rr = RestResponse.failed("Internal Timeout", "U900");
+            rr = RestResponse.failed("KSTS", "Internal Timeout", "K000");
             list.add(rsp);
             rr.setContent(list);
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rr);

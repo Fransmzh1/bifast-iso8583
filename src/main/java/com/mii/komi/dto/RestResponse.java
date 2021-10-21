@@ -17,6 +17,7 @@ public class RestResponse<T> {
     private String date;
     private String time;
     private String responseCode;
+    private String reasonCode;
     private String responseMessage;
     private List<T> content;
     
@@ -32,13 +33,10 @@ public class RestResponse<T> {
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
         rr.setResponseMessage(message);
+        rr.setReasonCode("ACTC");
         rr.setResponseCode("U000");
         rr.setContent(o);
         return rr;
-    }
-    
-    public static RestResponse success(List o) {
-        return RestResponse.success("Success", o);
     }
     
     public static RestResponse success(String message) {
@@ -46,21 +44,19 @@ public class RestResponse<T> {
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
         rr.setResponseMessage(message);
+        rr.setReasonCode("ACTC");
         rr.setResponseCode("U000");
         return rr;
     }
     
-    public static RestResponse failed(String message, String responseCode) {
+    public static RestResponse failed(String reasonCode, String message, String responseCode) {
         RestResponse rr = new RestResponse(new ArrayList<>());
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
+        rr.setReasonCode(reasonCode);
         rr.setResponseMessage(message);
         rr.setResponseCode(responseCode);
         return rr;
-    }
-    
-    public static RestResponse failed(int code) {
-        return RestResponse.failed(code);
     }
 
     /**
@@ -136,6 +132,20 @@ public class RestResponse<T> {
     public String toString() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(this);
+    }
+
+    /**
+     * @return the reasonCode
+     */
+    public String getReasonCode() {
+        return reasonCode;
+    }
+
+    /**
+     * @param reasonCode the reasonCode to set
+     */
+    public void setReasonCode(String reasonCode) {
+        this.reasonCode = reasonCode;
     }
     
 }
