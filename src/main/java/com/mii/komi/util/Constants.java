@@ -21,4 +21,8 @@ public class Constants {
     public static String REQUEST = "Request";
     
     public static String RESPONSE = "Response";
+    
+    public static String REASON_CODE_ACCEPTED = "ACTC";
+    
+    public static String RESPONSE_CODE_SUCCESS = "U000";
 }

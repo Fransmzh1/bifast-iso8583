@@ -2,6 +2,7 @@ package com.mii.komi.dto;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mii.komi.util.Constants;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -33,8 +34,8 @@ public class RestResponse<T> {
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
         rr.setResponseMessage(message);
-        rr.setReasonCode("ACTC");
-        rr.setResponseCode("U000");
+        rr.setReasonCode(Constants.REASON_CODE_ACCEPTED);
+        rr.setResponseCode(Constants.RESPONSE_CODE_SUCCESS);
         rr.setContent(o);
         return rr;
     }
@@ -44,8 +45,8 @@ public class RestResponse<T> {
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
         rr.setResponseMessage(message);
-        rr.setReasonCode("ACTC");
-        rr.setResponseCode("U000");
+        rr.setReasonCode(Constants.REASON_CODE_ACCEPTED);
+        rr.setResponseCode(Constants.RESPONSE_CODE_SUCCESS);
         return rr;
     }
     
