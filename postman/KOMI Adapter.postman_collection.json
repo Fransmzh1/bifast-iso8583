@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"transaction_id\":\"000009\",\r\n    \"dateTime\":\"2021-10-18T11:02:00.000\",\r\n    \"merchantType\":\"6018\",\r\n    \"terminalId\":\"TELLER01\",\r\n    \"noRef\":\"00000000000000000001\",\r\n    \"recipientBank\":\"BNINDJAMBK\",\r\n    \"amount\":\"1250000.00\",\r\n    \"categoryPurpose\":\"02\",\r\n    \"accountNumber\":\"123987456\"\r\n}",
+					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"2020042047164450081167758999                          000000000137400.2001BNINDJAMBK                        \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"20200420471644500811\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,18 +20,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/komi/api/v1/adapter/accountinquiry",
+					"raw": "http://localhost:5001/iso8583/service/sendAndReceive",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "5001",
 					"path": [
-						"komi",
-						"api",
-						"v1",
-						"adapter",
-						"accountinquiry"
+						"iso8583",
+						"service",
+						"sendAndReceive"
 					]
 				}
 			},
@@ -62,6 +60,36 @@
 						"komi-inbound",
 						"service",
 						"AccountEnquiryRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Netman to Core Banking",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0800\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 70,\r\n            \"value\": \"301\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/iso8583/service/sendAndReceive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"iso8583",
+						"service",
+						"sendAndReceive"
 					]
 				}
 			},
