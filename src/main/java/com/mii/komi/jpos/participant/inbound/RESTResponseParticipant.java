@@ -1,4 +1,4 @@
-package com.mii.komi.jpos.participant;
+package com.mii.komi.jpos.participant.inbound;
 
 import com.mii.komi.dto.BaseRequestDTO;
 import com.mii.komi.util.Constants;
@@ -21,7 +21,7 @@ public class RESTResponseParticipant implements AbortParticipant {
     
     @Override
     public int prepareForAbort(long id, Serializable context) {
-        return PREPARED;
+        return ABORTED;
     }
 
     @Override

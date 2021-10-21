@@ -1,9 +1,8 @@
-package com.mii.komi.jpos.participant;
+package com.mii.komi.jpos.participant.outbound;
 
 import com.mii.komi.dto.AccountEnquiryRequest;
 import com.mii.komi.dto.AccountEnquiryResponse;
 import com.mii.komi.dto.BaseResponseDTO;
-import com.mii.komi.dto.RestResponse;
 import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.exception.RestTemplateResponseErrorHandler;
@@ -11,6 +10,9 @@ import com.mii.komi.util.Constants;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jpos.core.Configurable;
+import org.jpos.core.Configuration;
+import org.jpos.core.ConfigurationException;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
@@ -22,16 +24,18 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class AccountEnquiryOutboundParticipant implements TransactionParticipant, BaseOutboundParticipant {
+public class AccountEnquiryOutboundParticipant implements TransactionParticipant, BaseOutboundParticipant, Configurable {
 
+    private Configuration cfg;
+    
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg reqMsg = (ISOMsg) ctx.get(Constants.ISO_REQUEST);
-        String endpointKomi = "http://demo8364822.mockable.io/komi-outbound/service/AccountEnquiryRequest";
         try {
             AccountEnquiryRequest accountEnquiryRequest = buildRequestMsg(reqMsg);
             ctx.put(Constants.HTTP_REQUEST, accountEnquiryRequest);
+            String endpointKomi = cfg.get("endpoint");
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
             AccountEnquiryResponse accountEnquiryResponse = restTemplate.postForObject(
@@ -70,11 +74,11 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
         ISOMsg rsp = buildFailedResponseMsg(req, httpRsp);
         ctx.put(Constants.ISO_RESPONSE, rsp);
     }
-    
+
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, BaseResponseDTO response) throws ISOException {
         AccountEnquiryResponse accountEnquiryRsp = (AccountEnquiryResponse) response;
-        ISOMsg isoRsp = (ISOMsg)req.clone();
+        ISOMsg isoRsp = (ISOMsg) req.clone();
         isoRsp.setResponseMTI();
         isoRsp.set(39, "00");
         StringBuilder sb = new StringBuilder();
@@ -90,34 +94,34 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
                 .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35));
         isoRsp.set(62, sb.toString());
         return isoRsp;
-        
+
     }
 
     @Override
     public AccountEnquiryRequest buildRequestMsg(ISOMsg isoMsg) {
         String privateData = isoMsg.getString(48);
-        
+
         AccountEnquiryRequest req = new AccountEnquiryRequest();
         int cursor = 0;
         int endCursor = 20;
         req.setNoRef(privateData.substring(cursor, endCursor));
-        
+
         cursor = endCursor;
         endCursor = cursor + 8;
         req.setRecipientBank(privateData.substring(cursor, endCursor));
-        
+
         cursor = endCursor;
         endCursor = cursor + 12;
         req.setAmount(privateData.substring(cursor, endCursor));
-        
+
         cursor = endCursor;
         endCursor = cursor + 2;
         req.setCategoryPurpose(privateData.substring(cursor, endCursor));
-        
+
         cursor = endCursor;
         endCursor = cursor + 34;
         req.setAccountNumber(privateData.substring(cursor, endCursor));
-        
+
         return req;
     }
 
@@ -125,7 +129,7 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
     public ISOMsg buildFailedResponseMsg(ISOMsg req, BaseResponseDTO rr) {
         try {
             AccountEnquiryResponse accountEnquiryRsp = (AccountEnquiryResponse) rr;
-            ISOMsg isoRsp = (ISOMsg)req.clone();
+            ISOMsg isoRsp = (ISOMsg) req.clone();
             isoRsp.setResponseMTI();
             isoRsp.set(39, "00");
             StringBuilder sb = new StringBuilder();
@@ -144,6 +148,11 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
         } catch (ISOException ex) {
             return null;
         }
+    }
+
+    @Override
+    public void setConfiguration(Configuration c) throws ConfigurationException {
+        this.cfg = c;
     }
 
 }

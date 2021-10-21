@@ -3,26 +3,25 @@
     <property name="queue" value="txnmgr-komi" />
     <property name="sessions" value="5" />
     <property name="debug" value="true" />
-    <participant class="com.mii.komi.jpos.participant.ISOSelector" name="Selector" logger="Q2">
+    <participant class="com.mii.komi.jpos.participant.outbound.ISOSelector" name="Selector" logger="Q2">
         <property name="fieldNumber" value="0" />
         <property name="0200" value="Financial" />
         <property name="0600" value="Proxy" />
         <property name="0800" value="Network" />
     </participant>
-    <participant class="com.mii.komi.jpos.participant.ISOResponseParticipant" logger="Q2"/>
+    <participant class="com.mii.komi.jpos.participant.outbound.ISOResponseParticipant" logger="Q2"/>
     
     <group name="Financial">
-        <participant class="com.mii.komi.jpos.participant.ISOSelector" name="Selector" logger="Q2">
+        <participant class="com.mii.komi.jpos.participant.outbound.ISOSelector" name="Selector" logger="Q2">
             <property name="fieldNumber" value="3" />
             <property name="389000" value="OutboundAccountInquiry" />
-            <property name="389100" value="SendAndReceiveToCore" />
             <property name="489000" value="CreditTransfer" />
             <property name="489200" value="PaymentStatus" />
         </participant>
     </group>
     
     <group name="Proxy">
-        <participant class="com.mii.komi.jpos.participant.ISOSelector" name="Selector" logger="Q2">
+        <participant class="com.mii.komi.jpos.participant.outbound.ISOSelector" name="Selector" logger="Q2">
             <property name="fieldNumber" value="3" />
             <property name="909000" value="ProxyManagement" />
             <property name="909100" value="ProxyResolution" />
@@ -31,11 +30,9 @@
     </group>
     
     <group name="OutboundAccountInquiry">
-        <participant class="com.mii.komi.jpos.participant.AccountEnquiryOutboundParticipant" logger="Q2" />
-    </group>
-    
-    <group name="SendAndReceiveToCore">
-        <participant class="com.mii.komi.jpos.participant.SendAndReceiveIso8583" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.outbound.AccountEnquiryOutboundParticipant" logger="Q2">
+            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/AccountEnquiryRequest" />
+        </participant>    
     </group>
     
     <group name="Network">

@@ -1,4 +1,4 @@
-package com.mii.komi.jpos.participant;
+package com.mii.komi.jpos.participant.outbound;
 
 import com.mii.komi.util.Constants;
 import java.io.Serializable;

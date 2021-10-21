@@ -1,4 +1,4 @@
-package com.mii.komi.jpos.participant;
+package com.mii.komi.jpos.participant.inbound;
 
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;

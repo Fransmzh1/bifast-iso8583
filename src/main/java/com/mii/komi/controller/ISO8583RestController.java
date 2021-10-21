@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiResponses;
 import javax.servlet.http.HttpServletRequest;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
-import org.jpos.q2.iso.QMUX;
 import org.jpos.util.NameRegistrar;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,7 +29,7 @@ public class ISO8583RestController {
 
     @ApiOperation(value = "ISO8583 Adapter", nickname = "ISO Sender")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Successfully get data"),
+        @ApiResponse(code = 200, message = "Successfully POST ISO Data"),
         @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Page Not Found")
@@ -39,29 +38,43 @@ public class ISO8583RestController {
     public ResponseEntity<String> sendAndReceiveISO8583(
             @RequestBody String request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+
+        // Convert HTTP Request JSON to ISO Request
+        ISOMsg isoReq = jsonToISOMsg(request);
+
+        // Send ISOMsg to socket channel
+        ISOMsg rspMsg = ISO8583Service.sendMessage("as400", isoReq);
+        if (rspMsg == null) {
+            rspMsg = (ISOMsg) isoReq.clone();
+            rspMsg.setResponseMTI();
+            rspMsg.set(39, "68");
+        }
+
+        // Convert ISOMsg response to JSON HTTP Response
+        String httpResponse = ISOMsgToJson(rspMsg);
+
+        return ResponseEntity.ok(httpResponse);
+    }
+
+    private ISOMsg jsonToISOMsg(String request) {
         JSONObject reqObj = new JSONObject(request);
         JSONArray reqArray = reqObj.getJSONArray("isoFields");
         ISOMsg isoMsg = new ISOMsg();
-        //isoMsg.setDirection(ISOMsg.OUTGOING);
         for (int i = 0; i < reqArray.length(); i++) {
             JSONObject fieldObject = reqArray.getJSONObject(i);
             int isoField = fieldObject.getInt("number");
             String isoValue = fieldObject.getString("value");
             isoMsg.set(isoField, isoValue);
         }
-        ISOMsg rspMsg;
-        JSONArray arrayRsp = new JSONArray();
-        rspMsg = ISO8583Service.sendMessage("as400", isoMsg);
-        if (rspMsg == null) {
-            rspMsg = (ISOMsg) isoMsg.clone();
-            rspMsg.setResponseMTI();
-            rspMsg.set(39, "68");
-        }
+        return isoMsg;
+    }
+
+    private String ISOMsgToJson(ISOMsg rspMsg) throws ISOException {
         JSONObject jsonMTIField = new JSONObject();
+        JSONArray arrayRsp = new JSONArray();
         jsonMTIField.put("number", 0);
         jsonMTIField.put("value", rspMsg.getMTI());
         arrayRsp.put(0, jsonMTIField);
-
         for (int i = 2; i <= rspMsg.getMaxField(); i++) {
             if (rspMsg.hasField(i)) {
                 JSONObject jsonField = new JSONObject();
@@ -72,7 +85,7 @@ public class ISO8583RestController {
         }
         JSONObject rsp = new JSONObject();
         rsp.put("isoFields", arrayRsp);
-        return ResponseEntity.ok(rsp.toString(5));
+        return rsp.toString(5);
     }
 
 }
