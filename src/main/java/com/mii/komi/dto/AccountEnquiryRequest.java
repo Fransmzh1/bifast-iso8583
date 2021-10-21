@@ -1,6 +1,5 @@
 package com.mii.komi.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
 
 /**
@@ -9,19 +8,14 @@ import java.util.Optional;
  */
 public class AccountEnquiryRequest extends BaseRequestDTO {
     
-    @JsonProperty("RecipientBank")
     private String recipientBank;
     
-    @JsonProperty("Amount")
     private String amount;
     
-    @JsonProperty("CategoryPurpose")
     private String categoryPurpose;
     
-    @JsonProperty("AccountNumber")
     private String accountNumber;
     
-    @JsonProperty("ProxyId")
     private String proxyId;
 
     /**
