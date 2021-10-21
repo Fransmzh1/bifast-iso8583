@@ -10,7 +10,7 @@ import org.jpos.transaction.GroupSelector;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class RESTSelector implements GroupSelector, Configurable {
     

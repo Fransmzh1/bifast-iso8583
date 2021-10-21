@@ -2,7 +2,7 @@ package com.mii.komi.exception;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class HttpRequestException extends RuntimeException {
     

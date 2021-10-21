@@ -15,7 +15,7 @@ import org.jpos.transaction.Context;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class ISOResponseParticipant implements AbortParticipant {
 

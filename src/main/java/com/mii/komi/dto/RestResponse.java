@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author ErwinSn
+ * @author Erwin Sugianto Santoso - MII
  */
 public class RestResponse<T> {
     

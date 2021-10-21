@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 @Service
 public class RESTLoggingService {

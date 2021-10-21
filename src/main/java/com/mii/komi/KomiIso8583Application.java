@@ -7,6 +7,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
+/**
+ *
+ * @author Erwin Sugianto Santoso - MII
+ */
+
 @SpringBootApplication
 public class KomiIso8583Application implements CommandLineRunner {
 

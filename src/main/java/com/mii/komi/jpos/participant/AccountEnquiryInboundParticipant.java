@@ -21,10 +21,12 @@ import org.springframework.http.ResponseEntity;
 
 /**
  *
- * @author Erwin Sugianto Santoso
+ * @author Erwin Sugianto Santoso - MII
  */
 public class AccountEnquiryInboundParticipant implements TransactionParticipant, BaseInboundParticipant {
 
+    public static String ACCOUNT_ENQUIRY_INBOUND_PC = "389100";
+    
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
@@ -72,7 +74,7 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
         String accountNumber = ISOUtil.strpad(accountEnquiryRequest.getAccountNumber(), 34);
         sb.append(noRef).append(recipientBank).append(amount).append(categoryPurpose).append(accountNumber);
 
-        ISOMsg isoMsg = ISO8583Service.buildFinancialMsg("389100", noRef, amount);
+        ISOMsg isoMsg = ISO8583Service.buildFinancialMsg(ACCOUNT_ENQUIRY_INBOUND_PC, noRef, amount);
         isoMsg.set(48, sb.toString());
         return isoMsg;
     }
@@ -159,13 +161,13 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
                 rsp.setAccountType(privateData.substring(cursor, endCursor));
                 rr = RestResponse.failed(rm, rm, rc);
             } else {
-                rr = RestResponse.failed("RJCT", "Error Undefined" , "U904");
+                rr = RestResponse.failed(Constants.REASON_CODE_REJECT, "Error Undefined" , "U904");
             }
             list.add(rsp);
             rr.setContent(list);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rr);
         } else {
-            rr = RestResponse.failed("KSTS", "Internal Timeout", "K000");
+            rr = RestResponse.failed(Constants.REASON_CODE_KOMI_STATUS, "Internal Timeout", "K000");
             list.add(rsp);
             rr.setContent(list);
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rr);

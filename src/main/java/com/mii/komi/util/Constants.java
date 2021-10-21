@@ -2,7 +2,7 @@ package com.mii.komi.util;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class Constants {
     
@@ -23,6 +23,12 @@ public class Constants {
     public static String RESPONSE = "Response";
     
     public static String REASON_CODE_ACCEPTED = "ACTC";
+    
+    public static String REASON_CODE_REJECT = "RJCT";
+    
+    public static String REASON_CODE_OTHER = "OTHR";
+    
+    public static String REASON_CODE_KOMI_STATUS = "KSTS";
     
     public static String RESPONSE_CODE_SUCCESS = "U000";
 }

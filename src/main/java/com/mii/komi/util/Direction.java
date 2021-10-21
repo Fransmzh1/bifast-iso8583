@@ -2,7 +2,7 @@ package com.mii.komi.util;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public enum Direction {
     

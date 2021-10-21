@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 @RestController
 @RequestMapping("/komi-inbound/service")

@@ -7,7 +7,7 @@ import org.jpos.iso.ISOMsg;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public interface BaseOutboundParticipant {
     

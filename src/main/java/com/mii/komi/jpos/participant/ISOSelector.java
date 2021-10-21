@@ -12,7 +12,7 @@ import org.jpos.transaction.GroupSelector;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class ISOSelector implements GroupSelector, Configurable {
 

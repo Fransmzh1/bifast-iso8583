@@ -11,7 +11,7 @@ import org.jpos.transaction.TransactionParticipant;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class NetworkManagementParticipant implements TransactionParticipant{
 

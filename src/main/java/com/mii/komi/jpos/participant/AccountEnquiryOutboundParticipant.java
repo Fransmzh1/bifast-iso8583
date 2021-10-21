@@ -2,7 +2,6 @@ package com.mii.komi.jpos.participant;
 
 import com.mii.komi.dto.AccountEnquiryRequest;
 import com.mii.komi.dto.AccountEnquiryResponse;
-import com.mii.komi.dto.BaseResponseDTO;
 import com.mii.komi.dto.RestResponse;
 import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
@@ -22,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class AccountEnquiryOutboundParticipant implements TransactionParticipant, BaseOutboundParticipant {
 

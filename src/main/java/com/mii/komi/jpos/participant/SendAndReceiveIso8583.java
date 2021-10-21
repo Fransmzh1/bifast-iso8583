@@ -14,7 +14,7 @@ import org.jpos.transaction.TransactionParticipant;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class SendAndReceiveIso8583 implements TransactionParticipant {
 

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 /**
  *
- * @author Erwin
+ * @author Erwin Sugianto Santoso - MII
  */
 public class AccountEnquiryRequest extends BaseRequestDTO {
     

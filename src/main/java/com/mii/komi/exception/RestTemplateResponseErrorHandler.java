@@ -10,7 +10,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 @Component
 public class RestTemplateResponseErrorHandler

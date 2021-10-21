@@ -22,7 +22,7 @@ import org.jpos.util.NameRegistrar.NotFoundException;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class ChannelManager extends QBeanSupport implements SpaceListener {
 

@@ -2,7 +2,7 @@ package com.mii.komi.dto;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class BaseResponseDTO {
     

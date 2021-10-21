@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
 public class BaseRootHttpRequest {
     
