@@ -14,6 +14,6 @@ public interface BaseInboundParticipant {
     
     public Object buildFailedResponseMsg(BaseRequestDTO request, ISOMsg rsp);
     
-    public Object buildResponseMsg(ISOMsg rsp);
+    public Object buildResponseMsg(BaseRequestDTO request, ISOMsg rsp);
     
 }

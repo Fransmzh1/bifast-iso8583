@@ -4,22 +4,38 @@ package com.mii.komi.dto;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class BaseResponseDTO {
+public class BaseResponseDTO extends BaseRequestDTO {
     
-    private String noRef;
+    private String status;
+    
+    private String reason;
 
     /**
-     * @return the noRef
+     * @return the status
      */
-    public String getNoRef() {
-        return noRef;
+    public String getStatus() {
+        return status;
     }
 
     /**
-     * @param noRef the noRef to set
+     * @param status the status to set
      */
-    public void setNoRef(String noRef) {
-        this.noRef = noRef;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * @return the reason
+     */
+    public String getReason() {
+        return reason;
+    }
+
+    /**
+     * @param reason the reason to set
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
     }
     
 }

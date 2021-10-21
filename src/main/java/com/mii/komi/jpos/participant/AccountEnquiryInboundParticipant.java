@@ -3,7 +3,6 @@ package com.mii.komi.jpos.participant;
 import com.mii.komi.dto.AccountEnquiryRequest;
 import com.mii.komi.dto.AccountEnquiryResponse;
 import com.mii.komi.dto.BaseRequestDTO;
-import com.mii.komi.dto.RestResponse;
 import com.mii.komi.dto.RootAccountEnquiryRequest;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
@@ -45,13 +44,13 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     @Override
     public void abort(long id, Serializable context) {
         Context ctx = (Context) context;
-        AccountEnquiryRequest accountEnquiryRequest = (AccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
+        RootAccountEnquiryRequest accountEnquiryRequest = (RootAccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
         ISOMsg isoMsg = ctx.get(Constants.ISO_RESPONSE);
-        ResponseEntity<RestResponse<AccountEnquiryResponse>> rr = null;
+        ResponseEntity<AccountEnquiryResponse> rr = null;
         if (isoMsg == null) {
-            rr = buildFailedResponseMsg(accountEnquiryRequest, null);
+            rr = buildFailedResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), null);
         } else {
-            rr = buildFailedResponseMsg(accountEnquiryRequest, isoMsg);
+            rr = buildFailedResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), isoMsg);
         }
         ctx.put(Constants.HTTP_RESPONSE, rr);
     }
@@ -60,7 +59,8 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     public void commit(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg isoMsg = ctx.get(Constants.ISO_RESPONSE);
-        ResponseEntity<RestResponse<AccountEnquiryResponse>> restResponse = buildResponseMsg(isoMsg);
+        RootAccountEnquiryRequest accountEnquiryRequest = (RootAccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
+        ResponseEntity<AccountEnquiryResponse> restResponse = buildResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), isoMsg);
         ctx.put(Constants.HTTP_RESPONSE, restResponse);
     }
 
@@ -74,28 +74,32 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
         String categoryPurpose = ISOUtil.zeropad(accountEnquiryRequest.getCategoryPurpose(), 2);
         String accountNumber = ISOUtil.strpad(accountEnquiryRequest.getAccountNumber(), 34);
         sb.append(noRef).append(recipientBank).append(amount).append(categoryPurpose).append(accountNumber);
-
-        ISOMsg isoMsg = ISO8583Service.buildFinancialMsg(ACCOUNT_ENQUIRY_INBOUND_PC, noRef, amount);
+        ISOMsg isoMsg = ISO8583Service.buildFinancialMsg(ACCOUNT_ENQUIRY_INBOUND_PC, request);
         isoMsg.set(48, sb.toString());
         return isoMsg;
     }
 
     @Override
-    public ResponseEntity<RestResponse<AccountEnquiryResponse>> buildResponseMsg(ISOMsg isoMsg) {
+    public ResponseEntity<AccountEnquiryResponse> buildResponseMsg(BaseRequestDTO request, ISOMsg isoMsg) {
         String privateData = isoMsg.getString(62);
 
         AccountEnquiryResponse rsp = new AccountEnquiryResponse();
+        rsp.setTransactionId(request.getTransactionId());
+        rsp.setDateTime(request.getDateTime());
+        rsp.setMerchantType(isoMsg.getString(18));
+        rsp.setTerminalId(isoMsg.getString(41));
+        
         int cursor = 0;
         int endCursor = 20;
         rsp.setNoRef(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 4;
-        String rc = privateData.substring(cursor, endCursor).trim();
+        rsp.setStatus(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 35;
-        String rm = privateData.substring(cursor, endCursor).trim();
+        rsp.setReason(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 34;
@@ -126,18 +130,15 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
 
         List<AccountEnquiryResponse> list = new ArrayList<>();
         list.add(rsp);
-        return ResponseEntity.ok(RestResponse.success(rm, list));
+        return ResponseEntity.ok(rsp);
     }
 
     @Override
-    public ResponseEntity<RestResponse<AccountEnquiryResponse>> buildFailedResponseMsg(BaseRequestDTO req, ISOMsg isoMsg) {
+    public ResponseEntity<AccountEnquiryResponse> buildFailedResponseMsg(BaseRequestDTO req, ISOMsg isoMsg) {
         AccountEnquiryResponse rsp = new AccountEnquiryResponse();
-        List<AccountEnquiryResponse> list = new ArrayList<>();
-        
         AccountEnquiryRequest originalRequest = (AccountEnquiryRequest) req;
         rsp.setNoRef(req.getNoRef());
         rsp.setAccountNumber(originalRequest.getAccountNumber());
-        RestResponse rr = null;
         if (isoMsg != null) {
             if (isoMsg.hasField(62)) {
                 String privateData = isoMsg.getString(62);
@@ -160,18 +161,18 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
                 cursor = cursor + endCursor;
                 endCursor = cursor + 35;
                 rsp.setAccountType(privateData.substring(cursor, endCursor));
-                rr = RestResponse.failed(rm, rm, rc);
+                
+                rsp.setStatus(rc);
+                rsp.setReason(rm);
             } else {
-                rr = RestResponse.failed(Constants.REASON_CODE_REJECT, "Error Undefined" , "U904");
+                rsp.setStatus(Constants.REASON_CODE_REJECT);
+                rsp.setReason("U904");
             }
-            list.add(rsp);
-            rr.setContent(list);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rr);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
         } else {
-            rr = RestResponse.failed(Constants.REASON_CODE_KOMI_STATUS, "Internal Timeout", "K000");
-            list.add(rsp);
-            rr.setContent(list);
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rr);
+            rsp.setStatus(Constants.REASON_CODE_KOMI_STATUS);
+            rsp.setReason("K000");
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
         }
     }
 

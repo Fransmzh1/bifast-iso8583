@@ -33,4 +33,10 @@ public class Constants {
     public static String RESPONSE_CODE_SUCCESS = "U000";
     
     public static String QUEUE_KEY = "QUEUE_KEY";
+    
+    public static String MB_DEFAULT_TERMINAL_ID = "MBS";
+    
+    public static String IB_DEFAULT_TERMINAL_ID = "IBS";
+    
+    public static String TELLER_DEFAULT_TERMINAL_ID = "TELLER";
 }

@@ -1,5 +1,7 @@
 package com.mii.komi.service;
 
+import com.mii.komi.dto.BaseRequestDTO;
+import com.mii.komi.util.Constants;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +23,7 @@ public class ISO8583Service {
     private static final String ISO_MTI_ADMINISTRATIVE_REQUEST_1987 = "0600";
     private static final String ISO_MTI_NETWORK_REQUEST_1987 = "0800";
     private static final String ISO_IDR_CURRENCY_CODE = "360";
+    private static final String ISO_LOCAL_BANK_CODE = "564";
 
     private static int SEQ_NUMBER = 0;
 
@@ -52,26 +55,26 @@ public class ISO8583Service {
         }
     }
 
-    public static ISOMsg buildFinancialMsg(String processingCode, String uniqueReff, String terminalType) throws ISOException {
+    public static ISOMsg buildFinancialMsg(String processingCode, BaseRequestDTO requestDTO) throws ISOException {
         LocalDateTime currentGMT = LocalDateTime.now(ZoneId.of("GMT"));
         LocalDateTime current = LocalDateTime.now();
         String currentStringGMTDate = currentGMT.format(DateTimeFormatter.ofPattern("MMddHHmmss"));
-        String currentDate = current.format(DateTimeFormatter.ofPattern("MMdd"));
-        String currentTime = current.format(DateTimeFormatter.ofPattern("HHmmss"));
-        String stan = ISOUtil.zeropad(1, 6);
-        //String rrn = ISOUtil.zeropad(uniqueReff, 12);
+        String currentLocalDate = current.format(DateTimeFormatter.ofPattern("MMdd"));
+        String currentLocalTime = current.format(DateTimeFormatter.ofPattern("HHmmss"));
 
         ISOMsg isomsg = new ISOMsg();
         isomsg.setMTI(ISO_MTI_FINANCIAL_REQUEST_1987);
         isomsg.set(3, processingCode);
         isomsg.set(7, currentStringGMTDate);
-        isomsg.set(11, stan);
-        //isomsg.set(12, currentTime);
-        isomsg.set(18, "6018");
-        //isomsg.set(13, currentDate);
-        isomsg.set(32, "000");
-        //isomsg.set(37, rrn);
+        isomsg.set(11, requestDTO.getTransactionId());
+        isomsg.set(12, currentLocalTime);
+        isomsg.set(13, currentLocalDate);
+        isomsg.set(18, requestDTO.getMerchantType());
+        isomsg.set(32, ISO_LOCAL_BANK_CODE);
+        isomsg.set(37, ISOUtil.zeropad(requestDTO.getTransactionId(), 12));
+        isomsg.set(41, requestDTO.getTerminalId());
         isomsg.set(49, ISO_IDR_CURRENCY_CODE);
+        isomsg.set(63, requestDTO.getNoRef());
         return isomsg;
     }
 
