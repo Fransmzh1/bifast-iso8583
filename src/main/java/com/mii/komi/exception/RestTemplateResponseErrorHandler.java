@@ -1,5 +1,6 @@
 package com.mii.komi.exception;
 
+import com.mii.komi.util.Utility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,14 +37,7 @@ public class RestTemplateResponseErrorHandler
             if (httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 if (httpResponse.getBody() != null) {
                     InputStream is = httpResponse.getBody();
-                    StringBuilder textBuilder = new StringBuilder();
-                    try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
-                        int c = 0;
-                        while ((c = reader.read()) != -1) {
-                            textBuilder.append((char) c);
-                        }
-                    }
-                    throw new HttpRequestException(textBuilder.toString());
+                    throw new HttpRequestException(Utility.convertInputStreamToString(is));
                 }
             }
         } else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
@@ -53,14 +47,7 @@ public class RestTemplateResponseErrorHandler
             } else if (httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 if (httpResponse.getBody() != null) {
                     InputStream is = httpResponse.getBody();
-                    StringBuilder textBuilder = new StringBuilder();
-                    try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
-                        int c = 0;
-                        while ((c = reader.read()) != -1) {
-                            textBuilder.append((char) c);
-                        }
-                    }
-                    throw new HttpRequestException(textBuilder.toString());
+                    throw new HttpRequestException(Utility.convertInputStreamToString(is));
                 }
             }
         }
