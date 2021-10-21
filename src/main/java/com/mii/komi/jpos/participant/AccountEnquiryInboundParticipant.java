@@ -66,10 +66,10 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
         AccountEnquiryRequest accountEnquiryRequest = (AccountEnquiryRequest) request;
         StringBuilder sb = new StringBuilder();
         String noRef = ISOUtil.strpad(accountEnquiryRequest.getNoRef(), 20);
-        String recipientBank = ISOUtil.strpad(accountEnquiryRequest.getRecipientBank(), 8);
+        String recipientBank = ISOUtil.strpad(accountEnquiryRequest.getRecipientBank(), 35);
         String amount = ISOUtil.zeropad(String.valueOf(accountEnquiryRequest.getAmount()), 18);
         String categoryPurpose = ISOUtil.zeropad(accountEnquiryRequest.getCategoryPurpose(), 2);
-        String accountNumber = ISOUtil.strpad(accountEnquiryRequest.getAccountNumber(), 35);
+        String accountNumber = ISOUtil.strpad(accountEnquiryRequest.getAccountNumber(), 34);
         sb.append(noRef).append(recipientBank).append(amount).append(categoryPurpose).append(accountNumber);
 
         ISOMsg isoMsg = ISO8583Service.buildFinancialMsg("389100", noRef, amount);
@@ -84,42 +84,42 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
         AccountEnquiryResponse rsp = new AccountEnquiryResponse();
         int cursor = 0;
         int endCursor = 20;
-        rsp.setNoRef(privateData.substring(cursor, endCursor));
+        rsp.setNoRef(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 4;
-        String rc = privateData.substring(cursor, endCursor);
+        String rc = privateData.substring(cursor, endCursor).trim();
 
         cursor = endCursor;
         endCursor = cursor + 35;
-        String rm = privateData.substring(cursor, endCursor);
+        String rm = privateData.substring(cursor, endCursor).trim();
 
         cursor = endCursor;
         endCursor = cursor + 34;
-        rsp.setAccountNumber(privateData.substring(cursor, endCursor));
+        rsp.setAccountNumber(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 35;
-        rsp.setAccountType(privateData.substring(cursor, endCursor));
+        rsp.setAccountType(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 140;
-        rsp.setCreditorName(privateData.substring(cursor, endCursor));
+        rsp.setCreditorName(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 35;
-        rsp.setCreditorId(privateData.substring(cursor, endCursor));
+        rsp.setCreditorId(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 35;
-        rsp.setCreditorType(privateData.substring(cursor, endCursor));
+        rsp.setCreditorType(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 35;
-        rsp.setResidentStatus(privateData.substring(cursor, endCursor));
+        rsp.setResidentStatus(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
-        rsp.setTownName(privateData.substring(cursor));
+        rsp.setTownName(privateData.substring(cursor).trim());
 
         List<AccountEnquiryResponse> list = new ArrayList<>();
         list.add(rsp);
