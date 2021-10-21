@@ -4,6 +4,7 @@ import com.mii.komi.dto.AccountEnquiryRequest;
 import com.mii.komi.dto.AccountEnquiryResponse;
 import com.mii.komi.dto.BaseRequestDTO;
 import com.mii.komi.dto.RestResponse;
+import com.mii.komi.dto.RootAccountEnquiryRequest;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
@@ -30,9 +31,9 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
-        AccountEnquiryRequest accountEnquiryRequest = (AccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
+        RootAccountEnquiryRequest accountEnquiryRequest = (RootAccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
         try {
-            ISOMsg isoMsg = buildRequestMsg(accountEnquiryRequest);
+            ISOMsg isoMsg = buildRequestMsg(accountEnquiryRequest.getAccountEnquiryRequest());
             ctx.put(Constants.ISO_REQUEST, isoMsg);
             return PREPARED;
         } catch (ISOException ex) {

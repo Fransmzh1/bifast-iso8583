@@ -9,8 +9,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 public class AccountEnquiryResponse extends BaseResponseDTO {
     
-    private String noRef;
-    
     private String accountNumber;
     
     @JsonInclude(Include.NON_NULL)
@@ -30,20 +28,6 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
     
     @JsonInclude(Include.NON_NULL)
     private String townName;
-
-    /**
-     * @return the noRef
-     */
-    public String getNoRef() {
-        return noRef;
-    }
-
-    /**
-     * @param noRef the noRef to set
-     */
-    public void setNoRef(String noRef) {
-        this.noRef = noRef;
-    }
 
     /**
      * @return the accountNumber

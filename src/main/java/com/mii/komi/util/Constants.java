@@ -31,4 +31,6 @@ public class Constants {
     public static String REASON_CODE_KOMI_STATUS = "KSTS";
     
     public static String RESPONSE_CODE_SUCCESS = "U000";
+    
+    public static String QUEUE_KEY = "QUEUE_KEY";
 }

@@ -1,11 +1,12 @@
 package com.mii.komi.controller;
 
-import com.mii.komi.dto.BaseRequestDTO;
+import com.mii.komi.dto.BaseRootHttpRequest;
 import com.mii.komi.dto.RestResponse;
 import com.mii.komi.dto.RootAccountEnquiryRequest;
 import com.mii.komi.service.RESTLoggingService;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Direction;
+import com.mii.komi.util.Utility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -44,9 +45,6 @@ public class BIFastController {
     
     @Value("${txnmgr.timeout}")
     private Long txnmgrTimeout;
-    
-    @Autowired
-    private RESTLoggingService loggingService;
 
     @ApiOperation(value = "Account Enquiry", nickname = "Account Enquiry API")
     @ApiResponses(value = {
@@ -59,27 +57,16 @@ public class BIFastController {
     public ResponseEntity<RestResponse> accountEnquiry(
             @RequestBody RootAccountEnquiryRequest request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
-        loggingService.log(Direction.INCOMING, 
-                request.toString(), 
-                HttpMethod.POST.toString(), 
-                httpServletRequest.getRemoteAddr(), 
-                httpServletRequest.getRequestURI(), 
-                Constants.REQUEST);
-        ResponseEntity<RestResponse> rsp = queryTxnMgr(request.getAccountEnquiryRequest(), "AccountEnquiryRequest");
-        /*loggingService.log(Direction.OUTGOING, 
-                rsp.getBody().toString(), 
-                HttpMethod.POST.toString(), 
-                httpServletRequest.getRemoteAddr(), 
-                httpServletRequest.getRequestURI(), 
-                Constants.RESPONSE);*/
+        ResponseEntity<RestResponse> rsp = queryTxnMgr(request, "AccountEnquiryRequest");
         return rsp;
     }
     
-    private ResponseEntity<RestResponse> queryTxnMgr(BaseRequestDTO requestDTO, String basepath) {
-        String queueKey = requestDTO.getNoRef();
+    private ResponseEntity<RestResponse> queryTxnMgr(BaseRootHttpRequest baseRootRequest, String basepath) {
+        String queueKey = Utility.generateUUID();
         Context context = new Context();
         context.put(Constants.SELECTOR_KEY, basepath);
-        context.put(Constants.HTTP_REQUEST, requestDTO);
+        context.put(Constants.HTTP_REQUEST, baseRootRequest);
+        context.put(Constants.QUEUE_KEY, queueKey);
         Space space = SpaceFactory.getSpace();
         space.out(txnmgrQueue, context, txnmgrTimeout);
         Context rspContext = (Context) space.in(queueKey, txnmgrTimeout);

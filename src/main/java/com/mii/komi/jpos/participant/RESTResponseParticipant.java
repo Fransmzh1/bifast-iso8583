@@ -36,9 +36,8 @@ public class RESTResponseParticipant implements AbortParticipant {
 
     private void sendResponse(long id, Serializable context) {
         Context ctx = (Context) context;
-        BaseRequestDTO req = ctx.get(Constants.HTTP_REQUEST);
+        String queueKey = ctx.get(Constants.QUEUE_KEY);
         Space space = SpaceFactory.getSpace();
-        String queueKey = req.getNoRef();
         space.out(queueKey, ctx);
     }
 
