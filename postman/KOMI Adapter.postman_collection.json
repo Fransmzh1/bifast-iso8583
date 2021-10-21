@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "ad9cf257-22c0-40ec-ab2c-082e925894c3",
+		"name": "KOMI Adapter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Outbound Account Enquiry",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transaction_id\":\"000009\",\r\n    \"dateTime\":\"2021-10-18T11:02:00.000\",\r\n    \"merchantType\":\"6018\",\r\n    \"terminalId\":\"TELLER01\",\r\n    \"noRef\":\"00000000000000000001\",\r\n    \"recipientBank\":\"BNINDJAMBK\",\r\n    \"amount\":\"1250000.00\",\r\n    \"categoryPurpose\":\"02\",\r\n    \"accountNumber\":\"123987456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/komi/api/v1/adapter/accountinquiry",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"komi",
+						"api",
+						"v1",
+						"adapter",
+						"accountinquiry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inbound Account Enquiry",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	]
+}
