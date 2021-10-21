@@ -40,42 +40,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/komi-inbound/service")
 @Api(tags = {"ISO8583 Adapter API"})
 public class BIFastController {
-
-    @Autowired
-    private ISO8583Service iso8583Service;
-
-    @Autowired
-    private CreditTransferService creditTransferService;
+    
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${txnmgr.queue}")
     private String txnmgrQueue;
     
     @Value("${txnmgr.timeout}")
     private Long txnmgrTimeout;
-    
-    @Autowired
-    private RESTLoggingService loggingService;
-    
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @ApiOperation(value = "Network Management", nickname = "ISO8583 Network Management API")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Successfully get data"),
-        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page Not Found")
-    })
-    @PostMapping(path = "/netman", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity echoTest() throws ISOException, NameRegistrar.NotFoundException {
-        ISOMsg isoMsg = iso8583Service.buildNetworkMsg("001");
-        //ISOMsg rsp = queryTxnMgr(isoMsg);
-        /*if ("00".equals(rsp.getBytes(39))) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.internalServerError().build();
-        }*/
-        return null;
-    }
 
     @ApiOperation(value = "Account Enquiry", nickname = "Account Enquiry API")
     @ApiResponses(value = {
@@ -88,33 +60,8 @@ public class BIFastController {
     public ResponseEntity<RestResponse> accountEnquiry(
             @RequestBody RootAccountEnquiryRequest request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
-        /*loggingService.log(Direction.INCOMING, 
-                request.toString(), 
-                httpServletRequest.getMethod(), 
-                httpServletRequest.getRemoteAddr(), 
-                httpServletRequest.getRequestURI(), 
-                "Request");*/
         ResponseEntity<RestResponse> rsp = queryTxnMgr(request.getAccountEnquiryRequest(), "AccountEnquiryRequest");
-        /*loggingService.log(Direction.OUTGOING, 
-                rsp.getBody().toString(), 
-                httpServletRequest.getMethod(), 
-                httpServletRequest.getRemoteAddr(), 
-                httpServletRequest.getRequestURI(), 
-                "Response");*/
         return rsp;
-    }
-
-    @ApiOperation(value = "Credit Transfer", nickname = "Core Banking Credit Transfer")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Successfully Post Transfer Data"),
-        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page Not Found")
-    })
-    @PostMapping(path = "/CreditTransferRequest", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreditTransferInboundResponse> creditTransfer(
-            @RequestBody CreditTransferInboundRequest request) throws ISOException, NameRegistrar.NotFoundException {
-        return null;
     }
     
     private ResponseEntity<RestResponse> queryTxnMgr(BaseRequestDTO requestDTO, String basepath) {
