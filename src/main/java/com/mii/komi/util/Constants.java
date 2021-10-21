@@ -17,4 +17,8 @@ public class Constants {
     public static String SOURCE_KEY = "ISO_SOURCE";
     
     public static String SELECTOR_KEY = "SELECTOR_KEY";
+    
+    public static String REQUEST = "Request";
+    
+    public static String RESPONSE = "Response";
 }

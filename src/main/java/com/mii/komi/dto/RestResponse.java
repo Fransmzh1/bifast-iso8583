@@ -1,5 +1,7 @@
 package com.mii.komi.dto;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -129,6 +131,11 @@ public class RestResponse<T> {
      */
     public void setContent(List<T> content) {
         this.content = content;
+    }
+    
+    public String toString() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
     }
     
 }

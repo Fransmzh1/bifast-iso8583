@@ -1,6 +1,8 @@
 package com.mii.komi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.Optional;
 
 /**

@@ -1,3 +1,5 @@
+import org.jpos.iso.ISOUtil;
+
 if("0200".equals(message.getMTI())) {
     if("389100".equals(message.getString(3))) {
         String reqData = message.getString(48);
@@ -8,14 +10,14 @@ if("0200".equals(message.getMTI())) {
         String accountNumber = reqData.substring(75);
         
         String statusCode = "ACTC";
-        String reason = "U000";
-        String accountType = "SVGS";
+        String reason = ISOUtil.strpad("U000", 35);
+        String accountType = ISOUtil.strpad("SVGS", 35);
         String creditorName = ISOUtil.strpad("Purnomo Erwin", 140);
         String creditorId = ISOUtil.strpad("1726857439902837", 35);
         String creditorType = ISOUtil.strpad("CORP", 35);
         String residentStatus = ISOUtil.strpad("01", 35);
         String townName = ISOUtil.strpad("0300", 35);
-        message.set (62, reqData + statusCode + reason + accountNumber + 
+        message.set (62, noref + statusCode + reason + accountNumber + 
             accountType + creditorName + creditorId + creditorType +
             residentStatus + townName);
     }
@@ -24,6 +26,7 @@ if("0200".equals(message.getMTI())) {
 }
 
 message.setResponseMTI ();
+message.unset(48);
 
 Random random = new Random (System.currentTimeMillis());
 message.set (37, Integer.toString(Math.abs(random.nextInt()) % 1000000));

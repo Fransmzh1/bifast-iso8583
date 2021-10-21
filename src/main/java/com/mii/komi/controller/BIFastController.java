@@ -3,10 +3,6 @@ package com.mii.komi.controller;
 import com.mii.komi.dto.BaseRequestDTO;
 import com.mii.komi.dto.RestResponse;
 import com.mii.komi.dto.RootAccountEnquiryRequest;
-import com.mii.komi.dto.inbound.CreditTransferInboundRequest;
-import com.mii.komi.dto.inbound.CreditTransferInboundResponse;
-import com.mii.komi.service.CreditTransferService;
-import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.service.RESTLoggingService;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Direction;
@@ -14,9 +10,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.models.HttpMethod;
 import javax.servlet.http.HttpServletRequest;
 import org.jpos.iso.ISOException;
-import org.jpos.iso.ISOMsg;
 import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
 import org.jpos.transaction.Context;
@@ -48,6 +44,9 @@ public class BIFastController {
     
     @Value("${txnmgr.timeout}")
     private Long txnmgrTimeout;
+    
+    @Autowired
+    private RESTLoggingService loggingService;
 
     @ApiOperation(value = "Account Enquiry", nickname = "Account Enquiry API")
     @ApiResponses(value = {
@@ -60,7 +59,19 @@ public class BIFastController {
     public ResponseEntity<RestResponse> accountEnquiry(
             @RequestBody RootAccountEnquiryRequest request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        loggingService.log(Direction.INCOMING, 
+                request.toString(), 
+                HttpMethod.POST.toString(), 
+                httpServletRequest.getRemoteAddr(), 
+                httpServletRequest.getRequestURI(), 
+                Constants.REQUEST);
         ResponseEntity<RestResponse> rsp = queryTxnMgr(request.getAccountEnquiryRequest(), "AccountEnquiryRequest");
+        /*loggingService.log(Direction.OUTGOING, 
+                rsp.getBody().toString(), 
+                HttpMethod.POST.toString(), 
+                httpServletRequest.getRemoteAddr(), 
+                httpServletRequest.getRequestURI(), 
+                Constants.RESPONSE);*/
         return rsp;
     }
     

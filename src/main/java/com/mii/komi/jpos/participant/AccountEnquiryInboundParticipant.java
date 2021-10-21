@@ -86,39 +86,39 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
         int endCursor = 20;
         rsp.setNoRef(privateData.substring(cursor, endCursor));
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 4;
         String rc = privateData.substring(cursor, endCursor);
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 35;
         String rm = privateData.substring(cursor, endCursor);
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 34;
         rsp.setAccountNumber(privateData.substring(cursor, endCursor));
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 35;
         rsp.setAccountType(privateData.substring(cursor, endCursor));
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 140;
         rsp.setCreditorName(privateData.substring(cursor, endCursor));
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 35;
         rsp.setCreditorId(privateData.substring(cursor, endCursor));
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 35;
         rsp.setCreditorType(privateData.substring(cursor, endCursor));
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         endCursor = cursor + 35;
         rsp.setResidentStatus(privateData.substring(cursor, endCursor));
 
-        cursor = cursor + endCursor;
+        cursor = endCursor;
         rsp.setTownName(privateData.substring(cursor));
 
         List<AccountEnquiryResponse> list = new ArrayList<>();
