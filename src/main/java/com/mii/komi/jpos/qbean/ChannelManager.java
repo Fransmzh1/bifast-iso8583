@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.jpos.iso.ISODate;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
+import org.jpos.iso.ISOUtil;
 import org.jpos.iso.packager.ISO87APackager;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.q2.iso.QMUX;
@@ -36,6 +37,8 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
     private LocalSpace sp;
     private String in;
     private String out;
+    
+    public static int stanSequence = 1;
 
     public static void logISOMsg(ISOMsg msg) {
         try {
@@ -72,9 +75,16 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
             logger.error("Error in initializing service :" + e.getMessage());
         }
     }
+    
+    private static void addStanSeqence() {
+        if(999999 == stanSequence) {
+            stanSequence = 1;
+        } else {
+            stanSequence++;
+        }
+    }
 
     private void sendEchoTest() {
-        String stanId = "000001";
         Map<String, String> date = getDate();
 
         try {
@@ -82,7 +92,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
 
             msg.setMTI("0800");
             msg.set(7, date.get("bit7"));
-            msg.set(11, stanId);
+            msg.set(11, ISOUtil.zeropad(stanSequence, 6));
             msg.set(70, "301");
             msg.setPackager(new ISO87APackager());
 
@@ -92,6 +102,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
 
             try {
                 sendMsg(msg);
+                addStanSeqence();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -113,13 +124,14 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
             ISOMsg msg = (ISOMsg) m.clone();
             msg.setMTI("0800");
             msg.set(7, ISODate.getDateTime(new Date()));
-            msg.set(11, "000002");
+            msg.set(11, ISOUtil.zeropad(stanSequence, 6));
             msg.set(70, "001");
             msg.setPackager(new ISO87APackager());
             byte[] messageBody = msg.pack();
             ChannelManager.logISOMsg(msg);
             try {
                 reply = sendMsg(msg);
+                addStanSeqence();
                 if (reply != null) {
                     if (reply.getValue(39).equals("00")) {
                         space.out(mux.getName() + "-signed-on", true);

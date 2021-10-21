@@ -31,7 +31,7 @@ public class ISO8583Service {
         try {
             QMUX mux = NameRegistrar.get("mux." + targetName + "-mux");
             if (mux.isConnected()) {
-                ISOMsg isoMsgRsp = mux.request(isoMsg, 6000);
+                ISOMsg isoMsgRsp = mux.request(isoMsg, 30000);
                 if (isoMsgRsp == null) {
                     isoMsgRsp = (ISOMsg) isoMsg.clone();
                     isoMsgRsp.setResponseMTI();

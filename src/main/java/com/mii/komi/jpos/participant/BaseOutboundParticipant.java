@@ -13,8 +13,8 @@ public interface BaseOutboundParticipant {
     
     public Object buildRequestMsg(ISOMsg isoMsg) throws ISOException;
     
-    public ISOMsg buildFailedResponseMsg(ISOMsg req, RestResponse rr);
+    public ISOMsg buildFailedResponseMsg(ISOMsg req, BaseResponseDTO rr);
     
-    public ISOMsg buildResponseMsg(ISOMsg req, RestResponse<BaseResponseDTO> dto) throws ISOException;
+    public ISOMsg buildResponseMsg(ISOMsg req, BaseResponseDTO dto) throws ISOException;
     
 }

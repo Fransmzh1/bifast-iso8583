@@ -14,15 +14,9 @@
     <group name="Financial">
         <participant class="com.mii.komi.jpos.participant.ISOSelector" name="Selector" logger="Q2">
             <property name="fieldNumber" value="3" />
-            <property name="109000" value="SendAndReceiveToCore" />
-            <property name="109100" value="SendAndReceiveToCore" />
-            <property name="209000" value="SendAndReceiveToCore" />
-            <property name="209100" value="SendAndReceiveToCore" />
-            <property name="310000" value="SendAndReceiveToCore" />
             <property name="389000" value="OutboundAccountInquiry" />
             <property name="389100" value="SendAndReceiveToCore" />
             <property name="489000" value="CreditTransfer" />
-            <property name="489100" value="SendAndReceiveToCore" />
             <property name="489200" value="PaymentStatus" />
         </participant>
     </group>
