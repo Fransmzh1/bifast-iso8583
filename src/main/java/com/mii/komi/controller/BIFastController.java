@@ -1,5 +1,8 @@
 package com.mii.komi.controller;
 
+import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
+import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
+import com.mii.komi.dto.inbound.DebitTransferInboundRequest;
 import com.mii.komi.dto.outbound.requestroot.BaseRootHttpRequest;
 import com.mii.komi.dto.outbound.RestResponse;
 import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
@@ -30,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Erwin Sugianto Santoso - MII
  */
 @RestController
-@RequestMapping("/komi-inbound/service")
+@RequestMapping("/komi/api/v1/adapter")
 @Api(tags = {"ISO8583 Adapter API"})
 public class BIFastController {
     
@@ -49,19 +52,34 @@ public class BIFastController {
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Page Not Found")
     })
-    @PostMapping(path = "/AccountEnquiryRequest", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/accountinquiry", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity accountEnquiry(
-            @RequestBody RootAccountEnquiry request,
+            @RequestBody AccountEnquiryInboundRequest request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
-        ResponseEntity rsp = queryTxnMgr(request, "AccountEnquiryRequest");
+        ResponseEntity rsp = queryTxnMgr(request, "AccountEnquiry");
         return rsp;
     }
     
-    private ResponseEntity queryTxnMgr(BaseRootHttpRequest baseRootRequest, String basepath) {
+    @ApiOperation(value = "Debit Transfer Request", nickname = "Debit Transfer API")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully POST data"),
+        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page Not Found")
+    })
+    @PostMapping(path = "/debit", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity debit(
+            @RequestBody DebitTransferInboundRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        ResponseEntity rsp = queryTxnMgr(request, "DebitTransfer");
+        return rsp;
+    }
+    
+    private ResponseEntity queryTxnMgr(BaseInboundRequestDTO baseRequestDTO, String basepath) {
         String queueKey = Utility.generateUUID();
         Context context = new Context();
         context.put(Constants.SELECTOR_KEY, basepath);
-        context.put(Constants.HTTP_REQUEST, baseRootRequest);
+        context.put(Constants.HTTP_REQUEST, baseRequestDTO);
         context.put(Constants.QUEUE_KEY, queueKey);
         Space space = SpaceFactory.getSpace();
         space.out(txnmgrQueue, context, txnmgrTimeout);

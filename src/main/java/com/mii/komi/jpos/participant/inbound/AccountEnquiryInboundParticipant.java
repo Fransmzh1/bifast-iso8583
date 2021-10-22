@@ -3,9 +3,6 @@ package com.mii.komi.jpos.participant.inbound;
 import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
 import com.mii.komi.dto.inbound.AccountEnquiryInboundResponse;
 import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
-import com.mii.komi.dto.inbound.BaseInboundResponseDTO;
-import com.mii.komi.dto.outbound.BaseOutboundDTO;
-import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
@@ -32,9 +29,9 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
-        RootAccountEnquiry accountEnquiryRequest = (RootAccountEnquiry) ctx.get(Constants.HTTP_REQUEST);
+        AccountEnquiryInboundRequest accountEnquiryRequest = (AccountEnquiryInboundRequest) ctx.get(Constants.HTTP_REQUEST);
         try {
-            ISOMsg isoMsg = buildRequestMsg(accountEnquiryRequest.getAccountEnquiryRequest());
+            ISOMsg isoMsg = buildRequestMsg(accountEnquiryRequest);
             ctx.put(Constants.ISO_REQUEST, isoMsg);
             return PREPARED;
         } catch (ISOException ex) {
@@ -46,13 +43,13 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     @Override
     public void abort(long id, Serializable context) {
         Context ctx = (Context) context;
-        RootAccountEnquiry accountEnquiryRequest = (RootAccountEnquiry) ctx.get(Constants.HTTP_REQUEST);
+        AccountEnquiryInboundRequest accountEnquiryRequest = (AccountEnquiryInboundRequest) ctx.get(Constants.HTTP_REQUEST);
         ISOMsg isoMsg = ctx.get(Constants.ISO_RESPONSE);
         ResponseEntity<AccountEnquiryInboundResponse> rr = null;
         if (isoMsg == null) {
-            rr = buildFailedResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), null);
+            rr = buildFailedResponseMsg(accountEnquiryRequest, null);
         } else {
-            rr = buildFailedResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), isoMsg);
+            rr = buildFailedResponseMsg(accountEnquiryRequest, isoMsg);
         }
         ctx.put(Constants.HTTP_RESPONSE, rr);
     }
@@ -61,8 +58,8 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     public void commit(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg isoMsg = ctx.get(Constants.ISO_RESPONSE);
-        RootAccountEnquiry accountEnquiryRequest = (RootAccountEnquiry) ctx.get(Constants.HTTP_REQUEST);
-        ResponseEntity<AccountEnquiryInboundResponse> restResponse = buildResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), isoMsg);
+        AccountEnquiryInboundRequest accountEnquiryRequest = (AccountEnquiryInboundRequest) ctx.get(Constants.HTTP_REQUEST);
+        ResponseEntity<AccountEnquiryInboundResponse> restResponse = buildResponseMsg(accountEnquiryRequest, isoMsg);
         ctx.put(Constants.HTTP_RESPONSE, restResponse);
     }
 
@@ -129,9 +126,7 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
 
         cursor = endCursor;
         rsp.setTownName(privateData.substring(cursor).trim());
-
-        List<AccountEnquiryInboundResponse> list = new ArrayList<>();
-        list.add(rsp);
+        
         return ResponseEntity.ok(rsp);
     }
 

@@ -4,12 +4,17 @@
     <property name="sessions" value="5" />
     <property name="debug" value="true" />
     <participant class="com.mii.komi.jpos.participant.inbound.RESTSelector" name="Selector" logger="Q2">
-        <property name="AccountEnquiryRequest" value="AccountEnquiry SendAndReceiveToCoreBanking" />
+        <property name="AccountEnquiry" value="AccountEnquiry SendAndReceiveToCoreBanking" />
+        <property name="DebitTransfer" value="DebitTransfer SendAndReceiveToCoreBanking" />
     </participant>
     <participant class="com.mii.komi.jpos.participant.inbound.RESTResponseParticipant" logger="Q2"/>
     
     <group name="AccountEnquiry">
         <participant class="com.mii.komi.jpos.participant.inbound.AccountEnquiryInboundParticipant" logger="Q2" />
+    </group>
+    
+    <group name="DebitTransfer">
+        <participant class="com.mii.komi.jpos.participant.inbound.DebitTransferParticipant" logger="Q2" />
     </group>
     
     <group name="SendAndReceiveToCoreBanking">
