@@ -42,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"AccountEnquiryRequest\": {\r\n        \"transactionId\":\"000001\",\r\n        \"dateTime\":\"2021-10-21T11:00:00.000\",\r\n        \"merchantType\":\"6018\",\r\n        \"terminalId\":\"MBS       \",\r\n        \"noRef\": \"20200420471644500911\",\r\n        \"recipientBank\": \"BNINDJAMBK\",\r\n        \"amount\": 137400.20,\r\n        \"categoryPurpose\": \"01\",\r\n        \"accountNumber\": \"67758999\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"amount\": 137400.20,\r\n    \"categoryPurpose\": \"01\",\r\n    \"accountNumber\": \"67758999\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -50,16 +50,18 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/komi-inbound/service/AccountEnquiryRequest",
+					"raw": "http://localhost:5001/komi/api/v1/adapter/accountinquiry",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5001",
 					"path": [
-						"komi-inbound",
-						"service",
-						"AccountEnquiryRequest"
+						"komi",
+						"api",
+						"v1",
+						"adapter",
+						"accountinquiry"
 					]
 				}
 			},
@@ -90,6 +92,38 @@
 						"iso8583",
 						"service",
 						"sendAndReceive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inbound Debit Transfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"amount\": 137400.20,\r\n    \"categoryPurpose\": \"01\",\r\n    \"accountNumber\": \"67758999\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/komi/api/v1/adapter/debit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"komi",
+						"api",
+						"v1",
+						"adapter",
+						"debit"
 					]
 				}
 			},
