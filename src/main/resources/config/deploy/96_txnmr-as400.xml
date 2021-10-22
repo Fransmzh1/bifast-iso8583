@@ -13,6 +13,6 @@
     </group>
     
     <group name="SendAndReceiveToCoreBanking">
-        <participant class="com.mii.komi.jpos.participant.SendAndReceiveIso8583" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.SendAndReceiveIso8583" logger="Q2" />
     </group>
 </txnmgr>
