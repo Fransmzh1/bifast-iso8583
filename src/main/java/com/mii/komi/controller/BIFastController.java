@@ -1,8 +1,8 @@
 package com.mii.komi.controller;
 
-import com.mii.komi.dto.BaseRootHttpRequest;
-import com.mii.komi.dto.RestResponse;
-import com.mii.komi.dto.RootAccountEnquiryRequest;
+import com.mii.komi.dto.outbound.requestroot.BaseRootHttpRequest;
+import com.mii.komi.dto.outbound.RestResponse;
+import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Utility;
 import io.swagger.annotations.Api;
@@ -51,7 +51,7 @@ public class BIFastController {
     })
     @PostMapping(path = "/AccountEnquiryRequest", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity accountEnquiry(
-            @RequestBody RootAccountEnquiryRequest request,
+            @RequestBody RootAccountEnquiry request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
         ResponseEntity rsp = queryTxnMgr(request, "AccountEnquiryRequest");
         return rsp;

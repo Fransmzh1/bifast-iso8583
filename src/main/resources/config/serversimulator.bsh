@@ -18,6 +18,8 @@ if(message.isRequest()) {
             String creditorType = ISOUtil.strpad("CORP", 35);
             String residentStatus = ISOUtil.strpad("01", 35);
             String townName = ISOUtil.strpad("0300", 35);
+            String proxyId = ISOUtil.strpad("", 140);
+            String proxyType = ISOUtil.strpad("", 35);
             message.set (62, noref + statusCode + reason + accountNumber + 
                 accountType + creditorName + creditorId + creditorType +
                 residentStatus + townName);

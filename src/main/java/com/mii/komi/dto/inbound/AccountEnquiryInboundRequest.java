@@ -1,4 +1,4 @@
-package com.mii.komi.dto;
+package com.mii.komi.dto.inbound;
 
 import java.util.Optional;
 
@@ -6,7 +6,7 @@ import java.util.Optional;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class AccountEnquiryRequest extends BaseRequestDTO {
+public class AccountEnquiryInboundRequest extends BaseInboundRequestDTO {
     
     private String recipientBank;
     

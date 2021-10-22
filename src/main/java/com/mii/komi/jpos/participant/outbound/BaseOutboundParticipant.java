@@ -1,7 +1,7 @@
 package com.mii.komi.jpos.participant.outbound;
 
-import com.mii.komi.dto.BaseResponseDTO;
-import com.mii.komi.dto.RestResponse;
+import com.mii.komi.dto.outbound.BaseOutboundDTO;
+import com.mii.komi.dto.outbound.RestResponse;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 
@@ -13,8 +13,8 @@ public interface BaseOutboundParticipant {
     
     public Object buildRequestMsg(ISOMsg isoMsg) throws ISOException;
     
-    public ISOMsg buildFailedResponseMsg(ISOMsg req, BaseResponseDTO rr);
+    public ISOMsg buildFailedResponseMsg(ISOMsg req, RestResponse<BaseOutboundDTO> rr);
     
-    public ISOMsg buildResponseMsg(ISOMsg req, BaseResponseDTO dto) throws ISOException;
+    public ISOMsg buildResponseMsg(ISOMsg req, RestResponse<BaseOutboundDTO> dto) throws ISOException;
     
 }

@@ -1,12 +1,10 @@
 package com.mii.komi.dto.inbound;
 
-import com.mii.komi.dto.BaseRequestDTO;
-
 /**
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class CreditTransferInboundRequest extends BaseRequestDTO {
+public class CreditTransferInboundRequest extends BaseInboundRequestDTO {
     
     private String categoryPurpose;
     

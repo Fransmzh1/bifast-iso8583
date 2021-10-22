@@ -1,0 +1,6 @@
+- Root Parent DTO : BaseDTO.java and direct descendant are BaseOutboundDTO
+- All outbound DTO are based on BaseOutboundDTO and all request outbound must be inside root (all root classes are in package requestroot)
+- All response for outbound DTO must be wrap under RestResponse class, with "content" key.
+- Sample : AccountEnquiryOutboundRequest.java & AccountEnquiryOutboundResponse.java
+- @JsonInclude(Include.NON_NULL) --> only applied request DTO are to prevent null or "" value send to KOMI so null value are not sent on JSON request
+- Optional.ofNullable(recipientBank).orElse(""); --> on getter response DTO are to prevent exception when building ISO8583 Private Data on JSON response

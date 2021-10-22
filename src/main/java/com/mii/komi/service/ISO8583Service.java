@@ -1,6 +1,7 @@
 package com.mii.komi.service;
 
-import com.mii.komi.dto.BaseRequestDTO;
+import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
+import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.util.Constants;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -55,7 +56,7 @@ public class ISO8583Service {
         }
     }
 
-    public static ISOMsg buildFinancialMsg(String processingCode, BaseRequestDTO requestDTO) throws ISOException {
+    public static ISOMsg buildFinancialMsg(String processingCode, BaseInboundRequestDTO requestDTO) throws ISOException {
         LocalDateTime currentGMT = LocalDateTime.now(ZoneId.of("GMT"));
         LocalDateTime current = LocalDateTime.now();
         String currentStringGMTDate = currentGMT.format(DateTimeFormatter.ofPattern("MMddHHmmss"));

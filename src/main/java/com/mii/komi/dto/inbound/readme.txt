@@ -1,0 +1,5 @@
+- Root Parent DTO : BaseDTO.java and direct descendant are BaseInboundRequestDTO
+- BaseInboundResponseDTO class are child of the BaseInboundRequestDTO
+- Sample : AccountEnquiryInboundRequest.java & AccountEnquiryInboundResponse.java
+- @JsonInclude(Include.NON_NULL) --> only applied response DTO are to prevent null or "" value send to KOMI so null value are not sent on JSON response
+- Optional.ofNullable(recipientBank).orElse(""); --> on getter request DTO are to prevent exception when building ISO8583 Private Data on JSON request

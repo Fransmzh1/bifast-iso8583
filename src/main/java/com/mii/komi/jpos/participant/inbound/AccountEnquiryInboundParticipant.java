@@ -1,9 +1,11 @@
 package com.mii.komi.jpos.participant.inbound;
 
-import com.mii.komi.dto.AccountEnquiryRequest;
-import com.mii.komi.dto.AccountEnquiryResponse;
-import com.mii.komi.dto.BaseRequestDTO;
-import com.mii.komi.dto.RootAccountEnquiryRequest;
+import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
+import com.mii.komi.dto.inbound.AccountEnquiryInboundResponse;
+import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
+import com.mii.komi.dto.inbound.BaseInboundResponseDTO;
+import com.mii.komi.dto.outbound.BaseOutboundDTO;
+import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
@@ -30,7 +32,7 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
-        RootAccountEnquiryRequest accountEnquiryRequest = (RootAccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
+        RootAccountEnquiry accountEnquiryRequest = (RootAccountEnquiry) ctx.get(Constants.HTTP_REQUEST);
         try {
             ISOMsg isoMsg = buildRequestMsg(accountEnquiryRequest.getAccountEnquiryRequest());
             ctx.put(Constants.ISO_REQUEST, isoMsg);
@@ -44,9 +46,9 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     @Override
     public void abort(long id, Serializable context) {
         Context ctx = (Context) context;
-        RootAccountEnquiryRequest accountEnquiryRequest = (RootAccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
+        RootAccountEnquiry accountEnquiryRequest = (RootAccountEnquiry) ctx.get(Constants.HTTP_REQUEST);
         ISOMsg isoMsg = ctx.get(Constants.ISO_RESPONSE);
-        ResponseEntity<AccountEnquiryResponse> rr = null;
+        ResponseEntity<AccountEnquiryInboundResponse> rr = null;
         if (isoMsg == null) {
             rr = buildFailedResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), null);
         } else {
@@ -59,14 +61,14 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     public void commit(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg isoMsg = ctx.get(Constants.ISO_RESPONSE);
-        RootAccountEnquiryRequest accountEnquiryRequest = (RootAccountEnquiryRequest) ctx.get(Constants.HTTP_REQUEST);
-        ResponseEntity<AccountEnquiryResponse> restResponse = buildResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), isoMsg);
+        RootAccountEnquiry accountEnquiryRequest = (RootAccountEnquiry) ctx.get(Constants.HTTP_REQUEST);
+        ResponseEntity<AccountEnquiryInboundResponse> restResponse = buildResponseMsg(accountEnquiryRequest.getAccountEnquiryRequest(), isoMsg);
         ctx.put(Constants.HTTP_RESPONSE, restResponse);
     }
 
     @Override
-    public ISOMsg buildRequestMsg(BaseRequestDTO request) throws ISOException {
-        AccountEnquiryRequest accountEnquiryRequest = (AccountEnquiryRequest) request;
+    public ISOMsg buildRequestMsg(BaseInboundRequestDTO request) throws ISOException {
+        AccountEnquiryInboundRequest accountEnquiryRequest = (AccountEnquiryInboundRequest) request;
         StringBuilder sb = new StringBuilder();
         String noRef = ISOUtil.strpad(accountEnquiryRequest.getNoRef(), 20);
         String recipientBank = ISOUtil.strpad(accountEnquiryRequest.getRecipientBank(), 35);
@@ -80,10 +82,10 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     }
 
     @Override
-    public ResponseEntity<AccountEnquiryResponse> buildResponseMsg(BaseRequestDTO request, ISOMsg isoMsg) {
+    public ResponseEntity<AccountEnquiryInboundResponse> buildResponseMsg(BaseInboundRequestDTO request, ISOMsg isoMsg) {
         String privateData = isoMsg.getString(62);
 
-        AccountEnquiryResponse rsp = new AccountEnquiryResponse();
+        AccountEnquiryInboundResponse rsp = new AccountEnquiryInboundResponse();
         rsp.setTransactionId(request.getTransactionId());
         rsp.setDateTime(request.getDateTime());
         rsp.setMerchantType(isoMsg.getString(18));
@@ -128,15 +130,15 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
         cursor = endCursor;
         rsp.setTownName(privateData.substring(cursor).trim());
 
-        List<AccountEnquiryResponse> list = new ArrayList<>();
+        List<AccountEnquiryInboundResponse> list = new ArrayList<>();
         list.add(rsp);
         return ResponseEntity.ok(rsp);
     }
 
     @Override
-    public ResponseEntity<AccountEnquiryResponse> buildFailedResponseMsg(BaseRequestDTO req, ISOMsg isoMsg) {
-        AccountEnquiryResponse rsp = new AccountEnquiryResponse();
-        AccountEnquiryRequest originalRequest = (AccountEnquiryRequest) req;
+    public ResponseEntity<AccountEnquiryInboundResponse> buildFailedResponseMsg(BaseInboundRequestDTO req, ISOMsg isoMsg) {
+        AccountEnquiryInboundResponse rsp = new AccountEnquiryInboundResponse();
+        AccountEnquiryInboundRequest originalRequest = (AccountEnquiryInboundRequest) req;
         rsp.setNoRef(req.getNoRef());
         rsp.setAccountNumber(originalRequest.getAccountNumber());
         if (isoMsg != null) {

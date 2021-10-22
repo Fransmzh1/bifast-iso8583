@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 
 /**
  *
- * @author Erwin Sugianto Santoso - MII
+ * @author vinch
  */
-public class BaseRootHttpRequest {
+public class BaseDTO {
     
     @Override
     public String toString() {

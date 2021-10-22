@@ -1,15 +1,17 @@
 package com.mii.komi.dto.inbound;
 
-import com.mii.komi.dto.BaseResponseDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class CreditTransferInboundResponse extends BaseResponseDTO {
+public class CreditTransferInboundResponse extends BaseInboundResponseDTO {
     
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String additionalInfo;
     
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String accountNumber;
 
     /**

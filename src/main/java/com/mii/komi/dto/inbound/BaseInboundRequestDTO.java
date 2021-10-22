@@ -1,14 +1,12 @@
-package com.mii.komi.dto;
+package com.mii.komi.dto.inbound;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import java.io.Serializable;
+import com.mii.komi.dto.BaseDTO;
 
 /**
  *
- * @author vinch
+ * @author Erwin Sugianto Santoso - MII
  */
-public class BaseRequestDTO implements Serializable {
+public class BaseInboundRequestDTO extends BaseDTO {
     
     private String transactionId;
     
@@ -89,11 +87,4 @@ public class BaseRequestDTO implements Serializable {
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
-    
-    @Override
-    public String toString() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(this);
-    }
-    
 }

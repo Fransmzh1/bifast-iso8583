@@ -1,39 +1,36 @@
-package com.mii.komi.dto;
+package com.mii.komi.dto.outbound;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.util.Optional;
 
 /**
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class AccountEnquiryResponse extends BaseResponseDTO {
+public class AccountEnquiryOutboundResponse extends BaseOutboundDTO {
     
     private String accountNumber;
     
-    @JsonInclude(Include.NON_NULL)
+    private String proxyType;
+    
+    private String proxyId;
+    
     private String accountType;
     
-    @JsonInclude(Include.NON_NULL)
     private String creditorName;
     
-    @JsonInclude(Include.NON_NULL)
     private String creditorId;
     
-    @JsonInclude(Include.NON_NULL)
     private String creditorType;
     
-    @JsonInclude(Include.NON_NULL)
     private String residentStatus;
     
-    @JsonInclude(Include.NON_NULL)
     private String townName;
 
     /**
      * @return the accountNumber
      */
     public String getAccountNumber() {
-        return accountNumber;
+        return Optional.ofNullable(accountNumber).orElse("");
     }
 
     /**
@@ -44,10 +41,38 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
     }
 
     /**
+     * @return the proxyType
+     */
+    public String getProxyType() {
+        return Optional.ofNullable(proxyType).orElse("");
+    }
+
+    /**
+     * @param proxyType the proxyType to set
+     */
+    public void setProxyType(String proxyType) {
+        this.proxyType = proxyType;
+    }
+
+    /**
+     * @return the proxyId
+     */
+    public String getProxyId() {
+        return Optional.ofNullable(proxyId).orElse("");
+    }
+
+    /**
+     * @param proxyId the proxyId to set
+     */
+    public void setProxyId(String proxyId) {
+        this.proxyId = proxyId;
+    }
+
+    /**
      * @return the accountType
      */
     public String getAccountType() {
-        return accountType;
+        return Optional.ofNullable(accountType).orElse("");
     }
 
     /**
@@ -61,7 +86,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the creditorName
      */
     public String getCreditorName() {
-        return creditorName;
+        return Optional.ofNullable(creditorName).orElse("");
     }
 
     /**
@@ -75,7 +100,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the creditorId
      */
     public String getCreditorId() {
-        return creditorId;
+        return Optional.ofNullable(creditorId).orElse("");
     }
 
     /**
@@ -89,7 +114,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the creditorType
      */
     public String getCreditorType() {
-        return creditorType;
+        return Optional.ofNullable(creditorType).orElse("");
     }
 
     /**
@@ -103,7 +128,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the residentStatus
      */
     public String getResidentStatus() {
-        return residentStatus;
+        return Optional.ofNullable(residentStatus).orElse("");
     }
 
     /**
@@ -117,7 +142,7 @@ public class AccountEnquiryResponse extends BaseResponseDTO {
      * @return the townName
      */
     public String getTownName() {
-        return townName;
+        return Optional.ofNullable(townName).orElse("");
     }
 
     /**

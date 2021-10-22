@@ -1,7 +1,6 @@
-package com.mii.komi.dto;
+package com.mii.komi.dto.outbound;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.mii.komi.dto.BaseDTO;
 import com.mii.komi.util.Constants;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,7 +12,7 @@ import java.util.List;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class RestResponse<T> {
+public class RestResponse<T> extends BaseDTO {
     
     private String date;
     private String time;
@@ -128,12 +127,6 @@ public class RestResponse<T> {
      */
     public void setContent(List<T> content) {
         this.content = content;
-    }
-    
-    @Override
-    public String toString() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(this);
     }
 
     /**
