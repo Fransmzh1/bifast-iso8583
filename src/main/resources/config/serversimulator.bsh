@@ -22,10 +22,45 @@ if(message.isRequest()) {
             String proxyType = ISOUtil.strpad("", 35);
             message.set (62, noref + statusCode + reason + accountNumber + 
                 accountType + creditorName + creditorId + creditorType +
-                residentStatus + townName);
+                residentStatus + townName + proxyId + proxyType);
+        } else if(("109000".equals(message.getString(3))) || ("109100".equals(message.getString(3)))) {
+            String reqData = message.getString(48);
+            String noref = reqData.substring(0,20);
+            String debtorAccountNumber = reqData.substring(262, 262 + 34);
+            
+            String status = "ACTC";
+            String reason = ISOUtil.strpad("U000", 35);
+            String additionalInfo = ISOUtil.strpad("Informasi Tambahin dari status", 140);
+            message.set(62, noref + status + reason + additionalInfo + debtorAccountNumber);
+        } else if("209000".equals(message.getString(3))) {
+            String reqData = message.getString(48);
+            String noref = reqData.substring(0,20);
+            String additionalReqData = message.getString(123);
+            String creditAccountNumber = reqData.substring(245, 245 + 34);
+            
+            String status = "ACTC";
+            String reason = ISOUtil.strpad("U000", 35);
+            String additionalInfo = ISOUtil.strpad("Informasi Tambahin dari status", 140);
+            message.set(62, noref + status + reason + additionalInfo + creditAccountNumber);
+        } else if("489100".equals(message.getString(3))) {
+            String reqData = message.getString(48);
+            String noref = reqData.substring(0,20);
+            String accountNumber = ISOUtil.strpad("112233445566", 34);
+
+            message.set(62, noref + accountNumber);
+        } else if("310000".equals(message.getString(3))) {
+            String reqData = message.getString(48);
+            String noref = reqData.substring(0,20);
+            String accountNumber = reqData.substring(20, 20 + 34);
+
+            String status = "ACTC";
+            String reason = ISOUtil.strpad("U000", 35);
+            String balance = ISOUtil.zeropad(689000000.00, 18);
+
+            message.set(62, noref + status + reason + balance);
         }
     } else if("0600".equals(message.getMTI())) {
-    
+        
     }
 
     message.setResponseMTI ();
