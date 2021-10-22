@@ -12,5 +12,12 @@ done adam.2021.10.22.16.15
     DebitTransferInboundResponse
     SettlementRequest
     SettlementResponse
+    AccountEnquiryInboundRequest
+    AccountEnquiryInboundResponse
+    BalanceInquiryRequest
+    BalanceInquiryResponse
+    CustomerAccountInfoInboundRequest
+    CustomerAccountInfoInboundResponse
     
+
 
