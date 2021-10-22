@@ -3,3 +3,14 @@
 - Sample : AccountEnquiryInboundRequest.java & AccountEnquiryInboundResponse.java
 - @JsonInclude(Include.NON_NULL) --> only applied response DTO are to prevent null or "" value send to KOMI so null value are not sent on JSON response
 - Optional.ofNullable(recipientBank).orElse(""); --> on getter request DTO are to prevent exception when building ISO8583 Private Data on JSON request
+
+done adam.2021.10.22.16.15
+    CreditTransferInboundRequest
+    DebitReversalInboundRequest
+    DebitReversalInboundResponse
+    DebitTransferInboundRequest
+    DebitTransferInboundResponse
+    SettlementRequest
+    SettlementResponse
+    
+
