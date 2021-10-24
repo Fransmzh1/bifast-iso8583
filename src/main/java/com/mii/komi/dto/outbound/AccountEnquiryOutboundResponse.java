@@ -2,28 +2,39 @@ package com.mii.komi.dto.outbound;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *
  * @author Erwin Sugianto Santoso - MII
  */
 public class AccountEnquiryOutboundResponse extends BaseOutboundDTO {
     
+    @JsonProperty("AccountNumber")
     private String accountNumber;
     
+    @JsonProperty("ProxyType")
     private String proxyType;
     
+    @JsonProperty("ProxyId")
     private String proxyId;
     
+    @JsonProperty("AccountType")
     private String accountType;
     
+    @JsonProperty("CreditorName")
     private String creditorName;
     
+    @JsonProperty("CreditorId")
     private String creditorId;
     
+    @JsonProperty("CreditorType")
     private String creditorType;
     
+    @JsonProperty("ResidentStatus")
     private String residentStatus;
     
+    @JsonProperty("TownName")
     private String townName;
 
     /**

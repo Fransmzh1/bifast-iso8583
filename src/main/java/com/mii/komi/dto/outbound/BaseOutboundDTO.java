@@ -2,12 +2,15 @@ package com.mii.komi.dto.outbound;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *
  * @author Erwin Sugianto Santoso - MII
  */
 public class BaseOutboundDTO implements Serializable {
     
+    @JsonProperty("NoRef")
     private String noRef;
 
     /**

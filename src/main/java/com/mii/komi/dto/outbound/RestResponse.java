@@ -1,5 +1,6 @@
 package com.mii.komi.dto.outbound;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mii.komi.dto.BaseDTO;
 import com.mii.komi.util.Constants;
 import java.time.LocalDate;
@@ -14,11 +15,22 @@ import java.util.List;
  */
 public class RestResponse<T> extends BaseDTO {
     
+    @JsonProperty("Date")
     private String date;
+    
+    @JsonProperty("Time")
     private String time;
+
+    @JsonProperty("ResponseCode")
     private String responseCode;
+
+    @JsonProperty("ReasonCode")
     private String reasonCode;
+
+    @JsonProperty("ResponseMessage")
     private String responseMessage;
+
+    @JsonProperty("Content")
     private List<T> content;
     
     public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
