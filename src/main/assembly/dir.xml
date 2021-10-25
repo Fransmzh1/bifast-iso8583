@@ -24,6 +24,7 @@
                 <include>run.bat</include>
                 <include>config/*.xml</include>
                 <include>config/*.txt</include>
+                <include>config/*.bsh</include>
                 <include>config/deploy/*.xml</include>
                 <include>config/packager/*.xml</include>
                 <include>logs/q2.log</include>

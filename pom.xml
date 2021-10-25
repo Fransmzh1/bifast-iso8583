@@ -83,6 +83,7 @@
                     <exclude>config/*.properties</exclude>
                     <exclude>config/*.txt</exclude>
                     <exclude>config/*.xml</exclude>
+                    <exclude>config/*.bsh</exclude>
                     <exclude>config/deploy/*.xml</exclude>
                     <exclude>config/packager/*.xml</exclude>
                     <exclude>*.bat</exclude>

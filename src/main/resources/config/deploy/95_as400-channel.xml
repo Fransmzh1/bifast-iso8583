@@ -2,7 +2,7 @@
     <channel class="org.jpos.iso.channel.NACChannel"
              packager="org.jpos.iso.packager.GenericPackager">
         <property name="packager-config"
-                  value="src/main/resources/config/packager/iso87taspencore.xml" />
+                  value="config/packager/iso87taspencore.xml" />
         <property name="host" value="127.0.0.1" />
         <property name="port" value="10001" />
         <property name="timeout" value="300000" />
