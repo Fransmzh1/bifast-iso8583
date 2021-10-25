@@ -1,6 +1,7 @@
 package com.mii.komi.dto.outbound;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
@@ -9,24 +10,31 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class AccountEnquiryOutboundRequest extends BaseOutboundDTO {
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("SenderAccountNumber")
     private String senderAccountNumber;
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("RecipientBank")
     private String recipientBank;
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("RecipientAccountNumber")
     private String recipientAccountNumber;
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("Amount")
     private String amount;
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("CategoryPurpose")
     private String categoryPurpose;
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("ProxyId")
     private String proxyId;
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("ProxyType")
     private String proxyType;
 
     /**
