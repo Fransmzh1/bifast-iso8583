@@ -4,6 +4,6 @@
     <key>7,11</key>
     <ready>as400-channel.ready</ready>
     <request-listener class="org.jpos.bsh.BSHRequestListener" logger="Q2">
-        <property name="source" value="src/main/resources/config/serversimulator.bsh" />
+        <property name="source" value="config/serversimulator.bsh" />
     </request-listener>
 </mux>
