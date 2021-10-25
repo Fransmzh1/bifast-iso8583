@@ -52,11 +52,7 @@ if(message.isRequest()) {
             String additionalInfo = ISOUtil.strpad("Informasi Tambahin dari status", 140);
             message.set(62, noref + status + reason + additionalInfo + creditAccountNumber);
         } else if("489100".equals(message.getString(3))) {
-            String reqData = message.getString(48);
-            String noref = reqData.substring(0,20);
-            String accountNumber = ISOUtil.strpad("112233445566", 34);
-
-            message.set(62, noref + accountNumber);
+            
         } else if("310000".equals(message.getString(3))) {
             String reqData = message.getString(48);
             String noref = reqData.substring(0,20);

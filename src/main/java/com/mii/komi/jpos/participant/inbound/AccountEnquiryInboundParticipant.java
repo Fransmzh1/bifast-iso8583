@@ -6,8 +6,6 @@ import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jpos.iso.ISOException;
