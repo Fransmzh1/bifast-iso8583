@@ -2,7 +2,6 @@ package com.mii.komi.dto.outbound;
 
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

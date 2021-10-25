@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class ProxyRegistrationResponse {
+public class ProxyRegistrationResponse extends BaseOutboundDTO {
     
     @JsonProperty("RegistrationType")
     private String registrationType;
