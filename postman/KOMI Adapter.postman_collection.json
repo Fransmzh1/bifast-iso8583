@@ -146,7 +146,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/credit",
+					"raw": "http://localhost:9003/komi/api/v1/adapter/debitreversal",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -157,7 +157,7 @@
 						"api",
 						"v1",
 						"adapter",
-						"credit"
+						"debitreversal"
 					]
 				}
 			},
@@ -170,7 +170,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"status\": \"ACPT\",\r\n    \"reason\": \"U0000\",\r\n    \"additionalInfo\":\"There is no additional info currently\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -202,7 +202,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"accountNumber\":\"1112223\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -210,7 +210,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/settlement",
+					"raw": "http://localhost:9003/komi/api/v1/adapter/emailphonelist",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -221,7 +221,7 @@
 						"api",
 						"v1",
 						"adapter",
-						"settlement"
+						"emailphonelist"
 					]
 				}
 			},
