@@ -2,10 +2,9 @@ package com.mii.komi.controller;
 
 import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
 import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
+import com.mii.komi.dto.inbound.CreditTransferInboundRequest;
 import com.mii.komi.dto.inbound.DebitTransferInboundRequest;
-import com.mii.komi.dto.outbound.requestroot.BaseRootHttpRequest;
 import com.mii.komi.dto.outbound.RestResponse;
-import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Utility;
 import io.swagger.annotations.Api;
@@ -72,6 +71,21 @@ public class BIFastController {
             @RequestBody DebitTransferInboundRequest request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
         ResponseEntity rsp = queryTxnMgr(request, "DebitTransfer");
+        return rsp;
+    }
+    
+    @ApiOperation(value = "Credit Transfer Request", nickname = "Credit Transfer API")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully POST data"),
+        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page Not Found")
+    })
+    @PostMapping(path = "/credit", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity credit(
+            @RequestBody CreditTransferInboundRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        ResponseEntity rsp = queryTxnMgr(request, "CreditTransfer");
         return rsp;
     }
     
