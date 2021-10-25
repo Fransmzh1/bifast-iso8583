@@ -86,6 +86,7 @@
                     <exclude>config/*.bsh</exclude>
                     <exclude>config/deploy/*.xml</exclude>
                     <exclude>config/packager/*.xml</exclude>
+                    <exclude>log/*.log</exclude>
                     <exclude>*.bat</exclude>
                     <exclude>*.properties</exclude>
                     <exclude>*.xml</exclude>
@@ -146,7 +147,7 @@
                                         <include>config/deploy/*.xml</include>
                                         <include>config/packager/*.xml</include>
                                         <include>config/*.bsh</include>
-                                        <include>logs/q2.log</include>
+                                        <include>log/${artifactId}.log</include>
                                     </includes>
                                 </resource>
                             </resources>

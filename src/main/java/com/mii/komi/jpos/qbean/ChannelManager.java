@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.apache.log4j.Logger;
 import org.jpos.iso.ISODate;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
@@ -20,6 +19,7 @@ import org.jpos.space.LocalSpace;
 import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
 import org.jpos.space.SpaceListener;
+import org.jpos.util.Log;
 import org.jpos.util.NameRegistrar;
 import org.jpos.util.NameRegistrar.NotFoundException;
 
@@ -29,7 +29,7 @@ import org.jpos.util.NameRegistrar.NotFoundException;
  */
 public class ChannelManager extends QBeanSupport implements SpaceListener {
 
-    private static final Logger logger = Logger.getLogger(ChannelManager.class);
+    private Log log;
 
     private static ChannelManager _cMSingleTon = null;
     private long MAX_TIME_OUT;
@@ -50,7 +50,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                     isoMsg.append(field);
                 }
             }
-            logger.info(isoMsg);
+            
         } catch (ISOException e) {
             e.printStackTrace();
         } finally {
@@ -72,7 +72,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
             NameRegistrar.register(getName(), this);
 
         } catch (NameRegistrar.NotFoundException e) {
-            logger.error("Error in initializing service :" + e.getMessage());
+            log.error("Error in initializing service :" + e.getMessage());
         }
     }
     
@@ -107,7 +107,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                 e.printStackTrace();
             }
         } catch (ISOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -146,7 +146,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                 space.in(mux.getName() + "-signed-on");
             }
         } catch (ISOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             space.in(mux.getName() + "-signed-on");
         }
     }
@@ -203,8 +203,6 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                 m.set(39, "91");
                 return m;
             }
-            long duration = System.currentTimeMillis() - start;
-            log.info("Response time (ms):" + duration);
             return resp;
         }
 
