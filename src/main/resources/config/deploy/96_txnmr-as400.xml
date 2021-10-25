@@ -9,6 +9,8 @@
         <property name="CreditTransfer" value="CreditTransfer SendAndReceiveToCoreBanking" />
         <property name="DebitReversal" value="DebitReversal SendAndReceiveToCoreBanking" />
         <property name="Settlement" value="Settlement SendAndReceiveToCoreBanking" />
+        <property name="BalanceInquiry" value="BalanceInquiry SendAndReceiveToCoreBanking" />
+        <property name="CustomerInfo" value="CustomerInfo SendAndReceiveToCoreBanking" />
     </participant>
     <participant class="com.mii.komi.jpos.participant.inbound.RESTResponseParticipant" logger="Q2"/>
     
@@ -30,6 +32,14 @@
     
     <group name="Settlement">
         <participant class="com.mii.komi.jpos.participant.inbound.SettlementParticipant" logger="Q2" />
+    </group>
+    
+    <group name="BalanceInquiry">
+        <participant class="com.mii.komi.jpos.participant.inbound.BalanceInquiryParticipant" logger="Q2" />
+    </group>
+    
+    <group name="CustomerInfo">
+        <participant class="com.mii.komi.jpos.participant.inbound.CustomerInfoParticipant" logger="Q2" />
     </group>
     
     <group name="SendAndReceiveToCoreBanking">

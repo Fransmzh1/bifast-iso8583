@@ -65,7 +65,31 @@ if(message.isRequest()) {
             message.set(62, noref + status + reason + balance);
         }
     } else if("0600".equals(message.getMTI())) {
-        
+        if("909200".equals(message.getString(3))) {
+            String reqData = message.getString(48);
+            String noref = reqData.substring(0,20);
+            String status = "ACTC";
+            String reason = ISOUtil.strpad("U000", 35);
+            int emailAddressCount = 2;
+            String emailAddress1 = ISOUtil.strpad("testemail1@mailtestserver.com", 50);
+            String emailAddress2 = ISOUtil.strpad("apaajatest@gmail.com", 50);
+            int phoneNumberCount = 3;
+            String phonenumber1 = ISOUtil.strpad("0888001100229", 35);
+            String phonenumber2 = ISOUtil.strpad("0812293810000", 35);
+            String phonenumber3 = ISOUtil.strpad("081100092841", 35);
+            
+            String accountNumber = reqData.substring(20,34);
+            String accountType = ISOUtil.strpad("SVGS", 35);
+            String customerName = ISOUtil.strpad("Purnama Erwin", 140);
+            String customerType = ISOUtil.strpad("CORP", 35);
+            String customerId = ISOUtil.strpad("88777555444443333", 35);
+            String customerIdType = ISOUtil.strpad("CORP", 35);
+            String residentStatus = ISOUtil.strpad("01", 35);
+            String townName = ISOUtil.strpad("0300", 35);
+
+            message.set(62, noref + status + reason + emailAddressCount + emailAddress1 + emailAddress2 + phoneNumberCount + phonenumber1 + phonenumber2 + phonenumber3);
+            message.set(123, accountNumber + accountType + customerName + customerType + customerId + customerIdType + residentStatus + townName);
+        }
     }
 
     message.setResponseMTI ();

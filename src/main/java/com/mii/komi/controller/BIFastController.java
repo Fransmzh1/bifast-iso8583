@@ -1,9 +1,13 @@
 package com.mii.komi.controller;
 
 import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
+import com.mii.komi.dto.inbound.BalanceInquiryRequest;
 import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
 import com.mii.komi.dto.inbound.CreditTransferInboundRequest;
+import com.mii.komi.dto.inbound.CustomerAccountInfoInboundRequest;
+import com.mii.komi.dto.inbound.DebitReversalInboundRequest;
 import com.mii.komi.dto.inbound.DebitTransferInboundRequest;
+import com.mii.komi.dto.inbound.SettlementRequest;
 import com.mii.komi.dto.outbound.RestResponse;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Utility;
@@ -86,6 +90,66 @@ public class BIFastController {
             @RequestBody CreditTransferInboundRequest request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
         ResponseEntity rsp = queryTxnMgr(request, "CreditTransfer");
+        return rsp;
+    }
+    
+    @ApiOperation(value = "Debit Reversal Request", nickname = "Debit Reversal API")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully POST data"),
+        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page Not Found")
+    })
+    @PostMapping(path = "/debitreversal", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity debitReversal(
+            @RequestBody DebitReversalInboundRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        ResponseEntity rsp = queryTxnMgr(request, "DebitReversal");
+        return rsp;
+    }
+    
+    @ApiOperation(value = "Settlement Request", nickname = "Settlement API")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully POST data"),
+        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page Not Found")
+    })
+    @PostMapping(path = "/settlement", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity settlement(
+            @RequestBody SettlementRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        ResponseEntity rsp = queryTxnMgr(request, "Settlement");
+        return rsp;
+    }
+    
+    @ApiOperation(value = "Balance Inquiry Request", nickname = "Balance Inquiry API")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully POST data"),
+        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page Not Found")
+    })
+    @PostMapping(path = "/balanceinquiry", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity balanceInquiry(
+            @RequestBody BalanceInquiryRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        ResponseEntity rsp = queryTxnMgr(request, "BalanceInquiry");
+        return rsp;
+    }
+    
+    @ApiOperation(value = "Balance Inquiry Request", nickname = "Balance Inquiry API")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully POST data"),
+        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page Not Found")
+    })
+    @PostMapping(path = "/emailphonelist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity accountCustomerInfo(
+            @RequestBody CustomerAccountInfoInboundRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        ResponseEntity rsp = queryTxnMgr(request, "CustomerInfo");
         return rsp;
     }
     

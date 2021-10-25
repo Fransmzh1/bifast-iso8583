@@ -19,6 +19,4 @@ public class BalanceInquiryResponse extends BaseInboundResponseDTO {
         this.balance = balance;
     }
 
-    
-
 }
