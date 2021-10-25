@@ -32,6 +32,15 @@ if(message.isRequest()) {
             String reason = ISOUtil.strpad("U000", 35);
             String additionalInfo = ISOUtil.strpad("Informasi Tambahan dari status", 140);
             message.set(62, noref + status + reason + additionalInfo + debtorAccountNumber);
+        } else if(("109100".equals(message.getString(3))) || ("109100".equals(message.getString(3)))) {
+            String reqData = message.getString(48);
+            String noref = reqData.substring(0,20);
+            String debtorAccountNumber = reqData.substring(262, 262 + 34);
+            
+            String status = "ACTC";
+            String reason = ISOUtil.strpad("U000", 35);
+            String additionalInfo = ISOUtil.strpad("Informasi Tambahan dari status", 140);
+            message.set(62, noref + status + reason + additionalInfo + debtorAccountNumber);
         } else if("209000".equals(message.getString(3))) {
             String reqData = message.getString(48);
             String noref = reqData.substring(0,20);
