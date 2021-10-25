@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class ProxyResolutionRequest {
+public class ProxyResolutionRequest extends BaseOutboundDTO {
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("SenderAccountNumber")

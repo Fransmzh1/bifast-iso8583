@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class ProxyResolutionResponse {
+public class ProxyResolutionResponse extends BaseOutboundDTO {
     
     @JsonProperty("ProxyType")
     private String proxyType;
