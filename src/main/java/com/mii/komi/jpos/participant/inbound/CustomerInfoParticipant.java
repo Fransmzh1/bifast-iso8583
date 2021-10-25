@@ -72,7 +72,7 @@ public class CustomerInfoParticipant implements TransactionParticipant, BaseInbo
         String noRef = ISOUtil.strpad(balanceInquiryRequest.getNoRef(), 20);
         String accountNumber = ISOUtil.strpad(balanceInquiryRequest.getAccountNumber(), 34);
         sb.append(noRef).append(accountNumber);
-        ISOMsg isoMsg = ISO8583Service.buildFinancialMsg(CUSTOMER_INFO_PC, request);
+        ISOMsg isoMsg = ISO8583Service.buildAdministrativeMsg(CUSTOMER_INFO_PC, request);
         isoMsg.set(48, sb.toString());
         return isoMsg;
     }
@@ -135,25 +135,26 @@ public class CustomerInfoParticipant implements TransactionParticipant, BaseInbo
 
         cursor = endCursor;
         endCursor = cursor + 1;
-
         List<String> emailAddressList = new ArrayList<String>();
         int mailCount = Integer.parseInt(privateData.substring(cursor, endCursor));
         if (mailCount > 0) {
             for (int i = 0; i < mailCount; i++) {
                 cursor = endCursor;
                 endCursor = cursor + 50;
-                emailAddressList.add(privateData.substring(cursor, endCursor));
+                emailAddressList.add(privateData.substring(cursor, endCursor).trim());
             }
         }
         rsp.setEmailAddressList(emailAddressList);
-
+        
+        cursor = endCursor;
+        endCursor = cursor + 1;
         List<String> phoneNumberList = new ArrayList<String>();
         int phoneCount = Integer.parseInt(privateData.substring(cursor, endCursor));
         if (phoneCount > 0) {
             for (int i = 0; i < phoneCount; i++) {
                 cursor = endCursor;
-                endCursor = cursor + 50;
-                phoneNumberList.add(privateData.substring(cursor, endCursor));
+                endCursor = cursor + 35;
+                phoneNumberList.add(privateData.substring(cursor, endCursor).trim());
             }
         }
         rsp.setPhoneNumberList(phoneNumberList);
@@ -179,7 +180,12 @@ public class CustomerInfoParticipant implements TransactionParticipant, BaseInbo
         rsp.setCustomerId(extPrivateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
-        rsp.setCustomerIdType(extPrivateData.substring(cursor).trim());
+        endCursor = cursor + 35;
+        rsp.setResidentStatus(extPrivateData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        rsp.setTownName(extPrivateData.substring(cursor, endCursor).trim());
 
         return ResponseEntity.ok(rsp);
     }

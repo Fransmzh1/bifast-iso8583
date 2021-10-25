@@ -27,7 +27,7 @@
                 <include>config/*.bsh</include>
                 <include>config/deploy/*.xml</include>
                 <include>config/packager/*.xml</include>
-                <include>logs/q2.log</include>
+                <include>logs/${artifactId}.log</include>
             </includes>
         </fileSet>
     </fileSets>

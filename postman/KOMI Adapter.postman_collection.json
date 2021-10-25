@@ -20,12 +20,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/iso8583/service/sendAndReceive",
+					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "9003",
 					"path": [
 						"iso8583",
 						"service",
@@ -50,12 +50,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/komi/api/v1/adapter/accountinquiry",
+					"raw": "http://localhost:9003/komi/api/v1/adapter/accountinquiry",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "9003",
 					"path": [
 						"komi",
 						"api",
@@ -68,43 +68,13 @@
 			"response": []
 		},
 		{
-			"name": "Netman to Core Banking",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0800\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 70,\r\n            \"value\": \"301\"\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:5001/iso8583/service/sendAndReceive",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5001",
-					"path": [
-						"iso8583",
-						"service",
-						"sendAndReceive"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Inbound Debit Transfer",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"amount\": 137400.20,\r\n    \"categoryPurpose\": \"01\",\r\n    \"accountNumber\": \"67758999\"\r\n}",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Reed Vafnir\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Sygwird Octavio\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -112,18 +82,146 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/komi/api/v1/adapter/debit",
+					"raw": "http://localhost:9003/komi/api/v1/adapter/debit",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
+					"port": "9003",
 					"path": [
 						"komi",
 						"api",
 						"v1",
 						"adapter",
 						"debit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inbound Credit Transfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/komi/api/v1/adapter/credit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"komi",
+						"api",
+						"v1",
+						"adapter",
+						"credit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inbound Debit Reversal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/komi/api/v1/adapter/credit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"komi",
+						"api",
+						"v1",
+						"adapter",
+						"credit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inbound Settlement",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/komi/api/v1/adapter/settlement",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"komi",
+						"api",
+						"v1",
+						"adapter",
+						"settlement"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inbound Account Customer Info",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/komi/api/v1/adapter/settlement",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"komi",
+						"api",
+						"v1",
+						"adapter",
+						"settlement"
 					]
 				}
 			},

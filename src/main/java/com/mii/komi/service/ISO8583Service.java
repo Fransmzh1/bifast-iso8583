@@ -78,6 +78,29 @@ public class ISO8583Service {
         isomsg.set(63, requestDTO.getNoRef());
         return isomsg;
     }
+    
+    public static ISOMsg buildAdministrativeMsg(String processingCode, BaseInboundRequestDTO requestDTO) throws ISOException {
+        LocalDateTime currentGMT = LocalDateTime.now(ZoneId.of("GMT"));
+        LocalDateTime current = LocalDateTime.now();
+        String currentStringGMTDate = currentGMT.format(DateTimeFormatter.ofPattern("MMddHHmmss"));
+        String currentLocalDate = current.format(DateTimeFormatter.ofPattern("MMdd"));
+        String currentLocalTime = current.format(DateTimeFormatter.ofPattern("HHmmss"));
+
+        ISOMsg isomsg = new ISOMsg();
+        isomsg.setMTI(ISO_MTI_ADMINISTRATIVE_REQUEST_1987);
+        isomsg.set(3, processingCode);
+        isomsg.set(7, currentStringGMTDate);
+        isomsg.set(11, requestDTO.getTransactionId());
+        isomsg.set(12, currentLocalTime);
+        isomsg.set(13, currentLocalDate);
+        isomsg.set(18, requestDTO.getMerchantType());
+        isomsg.set(32, ISO_LOCAL_BANK_CODE);
+        isomsg.set(37, ISOUtil.zeropad(requestDTO.getTransactionId(), 12));
+        isomsg.set(41, requestDTO.getTerminalId());
+        isomsg.set(49, ISO_IDR_CURRENCY_CODE);
+        isomsg.set(63, requestDTO.getNoRef());
+        return isomsg;
+    }
 
     public static ISOMsg buildNetworkMsg(String networkMgmtType) throws ISOException {
         LocalDateTime currentGMT = LocalDateTime.now(ZoneId.of("GMT"));
