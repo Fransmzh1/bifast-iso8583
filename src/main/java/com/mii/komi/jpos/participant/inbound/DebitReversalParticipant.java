@@ -44,7 +44,9 @@ public class DebitReversalParticipant implements TransactionParticipant, BaseInb
     public void commit(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg isoMsg = ctx.get(Constants.ISO_RESPONSE);
-        DebitReversalInboundResponse debitReversalInboundRequest = (DebitReversalInboundResponse) ctx.get(Constants.HTTP_REQUEST);
+        // adam : response->request
+        //DebitReversalInboundResponse debitReversalInboundRequest = (DebitReversalInboundResponse) ctx.get(Constants.HTTP_REQUEST);
+        DebitReversalInboundRequest debitReversalInboundRequest = (DebitReversalInboundRequest) ctx.get(Constants.HTTP_REQUEST);
         ResponseEntity<DebitReversalInboundResponse> restResponse = buildResponseMsg(debitReversalInboundRequest, isoMsg);
         ctx.put(Constants.HTTP_RESPONSE, restResponse);
     }
