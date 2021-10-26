@@ -69,12 +69,12 @@ if(message.isRequest()) {
             String phonenumber2 = ISOUtil.strpad("0812293810000", 35);
             String phonenumber3 = ISOUtil.strpad("081100092841", 35);
             
-            String accountNumber = reqData.substring(20,34);
+            String accountNumber = reqData.substring(20, 20 + 34);
             String accountType = ISOUtil.strpad("SVGS", 35);
             String customerName = ISOUtil.strpad("Purnama Erwin", 140);
             String customerType = ISOUtil.strpad("CORP", 35);
             String customerId = ISOUtil.strpad("88777555444443333", 35);
-            String customerIdType = ISOUtil.strpad("CORP", 35);
+            String customerIdType = ISOUtil.strpad("01", 35);
             String residentStatus = ISOUtil.strpad("01", 35);
             String townName = ISOUtil.strpad("0300", 35);
 

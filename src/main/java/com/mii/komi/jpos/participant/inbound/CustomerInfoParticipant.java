@@ -178,6 +178,11 @@ public class CustomerInfoParticipant implements TransactionParticipant, BaseInbo
         cursor = endCursor;
         endCursor = cursor + 35;
         rsp.setCustomerId(extPrivateData.substring(cursor, endCursor).trim());
+
+        // adam: added customerIdType
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        rsp.setCustomerIdType(extPrivateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
