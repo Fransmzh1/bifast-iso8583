@@ -32,7 +32,7 @@
     <group name="OutboundAccountInquiry">
         <participant class="com.mii.komi.jpos.participant.outbound.AccountEnquiryOutboundParticipant" logger="Q2">
             <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/AccountEnquiryRequest" />
-        </participant>    
+        </participant>
     </group>
     
     <group name="PaymentStatus">

@@ -10,6 +10,7 @@ import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.transaction.Context;
 import org.jpos.transaction.TransactionParticipant;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
@@ -23,7 +24,7 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
     public void commit(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg req = ctx.get(Constants.ISO_REQUEST);
-        RestResponse httpRsp = ctx.get(Constants.HTTP_RESPONSE);
+        ResponseEntity httpRsp = ctx.get(Constants.HTTP_RESPONSE);
         try {
             ISOMsg rsp = buildResponseMsg(req, httpRsp);
             ctx.put(Constants.ISO_RESPONSE, rsp);
@@ -36,7 +37,7 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
     public void abort(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg req = ctx.get(Constants.ISO_REQUEST);
-        RestResponse httpRsp = ctx.get(Constants.HTTP_RESPONSE);
+        ResponseEntity httpRsp = ctx.get(Constants.HTTP_RESPONSE);
         ISOMsg rsp = buildFailedResponseMsg(req, httpRsp);
         ctx.put(Constants.ISO_RESPONSE, rsp);
     }

@@ -36,6 +36,8 @@ public class RestResponse<T> extends BaseDTO {
     public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     public static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmmss");
     
+    public RestResponse() {}
+    
     public RestResponse(List<T> content) {
         this.content = content;
     }

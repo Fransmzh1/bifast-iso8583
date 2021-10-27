@@ -6,16 +6,20 @@ import com.mii.komi.dto.outbound.AccountEnquiryOutboundRequest;
 import com.mii.komi.dto.outbound.AccountEnquiryOutboundResponse;
 import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.dto.outbound.RestResponse;
+import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.exception.RestTemplateResponseErrorHandler;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
-import org.jpos.core.Configuration;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.transaction.Context;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -24,21 +28,21 @@ import org.springframework.web.client.RestTemplate;
  */
 public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
 
-    private Configuration cfg;
-
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg reqMsg = (ISOMsg) ctx.get(Constants.ISO_REQUEST);
         try {
-            AccountEnquiryOutboundRequest accountEnquiryRequest = buildRequestMsg(reqMsg);
+            RootAccountEnquiry accountEnquiryRequest = buildRequestMsg(reqMsg);
             ctx.put(Constants.HTTP_REQUEST, accountEnquiryRequest);
             String endpointKomi = cfg.get("endpoint");
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
-            RestResponse<AccountEnquiryOutboundResponse> accountEnquiryResponse = restTemplate.postForObject(endpointKomi,
-                    accountEnquiryRequest,
-                    RestResponse.class);
+            ParameterizedTypeReference<RestResponse<AccountEnquiryOutboundResponse>> typeRef = 
+                    new ParameterizedTypeReference<RestResponse<AccountEnquiryOutboundResponse>>() {};
+            HttpEntity<RootAccountEnquiry> entity = new HttpEntity<RootAccountEnquiry>(accountEnquiryRequest);
+            ResponseEntity<RestResponse<AccountEnquiryOutboundResponse>> accountEnquiryResponse = 
+                    restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, accountEnquiryResponse);
             return PREPARED;
         } catch (DataNotFoundException ex) {
@@ -60,15 +64,15 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
     }
 
     @Override
-    public ISOMsg buildResponseMsg(ISOMsg req, RestResponse<BaseOutboundDTO> response) throws ISOException {
-        AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getContent().get(0);
+    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> response) throws ISOException {
+        AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getBody().getContent().get(0);
         ISOMsg isoRsp = (ISOMsg) req.clone();
         isoRsp.setResponseMTI();
         isoRsp.set(39, "00");
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
-                .append(ISOUtil.strpad(response.getResponseCode(), 4))
-                .append(ISOUtil.strpad(response.getReasonCode(), 35))
+                .append(ISOUtil.strpad(response.getBody().getResponseCode(), 4))
+                .append(ISOUtil.strpad(response.getBody().getReasonCode(), 35))
                 .append(ISOUtil.zeropad(accountEnquiryRsp.getAccountNumber(), 34))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))
@@ -83,9 +87,10 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
     }
 
     @Override
-    public AccountEnquiryOutboundRequest buildRequestMsg(ISOMsg isoMsg) {
+    public RootAccountEnquiry buildRequestMsg(ISOMsg isoMsg) {
         String privateData = isoMsg.getString(48);
 
+        RootAccountEnquiry root = new RootAccountEnquiry();
         AccountEnquiryOutboundRequest req = new AccountEnquiryOutboundRequest();
         int cursor = 0;
         int endCursor = 20;
@@ -116,26 +121,27 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                 cursor = endCursor;
                 endCursor = cursor + 140;
                 req.setProxyId(privateData.substring(cursor, endCursor));
-                
+
                 cursor = endCursor;
                 endCursor = cursor + 140;
                 req.setProxyType(privateData.substring(cursor, endCursor));
             }
         }
-        return req;
+        root.setAccountEnquiryRequest(req);
+        return root;
     }
 
     @Override
-    public ISOMsg buildFailedResponseMsg(ISOMsg req, RestResponse<BaseOutboundDTO> rr) {
+    public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         try {
-            AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) rr.getContent().get(0);
+            AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) rr.getBody().getContent().get(0);
             ISOMsg isoRsp = (ISOMsg) req.clone();
             isoRsp.setResponseMTI();
             isoRsp.set(39, "81");
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
-                    .append(ISOUtil.strpad(rr.getResponseCode(), 4))
-                    .append(ISOUtil.strpad(rr.getReasonCode(), 35))
+                    .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
+                    .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
                     .append(ISOUtil.strpad(accountEnquiryRsp.getAccountNumber(), 34))
                     .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
                     .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))

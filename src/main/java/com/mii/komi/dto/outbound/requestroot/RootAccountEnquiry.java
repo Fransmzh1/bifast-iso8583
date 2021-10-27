@@ -2,6 +2,7 @@ package com.mii.komi.dto.outbound.requestroot;
 
 import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mii.komi.dto.outbound.AccountEnquiryOutboundRequest;
 
 /**
  *
@@ -10,19 +11,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class RootAccountEnquiry extends BaseRootHttpRequest {
     
     @JsonProperty("AccountEnquiryRequest")
-    private AccountEnquiryInboundRequest accountEnquiryRequest;
+    private AccountEnquiryOutboundRequest accountEnquiryRequest;
 
     /**
      * @return the accountEnquiryRequest
      */
-    public AccountEnquiryInboundRequest getAccountEnquiryRequest() {
+    public AccountEnquiryOutboundRequest getAccountEnquiryRequest() {
         return accountEnquiryRequest;
     }
 
     /**
      * @param accountEnquiryRequest the accountEnquiryRequest to set
      */
-    public void setAccountEnquiryRequest(AccountEnquiryInboundRequest accountEnquiryRequest) {
+    public void setAccountEnquiryRequest(AccountEnquiryOutboundRequest accountEnquiryRequest) {
         this.accountEnquiryRequest = accountEnquiryRequest;
     }
     

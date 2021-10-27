@@ -111,7 +111,11 @@ public class AccountEnquiryOutboundRequest extends BaseOutboundDTO {
      * @return the proxyId
      */
     public String getProxyId() {
+        if(proxyId != null) {
         return proxyId.trim();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -125,7 +129,11 @@ public class AccountEnquiryOutboundRequest extends BaseOutboundDTO {
      * @return the proxyType
      */
     public String getProxyType() {
+        if(proxyType != null) {
         return proxyType.trim();
+        } else {
+            return null;
+        }
     }
 
     /**
