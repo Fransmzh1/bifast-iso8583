@@ -31,4 +31,37 @@ public class Utility {
         return textBuilder.toString();
     }
 
+    public static String getOriginalDateTimeFromOriginalNoRef(String originalNoRef) {
+        int cursor = 0;
+        int endCursor = cursor + 3;
+        String prefix = originalNoRef.substring(cursor, endCursor);
+
+        cursor = endCursor;
+        endCursor = cursor + 2;
+        String year = originalNoRef.substring(cursor, endCursor);
+
+        cursor = endCursor;
+        endCursor = cursor + 2;
+        String month = originalNoRef.substring(cursor, endCursor);
+
+        cursor = endCursor;
+        endCursor = cursor + 2;
+        String day = originalNoRef.substring(cursor, endCursor);
+
+        cursor = endCursor;
+        endCursor = cursor + 2;
+        String hour = originalNoRef.substring(cursor, endCursor);
+
+        cursor = endCursor;
+        endCursor = cursor + 2;
+        String minute = originalNoRef.substring(cursor, endCursor);
+
+        cursor = endCursor;
+        endCursor = cursor + 2;
+        String second = originalNoRef.substring(cursor, endCursor);
+
+        String originalDateTime = month + day + hour + minute + second;
+        return originalDateTime;
+    }
+
 }

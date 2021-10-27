@@ -11,21 +11,18 @@ import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.exception.RestTemplateResponseErrorHandler;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
-import org.jpos.core.Configurable;
 import org.jpos.core.Configuration;
-import org.jpos.core.ConfigurationException;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.transaction.Context;
-import org.jpos.transaction.TransactionParticipant;
 import org.springframework.web.client.RestTemplate;
 
 /**
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class AccountEnquiryOutboundParticipant implements TransactionParticipant, BaseOutboundParticipant, Configurable {
+public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
 
     private Configuration cfg;
 
@@ -63,28 +60,6 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
     }
 
     @Override
-    public void commit(long id, Serializable context) {
-        Context ctx = (Context) context;
-        ISOMsg req = ctx.get(Constants.ISO_REQUEST);
-        RestResponse httpRsp = ctx.get(Constants.HTTP_RESPONSE);
-        try {
-            ISOMsg rsp = buildResponseMsg(req, httpRsp);
-            ctx.put(Constants.ISO_RESPONSE, rsp);
-        } catch (ISOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void abort(long id, Serializable context) {
-        Context ctx = (Context) context;
-        ISOMsg req = ctx.get(Constants.ISO_REQUEST);
-        RestResponse httpRsp = ctx.get(Constants.HTTP_RESPONSE);
-        ISOMsg rsp = buildFailedResponseMsg(req, httpRsp);
-        ctx.put(Constants.ISO_RESPONSE, rsp);
-    }
-
-    @Override
     public ISOMsg buildResponseMsg(ISOMsg req, RestResponse<BaseOutboundDTO> response) throws ISOException {
         AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getContent().get(0);
         ISOMsg isoRsp = (ISOMsg) req.clone();
@@ -103,8 +78,6 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
                 .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
-        
-        
         isoRsp.set(62, sb.toString());
         return isoRsp;
     }
@@ -177,11 +150,6 @@ public class AccountEnquiryOutboundParticipant implements TransactionParticipant
         } catch (ISOException ex) {
             return null;
         }
-    }
-
-    @Override
-    public void setConfiguration(Configuration c) throws ConfigurationException {
-        this.cfg = c;
     }
 
 }
