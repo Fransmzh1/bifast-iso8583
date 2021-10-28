@@ -146,7 +146,9 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
                     .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
-                    .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35));
+                    .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
+                    .append(proxyRegistrationResponse.getRegistrationType())
+                    .append(proxyRegistrationResponse.getRegistrationId());
             isoRsp.set(62, sb.toString());
             return isoRsp;
         } catch (ISOException ex) {
@@ -157,7 +159,6 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
         ProxyRegistrationResponse proxyRegistrationResponse = (ProxyRegistrationResponse) dto.getBody().getContent().get(0);
-        String privateData = req.getString(48);
         ISOMsg isoRsp = (ISOMsg) req.clone();
         isoRsp.setResponseMTI();
         isoRsp.set(39, "00");

@@ -25,7 +25,6 @@
             <property name="fieldNumber" value="3" />
             <property name="909000" value="ProxyManagement" />
             <property name="909100" value="ProxyResolution" />
-            <property name="909200" value="CustomerInquiry" />
         </participant>
     </group>
     
@@ -44,6 +43,17 @@
     <group name="CreditTransfer">
         <participant class="com.mii.komi.jpos.participant.outbound.CreditTransferOutboundParticipant" logger="Q2">
             <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/CreditTransfer" />
+        </participant>
+    </group>
+    
+    <group name="ProxyManagement">
+        <participant class="com.mii.komi.jpos.participant.outbound.ProxyRegistrationParticipant" logger="Q2">
+            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/ProxyRegistration" />
+        </participant>
+    </group>
+    <group name="ProxyResolution">
+        <participant class="com.mii.komi.jpos.participant.outbound.ProxyResolutionParticipant" logger="Q2">
+            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/ProxyResolution" />
         </participant>
     </group>
     
