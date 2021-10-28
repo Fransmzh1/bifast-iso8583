@@ -23,5 +23,4 @@ public class RootProxyRegistration extends BaseRootHttpRequest {
     public void setProxyRegistrationRequest(ProxyRegistrationRequest proxyRegistrationRequest) {
         this.proxyRegistrationRequest = proxyRegistrationRequest;
     }
-    
 }

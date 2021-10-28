@@ -13,6 +13,9 @@ public class ProxyResolutionResponse extends BaseOutboundDTO {
     @JsonProperty("ProxyType")
     private String proxyType;
 
+    @JsonProperty("ProxyValue")
+    private String proxyValue;
+
     @JsonProperty("RegistrationId")
     private String registrationId;
 
@@ -49,6 +52,14 @@ public class ProxyResolutionResponse extends BaseOutboundDTO {
 
     public void setProxyType(String proxyType) {
         this.proxyType = proxyType;
+    }
+
+    public String getProxyValue() {
+        return Optional.ofNullable(proxyValue).orElse("");
+    }
+
+    public void setProxyValue(String proxyValue) {
+        this.proxyValue = proxyValue;
     }
 
     public String getRegistrationId() {
