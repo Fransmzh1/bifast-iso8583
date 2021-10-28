@@ -43,32 +43,37 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
 
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
+        ISOMsg isoRsp = (ISOMsg) req.clone();
+        isoRsp.set(39, Constants.ISO_RSP_REJECTED);
         try {
-            ISOMsg isoRsp = (ISOMsg) req.clone();
             isoRsp.setResponseMTI();
-            isoRsp.set(39, Constants.ISO_RSP_REJECTED);
             return isoRsp;
         } catch (ISOException ex) {
             Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            return isoRsp;
         }
     }
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
-        try {
-            ISOMsg isoRsp = (ISOMsg) req.clone();
-            isoRsp.setResponseMTI();
+        ISOMsg isoRsp = (ISOMsg) req.clone();
+        if (dto.hasBody()) {
             String responseCode = dto.getBody().getResponseCode();
             if (Constants.RESPONSE_CODE_ACCEPTED.equals(responseCode)) {
                 isoRsp.set(39, Constants.ISO_RSP_APPROVED);
             } else {
                 isoRsp.set(39, Constants.ISO_RSP_REJECTED);
             }
+            try {
+                isoRsp.setResponseMTI();
+                return isoRsp;
+            } catch (ISOException ex) {
+                Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
+                return isoRsp;
+            }
+        } else {
+            isoRsp.set(39, Constants.ISO_RSP_REJECTED);
             return isoRsp;
-        } catch (ISOException ex) {
-            Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
         }
     }
 

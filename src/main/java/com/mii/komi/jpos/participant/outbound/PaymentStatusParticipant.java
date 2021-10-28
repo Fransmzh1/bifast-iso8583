@@ -1,7 +1,5 @@
 package com.mii.komi.jpos.participant.outbound;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.dto.outbound.PaymentStatusRequest;
 import com.mii.komi.dto.outbound.PaymentStatusResponse;
@@ -55,16 +53,8 @@ public class PaymentStatusParticipant extends OutboundParticipant {
             ex.printStackTrace();
             return ABORTED;
         } catch (HttpRequestException ex) {
-            if (ex.getMessage() != null) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                PaymentStatusResponse paymentStatusResponse;
-                try {
-                    paymentStatusResponse = objectMapper.readValue(ex.getMessage(), PaymentStatusResponse.class);
-                    ctx.put(Constants.HTTP_RESPONSE, paymentStatusResponse);
-                } catch (JsonProcessingException ex1) {
-                    ex1.printStackTrace();
-                }
-            }
+            ctx.put(Constants.HTTP_RESPONSE,
+                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
             return ABORTED;
         } catch (ISOException ex) {
             ex.printStackTrace();
@@ -93,13 +83,11 @@ public class PaymentStatusParticipant extends OutboundParticipant {
 
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
-        try {
-            String privateData = req.getString(48);
-            String originalNoRef = privateData.substring(20, 40);
+        ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
+        String privateData = req.getString(48);
+        String originalNoRef = privateData.substring(20, 40);
+        if (rr.hasBody()) {
             PaymentStatusResponse paymentStatusResponse = (PaymentStatusResponse) rr.getBody().getContent().get(0);
-            ISOMsg isoRsp = (ISOMsg) req.clone();
-            isoRsp.setResponseMTI();
-            isoRsp.set(39, "81");
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(paymentStatusResponse.getNoRef(), 20))
                     .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
@@ -108,17 +96,15 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                     .append(ISOUtil.strpad(Utility.getOriginalDateTimeFromOriginalNoRef(originalNoRef), 10))
                     .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountNumber(), 34));
             isoRsp.set(62, sb.toString());
-            return isoRsp;
-        } catch (ISOException ex) {
-            return null;
         }
+        return isoRsp;
     }
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
         try {
             ISOMsg isoRsp = super.buildResponseMsg(req, dto);
-            
+
             PaymentStatusResponse paymentStatusResponse = (PaymentStatusResponse) dto.getBody().getContent().get(0);
             String privateData = req.getString(48);
             String originalNoRef = privateData.substring(20, 40);
@@ -139,7 +125,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                     .append(ISOUtil.strpad(paymentStatusResponse.getAmount(), 18))
                     .append(ISOUtil.strpad(paymentStatusResponse.getFeeTransfer(), 18));
             isoRsp.set(62, sb.toString());
-            
+
             StringBuilder sb2 = new StringBuilder();
             sb2.append(ISOUtil.strpad(paymentStatusResponse.getRecipientBank(), 35))
                     .append(ISOUtil.zeropad(paymentStatusResponse.getCreditorName(), 140))

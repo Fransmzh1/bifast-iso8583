@@ -1,7 +1,5 @@
 package com.mii.komi.jpos.participant.outbound;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.dto.outbound.ProxyRegistrationRequest;
 import com.mii.komi.dto.outbound.ProxyRegistrationResponse;
@@ -38,6 +36,16 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         ISOMsg reqMsg = (ISOMsg) ctx.get(Constants.ISO_REQUEST);
         try {
             RootProxyRegistration rootProxyRegistration = (RootProxyRegistration) buildRequestMsg(reqMsg);
+            if(rootProxyRegistration.getProxyRegistrationRequest() == null) {
+                ISOMsg rspMsg = (ISOMsg) reqMsg.clone();
+                rspMsg.setResponseMTI();
+                rspMsg.set(39, Constants.ISO_RSP_REJECTED);
+                rspMsg.set(62, reqMsg.getString(63) + 
+                        Constants.RESPONSE_CODE_REJECT + 
+                        ISOUtil.strpad(Constants.REASON_CODE_UNDEFINED, 35));
+                ctx.put(Constants.ISO_RESPONSE, rspMsg);
+                return ABORTED | NO_JOIN;
+            }
             ctx.put(Constants.HTTP_REQUEST, rootProxyRegistration);
             String endpointKomi = cfg.get("endpoint");
             RestTemplate restTemplate = new RestTemplate();
@@ -45,10 +53,10 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             ParameterizedTypeReference<RestResponse<ProxyRegistrationResponse>> typeRef
                     = new ParameterizedTypeReference<RestResponse<ProxyRegistrationResponse>>() {
             };
-            
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            
+
             HttpEntity<RootProxyRegistration> entity = new HttpEntity<RootProxyRegistration>(rootProxyRegistration, headers);
             ResponseEntity<RestResponse<ProxyRegistrationResponse>> httpResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
@@ -58,20 +66,12 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             ex.printStackTrace();
             return ABORTED;
         } catch (HttpRequestException ex) {
-            if (ex.getMessage() != null) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                ProxyRegistrationResponse proxyRegistrationRsp;
-                try {
-                    proxyRegistrationRsp = objectMapper.readValue(ex.getMessage(), ProxyRegistrationResponse.class);
-                    ctx.put(Constants.HTTP_RESPONSE, proxyRegistrationRsp);
-                } catch (JsonProcessingException ex1) {
-                    ex1.printStackTrace();
-                }
-            }
+            ctx.put(Constants.HTTP_RESPONSE,
+                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
             return ABORTED;
         } catch (ISOException ex) {
             ex.printStackTrace();
-            return ABORTED;
+            return ABORTED | NO_JOIN;
         }
     }
 
@@ -81,73 +81,77 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
 
         RootProxyRegistration root = new RootProxyRegistration();
         ProxyRegistrationRequest req = new ProxyRegistrationRequest();
-        int cursor = 0;
-        int endCursor = 20;
-        req.setNoRef(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 4;
-        req.setRegistrationType(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 12;
-        req.setProxyType(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 140;
-        req.setProxyValue(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 140;
-        req.setDisplayName(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 34;
-        req.setAccountNumber(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 4;
-        req.setAccountType(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 140;
-        req.setAccountName(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 12;
-        req.setSecondaryIdType(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        req.setSecondaryIdValue(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        req.setCustomerType(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        req.setCustomerId(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        req.setResidentialStatus(privateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        req.setTownName(privateData.substring(cursor).trim());
+        try {
 
-        root.setProxyRegistrationRequest(req);
+            int cursor = 0;
+            int endCursor = 20;
+            req.setNoRef(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 4;
+            req.setRegistrationType(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 12;
+            req.setProxyType(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 140;
+            req.setProxyValue(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 140;
+            req.setDisplayName(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 34;
+            req.setAccountNumber(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 4;
+            req.setAccountType(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 140;
+            req.setAccountName(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 12;
+            req.setSecondaryIdType(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            req.setSecondaryIdValue(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            req.setCustomerType(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            req.setCustomerId(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            req.setResidentialStatus(privateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            req.setTownName(privateData.substring(cursor).trim());
+
+            root.setProxyRegistrationRequest(req);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            root.setProxyRegistrationRequest(null);
+        }
 
         return root;
     }
 
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
-        try {
+        ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
+        if (rr.hasBody()) {
             ProxyRegistrationResponse proxyRegistrationResponse = (ProxyRegistrationResponse) rr.getBody().getContent().get(0);
-            ISOMsg isoRsp = (ISOMsg) req.clone();
-            isoRsp.setResponseMTI();
-            isoRsp.set(39, "81");
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
                     .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
@@ -155,16 +159,14 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
                     .append(proxyRegistrationResponse.getRegistrationType())
                     .append(proxyRegistrationResponse.getRegistrationId());
             isoRsp.set(62, sb.toString());
-            return isoRsp;
-        } catch (ISOException ex) {
-            return null;
         }
+        return isoRsp;
     }
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
         ISOMsg isoRsp = super.buildResponseMsg(req, dto);
-        
+
         ProxyRegistrationResponse proxyRegistrationResponse = (ProxyRegistrationResponse) dto.getBody().getContent().get(0);
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
@@ -175,5 +177,5 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         isoRsp.set(62, sb.toString());
         return isoRsp;
     }
-    
+
 }
