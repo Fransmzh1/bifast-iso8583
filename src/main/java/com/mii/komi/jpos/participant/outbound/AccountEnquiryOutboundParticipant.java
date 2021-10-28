@@ -65,10 +65,9 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> response) throws ISOException {
+        ISOMsg isoRsp = super.buildResponseMsg(req, response);
+        
         AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getBody().getContent().get(0);
-        ISOMsg isoRsp = (ISOMsg) req.clone();
-        isoRsp.setResponseMTI();
-        isoRsp.set(39, "00");
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
                 .append(ISOUtil.strpad(response.getBody().getResponseCode(), 4))

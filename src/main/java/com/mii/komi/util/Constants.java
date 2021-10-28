@@ -39,4 +39,10 @@ public class Constants {
     public static String IB_DEFAULT_TERMINAL_ID = "IBS";
     
     public static String TELLER_DEFAULT_TERMINAL_ID = "TELLER";
+    
+    public static String ISO_RSP_REJECTED = "80";
+    
+    public static String ISO_RSP_UNDEFINED = "81";
+    
+    public static String ISO_RSP_APPROVED = "00";
 }

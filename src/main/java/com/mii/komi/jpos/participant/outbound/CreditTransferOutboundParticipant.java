@@ -150,11 +150,8 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
+        ISOMsg isoRsp = super.buildResponseMsg(req, dto);
         CreditTransferOutboundResponse creditTransferResponse = (CreditTransferOutboundResponse) dto.getBody().getContent().get(0);
-        String privateData = req.getString(48);
-        ISOMsg isoRsp = (ISOMsg) req.clone();
-        isoRsp.setResponseMTI();
-        isoRsp.set(39, "00");
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(creditTransferResponse.getNoRef(), 20))
                 .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))

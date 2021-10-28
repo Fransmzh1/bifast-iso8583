@@ -120,10 +120,9 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
+        ISOMsg isoRsp = super.buildResponseMsg(req, dto);
+        
         ProxyResolutionResponse proxyResolutionResponse = (ProxyResolutionResponse) dto.getBody().getContent().get(0);
-        ISOMsg isoRsp = (ISOMsg) req.clone();
-        isoRsp.setResponseMTI();
-        isoRsp.set(39, "00"); // check responseCode = "ACTC", "RJCT", "OTHR", "KSTS" ?
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(proxyResolutionResponse.getNoRef(), 20))
                 .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))

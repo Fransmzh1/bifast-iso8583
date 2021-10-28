@@ -1,5 +1,6 @@
 package com.mii.komi.jpos.participant.outbound;
 
+import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.dto.outbound.RestResponse;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
@@ -40,6 +41,14 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
         ResponseEntity httpRsp = ctx.get(Constants.HTTP_RESPONSE);
         ISOMsg rsp = buildFailedResponseMsg(req, httpRsp);
         ctx.put(Constants.ISO_RESPONSE, rsp);
+    }
+    
+    @Override
+    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
+        ISOMsg isoRsp = (ISOMsg) req.clone();
+        isoRsp.setResponseMTI();
+        isoRsp.set(39, Constants.ISO_RSP_APPROVED); // check responseCode = "ACTC", "RJCT", "OTHR", "KSTS" ?
+        return isoRsp;
     }
 
     @Override
