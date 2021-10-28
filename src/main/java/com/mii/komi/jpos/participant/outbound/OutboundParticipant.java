@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 public abstract class OutboundParticipant implements TransactionParticipant, BaseOutboundParticipant, Configurable {
 
     protected Configuration cfg;
-    
+
     @Override
     public void commit(long id, Serializable context) {
         Context ctx = (Context) context;
@@ -42,12 +42,22 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
         ISOMsg rsp = buildFailedResponseMsg(req, httpRsp);
         ctx.put(Constants.ISO_RESPONSE, rsp);
     }
-    
+
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
         ISOMsg isoRsp = (ISOMsg) req.clone();
         isoRsp.setResponseMTI();
-        isoRsp.set(39, Constants.ISO_RSP_APPROVED); // check responseCode = "ACTC", "RJCT", "OTHR", "KSTS" ?
+        String responseCode = dto.getBody().getResponseCode();
+        String reasonCode = dto.getBody().getReasonCode();
+        if (Constants.RESPONSE_CODE_KOMI_STATUS.equals(responseCode) && Constants.REASON_CODE_UNDEFINED.equals(reasonCode)) {
+            isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
+        } else {
+            if (Constants.RESPONSE_CODE_ACCEPTED.equals(responseCode)) {
+                isoRsp.set(39, Constants.ISO_RSP_APPROVED);
+            } else {
+                isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+            }
+        }
         return isoRsp;
     }
 
@@ -55,5 +65,5 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
     public void setConfiguration(Configuration c) throws ConfigurationException {
         this.cfg = c;
     }
-    
+
 }

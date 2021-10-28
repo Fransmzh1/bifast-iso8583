@@ -86,7 +86,7 @@ public class SettlementParticipant implements TransactionParticipant, BaseInboun
         rsp.setMerchantType(isoMsg.getString(18));
         rsp.setTerminalId(isoMsg.getString(41));
         rsp.setNoRef(request.getNoRef());
-        rsp.setStatus(Constants.REASON_CODE_ACCEPTED);
+        rsp.setStatus(Constants.RESPONSE_CODE_ACCEPTED);
         return ResponseEntity.ok(rsp);
     }
 
@@ -95,10 +95,10 @@ public class SettlementParticipant implements TransactionParticipant, BaseInboun
         SettlementResponse rsp = new SettlementResponse();
         rsp.setNoRef(req.getNoRef());
         if (isoMsg != null) {
-            rsp.setStatus(Constants.REASON_CODE_REJECT);
+            rsp.setStatus(Constants.RESPONSE_CODE_REJECT);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
         } else {
-            rsp.setStatus(Constants.REASON_CODE_KOMI_STATUS);
+            rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
         }
     }

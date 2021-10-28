@@ -22,15 +22,17 @@ public class Constants {
     
     public static String RESPONSE = "Response";
     
-    public static String REASON_CODE_ACCEPTED = "ACTC";
+    public static String RESPONSE_CODE_ACCEPTED = "ACTC";
     
-    public static String REASON_CODE_REJECT = "RJCT";
+    public static String RESPONSE_CODE_REJECT = "RJCT";
     
-    public static String REASON_CODE_OTHER = "OTHR";
+    public static String RESPONSE_CODE_OTHER = "OTHR";
     
-    public static String REASON_CODE_KOMI_STATUS = "KSTS";
+    public static String RESPONSE_CODE_KOMI_STATUS = "KSTS";
     
-    public static String RESPONSE_CODE_SUCCESS = "U000";
+    public static String REASON_CODE_SUCCESS = "U000";
+    
+    public static String REASON_CODE_UNDEFINED = "K000";
     
     public static String QUEUE_KEY = "QUEUE_KEY";
     

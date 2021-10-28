@@ -100,12 +100,12 @@ public class BalanceInquiryParticipant implements TransactionParticipant, BaseIn
                 rsp.setStatus(rc);
                 rsp.setReason(rm);
             } else {
-                rsp.setStatus(Constants.REASON_CODE_REJECT);
+                rsp.setStatus(Constants.RESPONSE_CODE_REJECT);
                 rsp.setReason("U904");
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
         } else {
-            rsp.setStatus(Constants.REASON_CODE_KOMI_STATUS);
+            rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
             rsp.setReason("K000");
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
         }

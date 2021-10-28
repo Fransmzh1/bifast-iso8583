@@ -139,12 +139,12 @@ public class DebitReversalParticipant implements TransactionParticipant, BaseInb
                 debitTransferRsp.setStatus(rc);
                 debitTransferRsp.setReason(rm);
             } else {
-                debitTransferRsp.setStatus(Constants.REASON_CODE_REJECT);
+                debitTransferRsp.setStatus(Constants.RESPONSE_CODE_REJECT);
                 debitTransferRsp.setReason("U904");
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
         } else {
-            debitTransferRsp.setStatus(Constants.REASON_CODE_KOMI_STATUS);
+            debitTransferRsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
             debitTransferRsp.setReason("K000");
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
         }

@@ -47,8 +47,8 @@ public class RestResponse<T> extends BaseDTO {
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
         rr.setReasonMessage(message);
-        rr.setReasonCode(Constants.REASON_CODE_ACCEPTED);
-        rr.setResponseCode(Constants.RESPONSE_CODE_SUCCESS);
+        rr.setReasonCode(Constants.RESPONSE_CODE_ACCEPTED);
+        rr.setResponseCode(Constants.REASON_CODE_SUCCESS);
         rr.setContent(o);
         return rr;
     }
@@ -58,8 +58,8 @@ public class RestResponse<T> extends BaseDTO {
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
         rr.setReasonMessage(message);
-        rr.setReasonCode(Constants.REASON_CODE_ACCEPTED);
-        rr.setResponseCode(Constants.RESPONSE_CODE_SUCCESS);
+        rr.setReasonCode(Constants.RESPONSE_CODE_ACCEPTED);
+        rr.setResponseCode(Constants.REASON_CODE_SUCCESS);
         return rr;
     }
     
