@@ -27,8 +27,8 @@ public class RestResponse<T> extends BaseDTO {
     @JsonProperty("ReasonCode")
     private String reasonCode;
 
-    @JsonProperty("ResponseMessage")
-    private String responseMessage;
+    @JsonProperty("ReasonMessage")
+    private String reasonMessage;
 
     @JsonProperty("Content")
     private List<T> content;
@@ -46,7 +46,7 @@ public class RestResponse<T> extends BaseDTO {
         RestResponse rr = new RestResponse(o);
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
-        rr.setResponseMessage(message);
+        rr.setReasonMessage(message);
         rr.setReasonCode(Constants.REASON_CODE_ACCEPTED);
         rr.setResponseCode(Constants.RESPONSE_CODE_SUCCESS);
         rr.setContent(o);
@@ -57,7 +57,7 @@ public class RestResponse<T> extends BaseDTO {
         RestResponse rr = new RestResponse(new ArrayList<>());
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
-        rr.setResponseMessage(message);
+        rr.setReasonMessage(message);
         rr.setReasonCode(Constants.REASON_CODE_ACCEPTED);
         rr.setResponseCode(Constants.RESPONSE_CODE_SUCCESS);
         return rr;
@@ -68,7 +68,7 @@ public class RestResponse<T> extends BaseDTO {
         rr.setDate(dateFormatter.format(LocalDate.now()));
         rr.setTime(timeFormatter.format(LocalTime.now()));
         rr.setReasonCode(reasonCode);
-        rr.setResponseMessage(message);
+        rr.setReasonMessage(message);
         rr.setResponseCode(responseCode);
         return rr;
     }
@@ -116,20 +116,6 @@ public class RestResponse<T> extends BaseDTO {
     }
 
     /**
-     * @return the responseMessage
-     */
-    public String getResponseMessage() {
-        return responseMessage;
-    }
-
-    /**
-     * @param responseMessage the responseMessage to set
-     */
-    public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
-    }
-
-    /**
      * @return the content
      */
     public List<T> getContent() {
@@ -155,6 +141,20 @@ public class RestResponse<T> extends BaseDTO {
      */
     public void setReasonCode(String reasonCode) {
         this.reasonCode = reasonCode;
+    }
+
+    /**
+     * @return the reasonMessage
+     */
+    public String getReasonMessage() {
+        return reasonMessage;
+    }
+
+    /**
+     * @param reasonMessage the reasonMessage to set
+     */
+    public void setReasonMessage(String reasonMessage) {
+        this.reasonMessage = reasonMessage;
     }
     
 }

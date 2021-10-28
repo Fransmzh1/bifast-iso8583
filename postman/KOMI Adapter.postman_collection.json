@@ -36,6 +36,36 @@
 			"response": []
 		},
 		{
+			"name": "Outbound Individual Credit Transfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR0042047164450081101Purnomo Er                                                                                                                                  debtortype                         debtorid                           debtorakun                        SVGS                               residentstatus                     0003                               000000000050000.00000000000002500.00\"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        },\r\n        {\r\n            \"number\": 123,\r\n            \"value\": \"BNINDJAMBK                         Purnomi Erwin                                                                                                                               CORP                               CREDITORID                         112233445566                      SVGS                               PR                                 creditorproxyid                                                                                                                             creditorproxytype                  freetext                                                                                                                                    \"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"iso8583",
+						"service",
+						"sendAndReceive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Outbound Proxy Registration",
 			"request": {
 				"method": "POST",

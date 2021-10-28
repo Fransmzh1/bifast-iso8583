@@ -70,57 +70,99 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
     @Override
     public Object buildRequestMsg(ISOMsg isoMsg) throws ISOException {
         String privateData = isoMsg.getString(48);
+        String privateAdditionalData = isoMsg.getString(123);
 
         RootCreditTransfer root = new RootCreditTransfer();
         CreditTransferOutboundRequest req = new CreditTransferOutboundRequest();
         int cursor = 0;
         int endCursor = 20;
-        req.setNoRef(privateData.substring(cursor, endCursor));
+        req.setNoRef(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 20;
         req.setTerminalId(isoMsg.getString(41).trim());
         
         cursor = endCursor;
         endCursor = cursor + 2;
-        req.setCategoryPurpose(privateData.substring(cursor, endCursor));
+        req.setCategoryPurpose(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 140;
-        req.setDebtorName(privateData.substring(cursor, endCursor));
+        req.setDebtorName(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setDebtorType(privateData.substring(cursor, endCursor));
+        req.setDebtorType(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setDebtorId(privateData.substring(cursor, endCursor));
+        req.setDebtorId(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 34;
-        req.setDebtorAccountNumber(privateData.substring(cursor, endCursor));
+        req.setDebtorAccountNumber(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setDebtorType(privateData.substring(cursor, endCursor));
+        req.setDebtorAccountType(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setDebtorResidentialStatus(privateData.substring(cursor, endCursor));
+        req.setDebtorResidentialStatus(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setDebtorTownName(privateData.substring(cursor, endCursor));
+        req.setDebtorTownName(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 18;
-        req.setAmount(privateData.substring(cursor, endCursor));
+        req.setAmount(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 18;
-        req.setFeeTransfer(privateData.substring(cursor, endCursor));
+        req.setFeeTransfer(privateData.substring(cursor, endCursor).trim());
 
+        cursor = 0;
+        endCursor = cursor + 35;
+        req.setRecipientBank(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 140;
+        req.setCreditorName(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        req.setCreditorType(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        req.setCreditorId(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 34;
+        req.setCreditorAccountNumber(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        req.setCreditorAccountType(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        req.setCreditorResidentialStatus(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        req.setCreditorTownName(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 140;
+        req.setCreditorProxyId(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        req.setCreditorProxyType(privateAdditionalData.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        req.setPaymentInformation(privateAdditionalData.substring(cursor).trim());
+        
         root.setCreditTransferRequest(req);
 
         return root;
@@ -138,7 +180,7 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
                 .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
                 .append(ISOUtil.strpad("", 35))
-                .append(ISOUtil.strpad(rr.getBody().getResponseMessage(), 140))
+                .append(ISOUtil.strpad(rr.getBody().getReasonMessage(), 140))
                 .append(ISOUtil.strpad("", 34))
                 .append(ISOUtil.strpad("", 35));
             isoRsp.set(62, sb.toString());
@@ -157,7 +199,7 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))
                 .append(ISOUtil.strpad(dto.getBody().getReasonCode(), 35))
                 .append(ISOUtil.strpad("", 35))
-                .append(ISOUtil.strpad(dto.getBody().getResponseMessage(), 140))
+                .append(ISOUtil.strpad(dto.getBody().getReasonMessage(), 140))
                 .append(ISOUtil.strpad(creditTransferResponse.getAccountNumber(), 34))
                 .append(ISOUtil.strpad(creditTransferResponse.getCreditorName(), 35));
         isoRsp.set(62, sb.toString());
