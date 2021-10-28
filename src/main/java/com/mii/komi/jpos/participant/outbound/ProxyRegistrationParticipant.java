@@ -20,7 +20,9 @@ import static org.jpos.transaction.TransactionConstants.ABORTED;
 import static org.jpos.transaction.TransactionConstants.PREPARED;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,7 +45,11 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             ParameterizedTypeReference<RestResponse<ProxyRegistrationResponse>> typeRef
                     = new ParameterizedTypeReference<RestResponse<ProxyRegistrationResponse>>() {
             };
-            HttpEntity<RootProxyRegistration> entity = new HttpEntity<RootProxyRegistration>(rootProxyRegistration);
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            
+            HttpEntity<RootProxyRegistration> entity = new HttpEntity<RootProxyRegistration>(rootProxyRegistration, headers);
             ResponseEntity<RestResponse<ProxyRegistrationResponse>> httpResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, httpResponse);
@@ -77,59 +83,58 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         ProxyRegistrationRequest req = new ProxyRegistrationRequest();
         int cursor = 0;
         int endCursor = 20;
-        req.setNoRef(privateData.substring(cursor, endCursor));
+        req.setNoRef(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 4;
-        req.setRegistrationType(privateData.substring(cursor, endCursor));
+        req.setRegistrationType(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 12;
-        req.setProxyType(privateData.substring(cursor, endCursor));
+        req.setProxyType(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 140;
-        req.setProxyValue(privateData.substring(cursor, endCursor));
+        req.setProxyValue(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 140;
-        req.setDisplayName(privateData.substring(cursor, endCursor));
+        req.setDisplayName(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 34;
-        req.setAccountNumber(privateData.substring(cursor, endCursor));
+        req.setAccountNumber(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 4;
-        req.setAccountType(privateData.substring(cursor, endCursor));
+        req.setAccountType(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 140;
-        req.setAccountName(privateData.substring(cursor, endCursor));
+        req.setAccountName(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 12;
-        req.setSecondaryIdType(privateData.substring(cursor, endCursor));
+        req.setSecondaryIdType(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setSecondaryIdValue(privateData.substring(cursor, endCursor));
+        req.setSecondaryIdValue(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setCustomerType(privateData.substring(cursor, endCursor));
+        req.setCustomerType(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setCustomerId(privateData.substring(cursor, endCursor));
+        req.setCustomerId(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
         endCursor = cursor + 35;
-        req.setResidentialStatus(privateData.substring(cursor, endCursor));
+        req.setResidentialStatus(privateData.substring(cursor, endCursor).trim());
         
         cursor = endCursor;
-        endCursor = cursor + 35;
-        req.setTownName(privateData.substring(cursor, endCursor));
+        req.setTownName(privateData.substring(cursor).trim());
 
         root.setProxyRegistrationRequest(req);
 

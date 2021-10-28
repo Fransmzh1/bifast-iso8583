@@ -1,5 +1,6 @@
 package com.mii.komi.dto.outbound.requestroot;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mii.komi.dto.outbound.ProxyRegistrationRequest;
 
 /**
@@ -8,6 +9,7 @@ import com.mii.komi.dto.outbound.ProxyRegistrationRequest;
  */
 public class RootProxyRegistration extends BaseRootHttpRequest {
     
+    @JsonProperty("ProxyRegistrationRequest")
     private ProxyRegistrationRequest proxyRegistrationRequest;
 
     /**

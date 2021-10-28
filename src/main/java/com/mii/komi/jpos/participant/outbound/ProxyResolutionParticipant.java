@@ -11,7 +11,6 @@ import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.exception.RestTemplateResponseErrorHandler;
 import com.mii.komi.util.Constants;
-import com.mii.komi.util.Utility;
 import java.io.Serializable;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
@@ -91,8 +90,7 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
         req.setProxyType(privateData.substring(cursor, endCursor));
 
         cursor = endCursor;
-        endCursor = cursor + 140;
-        req.setProxyValue(privateData.substring(cursor, endCursor));
+        req.setProxyValue(privateData.substring(cursor));
 
         root.setProxyResolutionRequest(req);
 

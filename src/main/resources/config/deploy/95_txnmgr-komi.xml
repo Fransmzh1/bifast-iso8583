@@ -51,6 +51,7 @@
             <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/ProxyRegistrationRequest" />
         </participant>
     </group>
+    
     <group name="ProxyResolution">
         <participant class="com.mii.komi.jpos.participant.outbound.ProxyResolutionParticipant" logger="Q2">
             <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/ProxyResolutionRequest" />
