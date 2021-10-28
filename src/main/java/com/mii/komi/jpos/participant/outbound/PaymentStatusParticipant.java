@@ -13,6 +13,8 @@ import com.mii.komi.exception.RestTemplateResponseErrorHandler;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Utility;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
@@ -113,43 +115,48 @@ public class PaymentStatusParticipant extends OutboundParticipant {
     }
 
     @Override
-    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
-        ISOMsg isoRsp = super.buildResponseMsg(req, dto);
-        
-        PaymentStatusResponse paymentStatusResponse = (PaymentStatusResponse) dto.getBody().getContent().get(0);
-        String privateData = req.getString(48);
-        String originalNoRef = privateData.substring(20, 40);
-        StringBuilder sb = new StringBuilder();
-        sb.append(ISOUtil.strpad(paymentStatusResponse.getNoRef(), 20))
-                .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))
-                .append(ISOUtil.strpad(dto.getBody().getReasonCode(), 35))
-                .append(originalNoRef)
-                .append(ISOUtil.strpad(Utility.getOriginalDateTimeFromOriginalNoRef(originalNoRef), 10))
-                .append(ISOUtil.zeropad(paymentStatusResponse.getCategoryPurpose(), 2))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorName(), 140))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorType(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorId(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountNumber(), 34))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountType(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorResidentialStatus(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorTownName(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getAmount(), 18))
-                .append(ISOUtil.strpad(paymentStatusResponse.getFeeTransfer(), 18));
-        isoRsp.set(62, sb.toString());
-
-        StringBuilder sb2 = new StringBuilder();
-        sb2.append(ISOUtil.strpad(paymentStatusResponse.getRecipientBank(), 35))
-                .append(ISOUtil.zeropad(paymentStatusResponse.getCreditorName(), 140))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorType(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorId(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountNumber(), 34))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountType(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorResidentialStatus(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorTownName(), 140))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorProxyType(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getPaymentInformation(), 140));
-        isoRsp.set(123, sb2.toString());
-        return isoRsp;
+    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
+        try {
+            ISOMsg isoRsp = super.buildResponseMsg(req, dto);
+            
+            PaymentStatusResponse paymentStatusResponse = (PaymentStatusResponse) dto.getBody().getContent().get(0);
+            String privateData = req.getString(48);
+            String originalNoRef = privateData.substring(20, 40);
+            StringBuilder sb = new StringBuilder();
+            sb.append(ISOUtil.strpad(paymentStatusResponse.getNoRef(), 20))
+                    .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))
+                    .append(ISOUtil.strpad(dto.getBody().getReasonCode(), 35))
+                    .append(originalNoRef)
+                    .append(ISOUtil.strpad(Utility.getOriginalDateTimeFromOriginalNoRef(originalNoRef), 10))
+                    .append(ISOUtil.zeropad(paymentStatusResponse.getCategoryPurpose(), 2))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getDebtorName(), 140))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getDebtorType(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getDebtorId(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountNumber(), 34))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountType(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getDebtorResidentialStatus(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getDebtorTownName(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getAmount(), 18))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getFeeTransfer(), 18));
+            isoRsp.set(62, sb.toString());
+            
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append(ISOUtil.strpad(paymentStatusResponse.getRecipientBank(), 35))
+                    .append(ISOUtil.zeropad(paymentStatusResponse.getCreditorName(), 140))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorType(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorId(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountNumber(), 34))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountType(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorResidentialStatus(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorTownName(), 140))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorProxyType(), 35))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getPaymentInformation(), 140));
+            isoRsp.set(123, sb2.toString());
+            return isoRsp;
+        } catch (ISOException ex) {
+            Logger.getLogger(PaymentStatusParticipant.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
 }

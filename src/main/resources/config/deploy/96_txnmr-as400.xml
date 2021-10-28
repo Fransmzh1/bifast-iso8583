@@ -43,6 +43,8 @@
     </group>
     
     <group name="SendAndReceiveToCoreBanking">
-        <participant class="com.mii.komi.jpos.participant.inbound.SendAndReceiveIso8583" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.SendAndReceiveIso8583" logger="Q2">
+            <property name="destination" value="mantabcorebanking" />
+        </participant>
     </group>
 </txnmgr>

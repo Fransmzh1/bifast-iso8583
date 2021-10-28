@@ -60,7 +60,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
     @Override
     protected void initService() throws ISOException {
         try {
-            mux = NameRegistrar.get("mux." + cfg.get("mux"));
+            mux = NameRegistrar.get("mux." + cfg.get("destination") + "-mux");
 
             in = mux.getInQueue();
             out = mux.getOutQueue();

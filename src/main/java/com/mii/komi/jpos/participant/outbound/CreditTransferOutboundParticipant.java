@@ -191,8 +191,13 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
     }
 
     @Override
-    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
+    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
         ISOMsg isoRsp = super.buildResponseMsg(req, dto);
+        if (Constants.RESPONSE_CODE_KOMI_STATUS.equals(dto.getBody().getResponseCode()) 
+                && Constants.REASON_CODE_UNDEFINED.equals(dto.getBody().getReasonCode())) {
+            isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
+        }
+        
         CreditTransferOutboundResponse creditTransferResponse = (CreditTransferOutboundResponse) dto.getBody().getContent().get(0);
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(creditTransferResponse.getNoRef(), 20))

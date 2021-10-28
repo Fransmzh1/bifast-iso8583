@@ -119,7 +119,7 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
     }
 
     @Override
-    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
+    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
         ISOMsg isoRsp = super.buildResponseMsg(req, dto);
         
         ProxyResolutionResponse proxyResolutionResponse = (ProxyResolutionResponse) dto.getBody().getContent().get(0);

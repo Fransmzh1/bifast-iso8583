@@ -4,6 +4,8 @@ import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.dto.outbound.RestResponse;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jpos.core.Configurable;
 import org.jpos.core.Configuration;
 import org.jpos.core.ConfigurationException;
@@ -26,12 +28,8 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
         Context ctx = (Context) context;
         ISOMsg req = ctx.get(Constants.ISO_REQUEST);
         ResponseEntity httpRsp = ctx.get(Constants.HTTP_RESPONSE);
-        try {
-            ISOMsg rsp = buildResponseMsg(req, httpRsp);
-            ctx.put(Constants.ISO_RESPONSE, rsp);
-        } catch (ISOException ex) {
-            ex.printStackTrace();
-        }
+        ISOMsg rsp = buildResponseMsg(req, httpRsp);
+        ctx.put(Constants.ISO_RESPONSE, rsp);
     }
 
     @Override
@@ -44,21 +42,34 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
     }
 
     @Override
-    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) throws ISOException {
-        ISOMsg isoRsp = (ISOMsg) req.clone();
-        isoRsp.setResponseMTI();
-        String responseCode = dto.getBody().getResponseCode();
-        String reasonCode = dto.getBody().getReasonCode();
-        if (Constants.RESPONSE_CODE_KOMI_STATUS.equals(responseCode) && Constants.REASON_CODE_UNDEFINED.equals(reasonCode)) {
-            isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
-        } else {
+    public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
+        try {
+            ISOMsg isoRsp = (ISOMsg) req.clone();
+            isoRsp.setResponseMTI();
+            isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+            return isoRsp;
+        } catch (ISOException ex) {
+            Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
+        try {
+            ISOMsg isoRsp = (ISOMsg) req.clone();
+            isoRsp.setResponseMTI();
+            String responseCode = dto.getBody().getResponseCode();
             if (Constants.RESPONSE_CODE_ACCEPTED.equals(responseCode)) {
                 isoRsp.set(39, Constants.ISO_RSP_APPROVED);
             } else {
                 isoRsp.set(39, Constants.ISO_RSP_REJECTED);
             }
+            return isoRsp;
+        } catch (ISOException ex) {
+            Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        return isoRsp;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class NetworkManagementParticipant implements TransactionParticipant{
             ISOMsg rspMsg = (ISOMsg) reqMsg.clone();
             rspMsg.setDirection(ISOMsg.OUTGOING);
             rspMsg.setResponseMTI();
-            rspMsg.set(39, "00");
+            rspMsg.set(39, Constants.ISO_RSP_APPROVED);
             ctx.put(Constants.ISO_RESPONSE, rspMsg);
         } catch (ISOException ex) {
             Logger.getLogger(NetworkManagementParticipant.class.getName()).log(Level.SEVERE, null, ex);

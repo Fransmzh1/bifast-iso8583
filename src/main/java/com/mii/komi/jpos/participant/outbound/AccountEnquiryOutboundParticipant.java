@@ -12,6 +12,8 @@ import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.exception.RestTemplateResponseErrorHandler;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
@@ -64,25 +66,29 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
     }
 
     @Override
-    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> response) throws ISOException {
-        ISOMsg isoRsp = super.buildResponseMsg(req, response);
-        
-        AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getBody().getContent().get(0);
-        StringBuilder sb = new StringBuilder();
-        sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
-                .append(ISOUtil.strpad(response.getBody().getResponseCode(), 4))
-                .append(ISOUtil.strpad(response.getBody().getReasonCode(), 35))
-                .append(ISOUtil.zeropad(accountEnquiryRsp.getAccountNumber(), 34))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorId(), 35))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorType(), 35))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
-        isoRsp.set(62, sb.toString());
-        return isoRsp;
+    public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> response) {
+        try {
+            ISOMsg isoRsp = super.buildResponseMsg(req, response);
+            AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getBody().getContent().get(0);
+            StringBuilder sb = new StringBuilder();
+            sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
+                    .append(ISOUtil.strpad(response.getBody().getResponseCode(), 4))
+                    .append(ISOUtil.strpad(response.getBody().getReasonCode(), 35))
+                    .append(ISOUtil.zeropad(accountEnquiryRsp.getAccountNumber(), 34))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorId(), 35))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorType(), 35))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
+                    .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
+            isoRsp.set(62, sb.toString());
+            return isoRsp;
+        } catch (ISOException ex) {
+            Logger.getLogger(AccountEnquiryOutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     @Override
