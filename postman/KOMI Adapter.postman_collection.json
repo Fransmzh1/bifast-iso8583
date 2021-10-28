@@ -36,6 +36,96 @@
 			"response": []
 		},
 		{
+			"name": "Outbound Proxy Registration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0600\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"909000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR00420471644500811NEWR02          proxy@value.com                                                                                                                             MR JOHN                                                                                                                                     111122223333444                   SVGSMR JOHN                                                                                                                                     idtype      idvalue                            customertype                       customerid                         resident                           0003                               \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"iso8583",
+						"service",
+						"sendAndReceive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Outbound Proxy Resolution",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"2020042047164450081167758999                          000000000137400.2001BNINDJAMBK                        \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"20200420471644500811\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"iso8583",
+						"service",
+						"sendAndReceive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Outbound Payment Status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"2020042047164450081167758999                          000000000137400.2001BNINDJAMBK                        \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"20200420471644500811\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"iso8583",
+						"service",
+						"sendAndReceive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Inbound Account Enquiry",
 			"request": {
 				"method": "POST",
