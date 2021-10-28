@@ -41,6 +41,12 @@
         </participant>
     </group>
     
+    <group name="CreditTransfer">
+        <participant class="com.mii.komi.jpos.participant.outbound.CreditTransferOutboundParticipant" logger="Q2">
+            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/CreditTransfer" />
+        </participant>
+    </group>
+    
     <group name="Network">
         <participant class="com.mii.komi.jpos.participant.NetworkManagementParticipant" logger="Q2" />
     </group>
