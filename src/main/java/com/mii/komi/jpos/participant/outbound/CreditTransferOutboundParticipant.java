@@ -165,7 +165,7 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
             req.setPaymentInformation(privateAdditionalData.substring(cursor).trim());
 
             root.setCreditTransferRequest(req);
-        } catch (ArrayIndexOutOfBoundsException ex) {
+        } catch (StringIndexOutOfBoundsException ex) {
             root.setCreditTransferRequest(null);
         }
         return root;

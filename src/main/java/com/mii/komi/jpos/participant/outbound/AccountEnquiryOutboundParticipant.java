@@ -138,7 +138,7 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                 }
             }
             root.setAccountEnquiryRequest(req);
-        } catch (ArrayIndexOutOfBoundsException ex) {
+        } catch (StringIndexOutOfBoundsException ex) {
             ex.printStackTrace();
             root.setAccountEnquiryRequest(null);
         }

@@ -94,7 +94,7 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
             req.setProxyValue(privateData.substring(cursor));
 
             root.setProxyResolutionRequest(req);
-        } catch (ArrayIndexOutOfBoundsException ex) {
+        } catch (StringIndexOutOfBoundsException ex) {
             root.setProxyResolutionRequest(null);
         }
 

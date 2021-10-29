@@ -140,7 +140,7 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             req.setTownName(privateData.substring(cursor).trim());
 
             root.setProxyRegistrationRequest(req);
-        } catch (ArrayIndexOutOfBoundsException ex) {
+        } catch (StringIndexOutOfBoundsException ex) {
             root.setProxyRegistrationRequest(null);
         }
 
