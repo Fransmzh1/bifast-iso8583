@@ -175,7 +175,7 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
         isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
-        if (rr.hasBody()) {
+        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             CreditTransferOutboundResponse creditTransferResponse = (CreditTransferOutboundResponse) rr.getBody().getContent().get(0);
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(creditTransferResponse.getNoRef(), 20))

@@ -44,7 +44,11 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = (ISOMsg) req.clone();
-        isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+        if(rr.getStatusCodeValue() >= 400 && rr.getStatusCodeValue() <= 499) {
+            isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+        } else if (rr.getStatusCodeValue() >= 500) {
+            isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
+        }
         try {
             isoRsp.setResponseMTI();
             return isoRsp;

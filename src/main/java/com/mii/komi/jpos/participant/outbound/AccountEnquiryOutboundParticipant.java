@@ -148,7 +148,7 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
-        if (rr.hasBody()) {
+        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) rr.getBody().getContent().get(0);
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))

@@ -86,7 +86,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
         String privateData = req.getString(48);
         String originalNoRef = privateData.substring(20, 40);
-        if (rr.hasBody()) {
+        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             PaymentStatusResponse paymentStatusResponse = (PaymentStatusResponse) rr.getBody().getContent().get(0);
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(paymentStatusResponse.getNoRef(), 20))
