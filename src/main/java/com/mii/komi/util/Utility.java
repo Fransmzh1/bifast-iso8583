@@ -9,6 +9,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import org.jpos.iso.ISOException;
+import org.jpos.iso.ISOUtil;
+
 /**
  *
  * @author Erwin Sugianto Santoso - MII
@@ -64,4 +67,16 @@ public class Utility {
         return originalDateTime;
     }
 
+    public static String getJSONMoney(String isomoney) {
+        String sig = isomoney.substring(0, 16);
+        String dec = isomoney.substring(16);        
+        return ISOUtil.zeroUnPad(sig) + "." + dec;
+    }
+
+    public static String getISOMoney(String jsonmoney) throws ISOException {
+        // minimum of ".00" - two decimal places
+        String dec = jsonmoney.substring(jsonmoney.length() - 2);
+        String sig = jsonmoney.substring(0, jsonmoney.length() - 3);
+        return ISOUtil.zeropad(sig, 16) + dec;
+    }
 }

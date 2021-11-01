@@ -9,6 +9,8 @@ import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.jpos.qbean.RestSender;
 import com.mii.komi.util.Constants;
+import com.mii.komi.util.Utility;
+
 import java.io.Serializable;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
@@ -114,11 +116,15 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
 
             cursor = endCursor;
             endCursor = cursor + 18;
-            req.setAmount(privateData.substring(cursor, endCursor).trim());
+            // Amount fix
+            //req.setAmount(privateData.substring(cursor, endCursor).trim());
+            req.setAmount(Utility.getJSONMoney(privateData.substring(cursor, endCursor)));
 
             cursor = endCursor;
             endCursor = cursor + 18;
-            req.setFeeTransfer(privateData.substring(cursor, endCursor).trim());
+            // Amount fix
+            //req.setFeeTransfer(privateData.substring(cursor, endCursor).trim());
+            req.setFeeTransfer(Utility.getJSONMoney(privateData.substring(cursor, endCursor)));
 
             cursor = 0;
             endCursor = cursor + 35;
