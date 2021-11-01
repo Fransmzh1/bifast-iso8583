@@ -5,6 +5,8 @@ import com.mii.komi.dto.inbound.AccountEnquiryInboundResponse;
 import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
+import com.mii.komi.util.Utility;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,7 +69,11 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
         StringBuilder sb = new StringBuilder();
         String noRef = ISOUtil.strpad(accountEnquiryRequest.getNoRef(), 20);
         String recipientBank = ISOUtil.strpad(accountEnquiryRequest.getRecipientBank(), 35);
-        String amount = ISOUtil.zeropad(String.valueOf(accountEnquiryRequest.getAmount()), 18);
+        
+        // fix amount
+        //String amount = ISOUtil.zeropad(String.valueOf(accountEnquiryRequest.getAmount()), 18);
+        String amount = Utility.getISOMoney(accountEnquiryRequest.getAmount());
+
         String categoryPurpose = ISOUtil.zeropad(accountEnquiryRequest.getCategoryPurpose(), 2);
         String accountNumber = ISOUtil.strpad(accountEnquiryRequest.getAccountNumber(), 34);
         sb.append(noRef).append(recipientBank).append(amount).append(categoryPurpose).append(accountNumber);

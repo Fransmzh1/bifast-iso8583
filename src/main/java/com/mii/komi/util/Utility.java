@@ -74,6 +74,7 @@ public class Utility {
     }
 
     public static String getISOMoney(String jsonmoney) throws ISOException {
+        if (jsonmoney.length() < 3) return "000000000000000000"; // else returns zero
         // minimum of ".00" - two decimal places
         String dec = jsonmoney.substring(jsonmoney.length() - 2);
         String sig = jsonmoney.substring(0, jsonmoney.length() - 3);
