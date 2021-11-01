@@ -102,37 +102,37 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
         try {
             int cursor = 0;
             int endCursor = 20;
-            req.setNoRef(privateData.substring(cursor, endCursor));
+            req.setNoRef(privateData.substring(cursor, endCursor).trim());
 
             cursor = endCursor;
             endCursor = cursor + 34;
-            req.setSenderAccountNumber(privateData.substring(cursor, endCursor));
+            req.setSenderAccountNumber(privateData.substring(cursor, endCursor).trim());
 
             cursor = endCursor;
             endCursor = cursor + 18;
-            req.setAmount(privateData.substring(cursor, endCursor));
+            req.setAmount(privateData.substring(cursor, endCursor).trim());
 
             cursor = endCursor;
             endCursor = cursor + 2;
-            req.setCategoryPurpose(privateData.substring(cursor, endCursor));
+            req.setCategoryPurpose(privateData.substring(cursor, endCursor).trim());
 
             if (privateData.length() > endCursor) {
                 cursor = endCursor;
                 endCursor = cursor + 34;
-                req.setRecipientBank(privateData.substring(cursor, endCursor));
+                req.setRecipientBank(privateData.substring(cursor, endCursor).trim());
 
                 cursor = endCursor;
                 endCursor = cursor + 34;
-                req.setRecipientAccountNumber(privateData.substring(cursor, endCursor));
+                req.setRecipientAccountNumber(privateData.substring(cursor, endCursor).trim());
 
                 if (privateData.length() > endCursor) {
                     cursor = endCursor;
                     endCursor = cursor + 140;
-                    req.setProxyId(privateData.substring(cursor, endCursor));
+                    req.setProxyId(privateData.substring(cursor, endCursor).trim());
 
                     cursor = endCursor;
                     endCursor = cursor + 140;
-                    req.setProxyType(privateData.substring(cursor, endCursor));
+                    req.setProxyType(privateData.substring(cursor, endCursor).trim());
                 }
             }
             root.setAccountEnquiryRequest(req);
