@@ -7,7 +7,7 @@ import com.mii.komi.dto.outbound.RestResponse;
 import com.mii.komi.dto.outbound.requestroot.RootProxyRegistration;
 import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
-import com.mii.komi.exception.RestTemplateResponseErrorHandler;
+import com.mii.komi.jpos.qbean.RestSender;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
 import org.jpos.iso.ISOException;
@@ -16,11 +16,10 @@ import org.jpos.iso.ISOUtil;
 import org.jpos.transaction.Context;
 import static org.jpos.transaction.TransactionConstants.ABORTED;
 import static org.jpos.transaction.TransactionConstants.PREPARED;
+import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,16 +45,12 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             }
             ctx.put(Constants.HTTP_REQUEST, rootProxyRegistration);
             String endpointKomi = cfg.get("endpoint");
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
+            RestSender restSender = NameRegistrar.get("komi-restsender");
+            RestTemplate restTemplate = restSender.getRestTemplate();
             ParameterizedTypeReference<RestResponse<ProxyRegistrationResponse>> typeRef
                     = new ParameterizedTypeReference<RestResponse<ProxyRegistrationResponse>>() {
             };
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            HttpEntity<RootProxyRegistration> entity = new HttpEntity<RootProxyRegistration>(rootProxyRegistration, headers);
+            HttpEntity<RootProxyRegistration> entity = new HttpEntity<RootProxyRegistration>(rootProxyRegistration, restSender.getHeaders());
             ResponseEntity<RestResponse<ProxyRegistrationResponse>> httpResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, httpResponse);
@@ -63,7 +58,7 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         } catch (DataNotFoundException ex) {
             ex.printStackTrace();
             return ABORTED;
-        } catch (HttpRequestException ex) {
+        } catch (HttpRequestException | NameRegistrar.NotFoundException ex) {
             ctx.put(Constants.HTTP_RESPONSE,
                     ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
             return ABORTED;

@@ -7,7 +7,7 @@ import com.mii.komi.dto.outbound.RestResponse;
 import com.mii.komi.dto.outbound.requestroot.RootPaymentStatus;
 import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
-import com.mii.komi.exception.RestTemplateResponseErrorHandler;
+import com.mii.komi.jpos.qbean.RestSender;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Utility;
 import java.io.Serializable;
@@ -19,6 +19,7 @@ import org.jpos.iso.ISOUtil;
 import org.jpos.transaction.Context;
 import static org.jpos.transaction.TransactionConstants.ABORTED;
 import static org.jpos.transaction.TransactionConstants.PREPARED;
+import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -39,12 +40,12 @@ public class PaymentStatusParticipant extends OutboundParticipant {
             RootPaymentStatus rootPaymentStatus = (RootPaymentStatus) buildRequestMsg(reqMsg);
             ctx.put(Constants.HTTP_REQUEST, rootPaymentStatus);
             String endpointKomi = cfg.get("endpoint");
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
+            RestSender restSender = NameRegistrar.get("komi-restsender");
+            RestTemplate restTemplate = restSender.getRestTemplate();
             ParameterizedTypeReference<RestResponse<PaymentStatusResponse>> typeRef
                     = new ParameterizedTypeReference<RestResponse<PaymentStatusResponse>>() {
             };
-            HttpEntity<RootPaymentStatus> entity = new HttpEntity<RootPaymentStatus>(rootPaymentStatus);
+            HttpEntity<RootPaymentStatus> entity = new HttpEntity<RootPaymentStatus>(rootPaymentStatus, restSender.getHeaders());
             ResponseEntity<RestResponse<PaymentStatusResponse>> paymentStatusResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, paymentStatusResponse);
@@ -52,9 +53,9 @@ public class PaymentStatusParticipant extends OutboundParticipant {
         } catch (DataNotFoundException ex) {
             ex.printStackTrace();
             return ABORTED;
-        } catch (HttpRequestException ex) {
+        } catch (HttpRequestException | NameRegistrar.NotFoundException ex) {
             ctx.put(Constants.HTTP_RESPONSE,
-                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
+                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "KSTS")));
             return ABORTED;
         } catch (ISOException ex) {
             ex.printStackTrace();

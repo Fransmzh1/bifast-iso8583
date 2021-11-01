@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<qbean name="komi-restsender" logger="Q2" realm="komi-restsender"
+       class="com.mii.komi.jpos.qbean.RestSender">
+    <property name="authorization" value="Q01TOnBhc3N3b3Jk" />
+</qbean>

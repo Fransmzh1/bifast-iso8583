@@ -7,7 +7,7 @@ import com.mii.komi.dto.outbound.RestResponse;
 import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
-import com.mii.komi.exception.RestTemplateResponseErrorHandler;
+import com.mii.komi.jpos.qbean.RestSender;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -16,6 +16,7 @@ import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.transaction.Context;
+import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -44,12 +45,12 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
             }
             ctx.put(Constants.HTTP_REQUEST, accountEnquiryRequest);
             String endpointKomi = cfg.get("endpoint");
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
+            RestSender restSender = NameRegistrar.get("komi-restsender");
+            RestTemplate restTemplate = restSender.getRestTemplate();
             ParameterizedTypeReference<RestResponse<AccountEnquiryOutboundResponse>> typeRef
                     = new ParameterizedTypeReference<RestResponse<AccountEnquiryOutboundResponse>>() {
             };
-            HttpEntity<RootAccountEnquiry> entity = new HttpEntity<RootAccountEnquiry>(accountEnquiryRequest);
+            HttpEntity<RootAccountEnquiry> entity = new HttpEntity<RootAccountEnquiry>(accountEnquiryRequest, restSender.getHeaders());
             ResponseEntity<RestResponse<AccountEnquiryOutboundResponse>> accountEnquiryResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, accountEnquiryResponse);
@@ -63,6 +64,9 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                     ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
             return ABORTED;
         } catch (ISOException ex) {
+            Logger.getLogger(AccountEnquiryOutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
+            return ABORTED | NO_JOIN;
+        } catch (NameRegistrar.NotFoundException ex) {
             Logger.getLogger(AccountEnquiryOutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
             return ABORTED | NO_JOIN;
         }
@@ -131,7 +135,8 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                     req.setProxyId(privateData.substring(cursor, endCursor).trim());
 
                     cursor = endCursor;
-                    endCursor = cursor + 140;
+                    // update : adam, 140 -> 35
+                    endCursor = cursor + 35;
                     req.setProxyType(privateData.substring(cursor, endCursor).trim());
                 }
             }

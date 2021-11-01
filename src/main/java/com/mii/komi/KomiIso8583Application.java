@@ -5,19 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestOperations;
 
 /**
  *
  * @author Erwin Sugianto Santoso - MII
  */
-
 @SpringBootApplication
 public class KomiIso8583Application implements CommandLineRunner {
 
     @Autowired
     Environment env;
-    
+
     public static void main(String[] args) {
         SpringApplication.run(KomiIso8583Application.class, args);
     }
