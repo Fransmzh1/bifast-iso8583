@@ -19,6 +19,7 @@ import org.jpos.transaction.Context;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,7 +50,7 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
             ParameterizedTypeReference<RestResponse<AccountEnquiryOutboundResponse>> typeRef
                     = new ParameterizedTypeReference<RestResponse<AccountEnquiryOutboundResponse>>() {
             };
-            HttpEntity<RootAccountEnquiry> entity = new HttpEntity<RootAccountEnquiry>(accountEnquiryRequest);
+
             ResponseEntity<RestResponse<AccountEnquiryOutboundResponse>> accountEnquiryResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, accountEnquiryResponse);
@@ -131,7 +132,8 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                     req.setProxyId(privateData.substring(cursor, endCursor));
 
                     cursor = endCursor;
-                    endCursor = cursor + 140;
+                    // update : adam, 140 -> 35
+                    endCursor = cursor + 35;
                     req.setProxyType(privateData.substring(cursor, endCursor));
                 }
             }
