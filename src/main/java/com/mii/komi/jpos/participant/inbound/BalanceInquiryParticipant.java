@@ -7,6 +7,8 @@ import com.mii.komi.dto.inbound.BalanceInquiryResponse;
 import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
+import com.mii.komi.util.Utility;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -134,7 +136,9 @@ public class BalanceInquiryParticipant implements TransactionParticipant, BaseIn
         rsp.setReason(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
-        rsp.setBalance(privateData.substring(cursor).trim());
+        // Amount fix
+        //rsp.setBalance(privateData.substring(cursor).trim());
+        rsp.setBalance(Utility.getJSONMoney(privateData.substring(cursor).trim()));
         
         return ResponseEntity.ok(rsp);
     }

@@ -5,6 +5,8 @@ import com.mii.komi.dto.inbound.CreditTransferInboundRequest;
 import com.mii.komi.dto.inbound.CreditTransferInboundResponse;
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
+import com.mii.komi.util.Utility;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,8 +81,13 @@ public class CreditTransferParticipant implements TransactionParticipant, BaseIn
         String debtorAccountType = ISOUtil.strpad(debitRequest.getDebtorAccountType(), 35);
         String debtorResidentStatus = ISOUtil.strpad(debitRequest.getDebtorResidentStatus(), 35);
         String debtorTownName = ISOUtil.strpad(debitRequest.getDebtorTownName(), 35);
-        String amount = ISOUtil.zeropad(String.valueOf(debitRequest.getAmount()), 18);
-        String feeTransfer = ISOUtil.zeropad(String.valueOf(debitRequest.getAmount()), 18);
+
+        // Amount fix
+        //String amount = ISOUtil.zeropad(String.valueOf(debitRequest.getAmount()), 18);
+        //String feeTransfer = ISOUtil.zeropad(String.valueOf(debitRequest.getAmount()), 18);
+        String amount = Utility.getISOMoney(debitRequest.getAmount());
+        String feeTransfer = Utility.getISOMoney(debitRequest.getFeeTransfer());
+        
         content48.append(noRef).append(originalNoRef).append(originalDateTime).append(categoryPurpose)
                 .append(debtorName).append(debtorType).append(debtorId).append(debtorAccountNumber)
                 .append(debtorAccountNumber).append(debtorAccountType).append(debtorResidentStatus)
