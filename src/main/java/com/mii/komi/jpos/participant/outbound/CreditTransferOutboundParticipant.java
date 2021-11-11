@@ -39,7 +39,7 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
                 ISOMsg rspMsg = (ISOMsg) reqMsg.clone();
                 rspMsg.setResponseMTI();
                 rspMsg.set(39, Constants.ISO_RSP_REJECTED);
-                rspMsg.unset(48);
+                //rspMsg.unset(48);
                 ctx.put(Constants.ISO_RESPONSE, rspMsg);
                 return ABORTED | NO_JOIN;
             }
