@@ -71,7 +71,6 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
             }
             try {
                 isoRsp.setResponseMTI();
-                isoRsp.unset(48);
                 return isoRsp;
             } catch (ISOException ex) {
                 Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
