@@ -6,8 +6,10 @@
     <channel class="org.jpos.iso.channel.NACChannel" packager="org.jpos.iso.packager.GenericPackager" logger="Q2">
        <property name="packager-config" value="config/packager/iso87mantabcorebanking.xml" />
     </channel>
+    <send-request>LAST</send-request>
     <property name="allow" value="127.0.0.1"/>
     <in>mantabcorebanking-in</in>
     <out>mantabcorebanking-out</out>
+    <ready>mantabcorebanking.ready</ready>
 </srv>
 
