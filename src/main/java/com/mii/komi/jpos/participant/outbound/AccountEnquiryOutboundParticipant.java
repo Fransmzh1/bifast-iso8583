@@ -9,6 +9,8 @@ import com.mii.komi.exception.DataNotFoundException;
 import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.jpos.qbean.RestSender;
 import com.mii.komi.util.Constants;
+import com.mii.komi.util.Utility;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,7 +116,9 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
 
             cursor = endCursor;
             endCursor = cursor + 18;
-            req.setAmount(privateData.substring(cursor, endCursor).trim());
+            // Amount fix
+            //req.setAmount(privateData.substring(cursor, endCursor).trim());
+            req.setAmount(Utility.getJSONMoney(privateData.substring(cursor, endCursor)));
 
             cursor = endCursor;
             endCursor = cursor + 2;

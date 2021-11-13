@@ -5,9 +5,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.util.UUID;
+
+import org.jpos.iso.ISOException;
+import org.jpos.iso.ISOUtil;
 
 /**
  *
@@ -64,4 +71,19 @@ public class Utility {
         return originalDateTime;
     }
 
+    public static String getJSONMoney(String isomoney) {
+        String sig = isomoney.substring(0, 16);
+        String dec = isomoney.substring(16);        
+        return ISOUtil.zeroUnPad(sig) + "." + dec;
+    }
+
+    public static String getISOMoney(String jsonmoney) throws ISOException {
+        // assume client will make sure input is valid number with format ################.00 (num(16,2))
+        // just in-case, set to zero otherwise
+        if (jsonmoney.length() < 3) return "000000000000000000"; // else returns zero
+
+        String dec = jsonmoney.substring(jsonmoney.length() - 2);
+        String sig = jsonmoney.substring(0, jsonmoney.length() - 3);
+        return ISOUtil.zeropad(sig, 16) + dec;
+    }
 }

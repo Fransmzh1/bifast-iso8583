@@ -36,7 +36,7 @@ public class AccountEnquiryInboundRequest extends BaseInboundRequestDTO {
      * @return the amount
      */
     public String getAmount() {
-        return Optional.ofNullable(amount).orElse("0");
+        return Optional.ofNullable(amount).orElse("0.00");
     }
 
     /**
