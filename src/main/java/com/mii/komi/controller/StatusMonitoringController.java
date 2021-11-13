@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
             RequestMethod.TRACE})
 @Api(tags = {"System Monitor API"})
 @RestController
-@RequestMapping("/iso8583/sysmon")
+@RequestMapping("/komi/api/v1/adapter/sysmon")
 public class StatusMonitoringController {
 
     public static final String MODULE_TYPE_TCP_SERVER = "TCP-Server";
@@ -59,7 +59,7 @@ public class StatusMonitoringController {
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Page Not Found")
     })
-    @GetMapping("/")
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<List<Sysmon>> getModuleNames() throws NameRegistrar.NotFoundException {
         Map<String, Object> map = NameRegistrar.getAsMap();
         List<Sysmon> sysmons = new ArrayList<>();

@@ -6,394 +6,415 @@
 	},
 	"item": [
 		{
-			"name": "Outbound Account Enquiry",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"2020042047164450081167758999                          000000000137400.2001BNINDJAMBK                        \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"20200420471644500811\"\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Outbound Trx Services",
+			"item": [
+				{
+					"name": "Outbound Account Enquiry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"2020042047164450081167758999                          000000000137400.2001BNINDJAMBK                        \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"20200420471644500811\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"iso8583",
+								"service",
+								"sendAndReceive"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"iso8583",
-						"service",
-						"sendAndReceive"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Outbound Individual Credit Transfer",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR0042047164450081101Purnomo Er                                                                                                                                  debtortype                         debtorid                           debtorakun                        SVGS                               residentstatus                     0003                               000000000050000.00000000000002500.00\"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        },\r\n        {\r\n            \"number\": 123,\r\n            \"value\": \"BNINDJAMBK                         Purnomi Erwin                                                                                                                               CORP                               CREDITORID                         112233445566                      SVGS                               PR                                 creditorproxyid                                                                                                                             creditorproxytype                  freetext                                                                                                                                    \"\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Outbound Individual Credit Transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR0042047164450081101Purnomo Er                                                                                                                                  debtortype                         debtorid                           debtorakun                        SVGS                               residentstatus                     0003                               000000000050000.00000000000002500.00\"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        },\r\n        {\r\n            \"number\": 123,\r\n            \"value\": \"BNINDJAMBK                         Purnomi Erwin                                                                                                                               CORP                               CREDITORID                         112233445566                      SVGS                               PR                                 creditorproxyid                                                                                                                             creditorproxytype                  freetext                                                                                                                                    \"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"iso8583",
+								"service",
+								"sendAndReceive"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"iso8583",
-						"service",
-						"sendAndReceive"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Outbound Proxy Registration",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0600\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"909000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR00420471644500811NEWR02          proxy@value.com                                                                                                                             MR JOHN                                                                                                                                     111122223333444                   SVGSMR JOHN                                                                                                                                     idtype      idvalue                            customertype                       customerid                         resident                           0003                               \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Outbound Proxy Registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0600\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"909000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR00420471644500811NEWR02          proxy@value.com                                                                                                                             MR JOHN                                                                                                                                     111122223333444                   SVGSMR JOHN                                                                                                                                     idtype      idvalue                            customertype                       customerid                         resident                           0003                               \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"iso8583",
+								"service",
+								"sendAndReceive"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"iso8583",
-						"service",
-						"sendAndReceive"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Outbound Proxy Resolution",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0600\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"909100\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR00420471644500811PRXS1122113344553232                  02          ab@ebd.com                                                                                                                                  \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Outbound Proxy Resolution",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0600\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"909100\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"TLR00420471644500811PRXS1122113344553232                  02          ab@ebd.com                                                                                                                                  \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"TLR00420471644500811\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"iso8583",
+								"service",
+								"sendAndReceive"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"iso8583",
-						"service",
-						"sendAndReceive"
-					]
+				{
+					"name": "Outbound Payment Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"2020042047164450081167758999                          000000000137400.2001BNINDJAMBK                        \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"20200420471644500811\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"iso8583",
+								"service",
+								"sendAndReceive"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Outbound Payment Status",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"isoFields\": [\r\n        {\r\n            \"number\": 0,\r\n            \"value\": \"0200\"\r\n        },\r\n        {\r\n            \"number\": 3,\r\n            \"value\": \"389000\"\r\n        },\r\n        {\r\n            \"number\": 7,\r\n            \"value\": \"1021081650\"\r\n        },\r\n        {\r\n            \"number\": 11,\r\n            \"value\": \"000001\"\r\n        },\r\n        {\r\n            \"number\": 18,\r\n            \"value\": \"6011\"\r\n        },\r\n        {\r\n            \"number\": 41,\r\n            \"value\": \"TELLER    \"\r\n        },\r\n        {\r\n            \"number\": 48,\r\n            \"value\": \"2020042047164450081167758999                          000000000137400.2001BNINDJAMBK                        \"\r\n        },\r\n        {\r\n            \"number\": 63,\r\n            \"value\": \"20200420471644500811\"\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Inbound Trx Services",
+			"item": [
+				{
+					"name": "Inbound Account Enquiry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"amount\": 137400.20,\r\n    \"categoryPurpose\": \"01\",\r\n    \"accountNumber\": \"67758999\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/accountinquiry",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"accountinquiry"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/iso8583/service/sendAndReceive",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"iso8583",
-						"service",
-						"sendAndReceive"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Inbound Account Enquiry",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"amount\": 137400.20,\r\n    \"categoryPurpose\": \"01\",\r\n    \"accountNumber\": \"67758999\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Inbound Debit Transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Reed Vafnir\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Sygwird Octavio\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/debit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"debit"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/accountinquiry",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"komi",
-						"api",
-						"v1",
-						"adapter",
-						"accountinquiry"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Inbound Debit Transfer",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Reed Vafnir\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Sygwird Octavio\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Inbound Credit Transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/credit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"credit"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/debit",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"komi",
-						"api",
-						"v1",
-						"adapter",
-						"debit"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Inbound Credit Transfer",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Inbound Debit Reversal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/debitreversal",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"debitreversal"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/credit",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"komi",
-						"api",
-						"v1",
-						"adapter",
-						"credit"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Inbound Debit Reversal",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"originalDateTime\": \"\",\r\n    \"categoryPurpose\": \"01\",\r\n    \"debtorName\": \"Heid Joel\",\r\n    \"debtorType\": \"CORP\",\r\n    \"debtorAccountNumber\": \"67758999\",\r\n    \"debtorAccountType\": \"SVGS\",\r\n    \"debtorResidentStatus\": \"PR\",\r\n    \"debtorTownName\": \"003\",\r\n    \"amount\": \"10000000.00\",\r\n    \"feeTransfer\": \"5000.00\",\r\n    \"recipientBank\": \"BNINDJAMBK\",\r\n    \"creditorName\": \"Scoelin Avraiz\",\r\n    \"creditorType\": \"CORP\",\r\n    \"creditorId\": \"111111666283746573\",\r\n    \"creditorAccountNumber\": \"7563537820\",\r\n    \"creditorAccountType\": \"SVGS\",\r\n    \"creditorResidentStatus\": \"PR\",\r\n    \"creditorTownName\": \"003\",\r\n    \"creditorProxyId\": \"112246583839256\",\r\n    \"creditorProxyType\": \"Mob\",\r\n    \"paymentInformation\": \"Billing Payment Last Month\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Inbound Settlement",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"status\": \"ACPT\",\r\n    \"reason\": \"U0000\",\r\n    \"additionalInfo\":\"There is no additional info currently\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/settlement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"settlement"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/debitreversal",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"komi",
-						"api",
-						"v1",
-						"adapter",
-						"debitreversal"
-					]
+				{
+					"name": "Inbound Account Customer Info",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"accountNumber\":\"1112223\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/emailphonelist",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"emailphonelist"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Inbound Settlement",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"originalNoRef\": \"\",\r\n    \"status\": \"ACPT\",\r\n    \"reason\": \"U0000\",\r\n    \"additionalInfo\":\"There is no additional info currently\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "System Monitoring",
+			"item": [
+				{
+					"name": "Get Module Detail Status by Module Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/sysmon/:moduleName",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"sysmon",
+								":moduleName"
+							],
+							"variable": [
+								{
+									"key": "moduleName",
+									"value": "server.mantabcorebanking"
+								}
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/settlement",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"komi",
-						"api",
-						"v1",
-						"adapter",
-						"settlement"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Inbound Account Customer Info",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"000001\",\r\n    \"dateTime\": \"2021-10-21T11:00:00.000\",\r\n    \"merchantType\": \"6018\",\r\n    \"terminalId\": \"MBS       \",\r\n    \"noRef\": \"20200420471644500911\",\r\n    \"accountNumber\":\"1112223\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Get All Module Name and Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9003/komi/api/v1/adapter/sysmon/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9003",
+							"path": [
+								"komi",
+								"api",
+								"v1",
+								"adapter",
+								"sysmon",
+								""
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:9003/komi/api/v1/adapter/emailphonelist",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"komi",
-						"api",
-						"v1",
-						"adapter",
-						"emailphonelist"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Module Detail Status by Module Name",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:9003/iso8583/sysmon/:moduleName",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"iso8583",
-						"sysmon",
-						":moduleName"
-					],
-					"variable": [
-						{
-							"key": "moduleName",
-							"value": "server.mantabcorebanking"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get All Module Name and Type",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:9003/iso8583/sysmon/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9003",
-					"path": [
-						"iso8583",
-						"sysmon",
-						""
-					]
-				}
-			},
-			"response": []
+			]
 		}
 	]
 }
