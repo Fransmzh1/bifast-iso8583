@@ -346,6 +346,54 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get Module Detail Status by Module Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9003/iso8583/sysmon/:moduleName",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"iso8583",
+						"sysmon",
+						":moduleName"
+					],
+					"variable": [
+						{
+							"key": "moduleName",
+							"value": "server.mantabcorebanking"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Module Name and Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9003/iso8583/sysmon/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9003",
+					"path": [
+						"iso8583",
+						"sysmon",
+						""
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
