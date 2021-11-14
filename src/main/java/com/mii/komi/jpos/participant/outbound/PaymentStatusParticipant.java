@@ -71,11 +71,11 @@ public class PaymentStatusParticipant extends OutboundParticipant {
         PaymentStatusRequest req = new PaymentStatusRequest();
         int cursor = 0;
         int endCursor = 20;
-        req.setNoRef(privateData.substring(cursor, endCursor));
+        req.setNoRef(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 20;
-        req.setOriginalNoRef(privateData.substring(cursor, endCursor));
+        req.setOriginalNoRef(privateData.substring(cursor, endCursor).trim());
 
         root.setPaymentStatusRequest(req);
 

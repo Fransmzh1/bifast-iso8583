@@ -20,6 +20,7 @@ import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,13 +50,18 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
             ResponseEntity<RestResponse<ProxyResolutionResponse>> proxyResolutionResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, proxyResolutionResponse);
+
+            // handle http 500
+            if (proxyResolutionResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) return ABORTED;
+
             return PREPARED;
         } catch (DataNotFoundException ex) {
             ex.printStackTrace();
             return ABORTED;
         } catch (HttpRequestException | NameRegistrar.NotFoundException ex) {
+            // use constants
             ctx.put(Constants.HTTP_RESPONSE,
-                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
+                    ResponseEntity.internalServerError().body(RestResponse.failed(Constants.REASON_CODE_OTHER, ex.getMessage(), Constants.RESPONSE_CODE_REJECT)));
             return ABORTED;
         } catch (ISOException ex) {
             ex.printStackTrace();
@@ -73,7 +79,7 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
         try {
             int cursor = 0;
             int endCursor = 20;
-            req.setNoRef(privateData.substring(cursor, endCursor));
+            req.setNoRef(privateData.substring(cursor, endCursor).trim());
 
             cursor = endCursor;
             endCursor = cursor + 4;
@@ -82,14 +88,14 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
 
             cursor = endCursor;
             endCursor = cursor + 34;
-            req.setSenderAccountNumber(privateData.substring(cursor, endCursor));
+            req.setSenderAccountNumber(privateData.substring(cursor, endCursor).trim());
 
             cursor = endCursor;
             endCursor = cursor + 12;
-            req.setProxyType(privateData.substring(cursor, endCursor));
+            req.setProxyType(privateData.substring(cursor, endCursor).trim());
 
             cursor = endCursor;
-            req.setProxyValue(privateData.substring(cursor));
+            req.setProxyValue(privateData.substring(cursor).trim());
 
             root.setProxyResolutionRequest(req);
         } catch (StringIndexOutOfBoundsException ex) {
@@ -102,6 +108,48 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
+
+        // handles : body with no-content, body n/a
+        String responseCode;
+        String reasonCode;
+        ProxyResolutionResponse proxyResolutionResponse = null;
+        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
+            proxyResolutionResponse = (ProxyResolutionResponse) rr.getBody().getContent().get(0);
+            responseCode = rr.getBody().getResponseCode();
+            reasonCode = rr.getBody().getReasonCode();
+        }
+        else {
+            proxyResolutionResponse = new ProxyResolutionResponse(); // empty response
+            proxyResolutionResponse.setNoRef(req.getString(63)); // set noRef from request
+            try {
+                responseCode = rr.getBody().getResponseCode();
+                reasonCode = rr.getBody().getReasonCode();
+            }
+            catch (Exception e) {
+                responseCode = Constants.RESPONSE_CODE_REJECT;
+                reasonCode = Constants.REASON_CODE_OTHER;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(ISOUtil.strpad(proxyResolutionResponse.getNoRef(), 20))
+                .append(ISOUtil.strpad(responseCode, 4))
+                .append(ISOUtil.strpad(reasonCode, 35))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getProxyType(), 12))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getProxyValue(), 140))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getRegistrationId(), 35))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getDisplayName(), 140))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getRegisterBank(), 35))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getAccountNumber(), 34))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getAccountType(), 4))
+                // below are optionals
+                .append(ISOUtil.strpad(proxyResolutionResponse.getAccountName(), 140))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getCustomerType(), 35))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getCustomerId(), 35))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getResidentialStatus(), 35))
+                .append(ISOUtil.strpad(proxyResolutionResponse.getTownName(), 35));
+        isoRsp.set(62, sb.toString());
+
+        /*
         if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             ProxyResolutionResponse proxyResolutionResponse = (ProxyResolutionResponse) rr.getBody().getContent().get(0);
             StringBuilder sb = new StringBuilder();
@@ -110,6 +158,7 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
                     .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35));
             isoRsp.set(62, sb.toString());
         }
+        */
         return isoRsp;
     }
 
