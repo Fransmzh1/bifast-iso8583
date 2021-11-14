@@ -51,7 +51,6 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
         }
         try {
             isoRsp.setResponseMTI();
-            isoRsp.unset(48);
             return isoRsp;
         } catch (ISOException ex) {
             Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,10 +63,17 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
         ISOMsg isoRsp = (ISOMsg) req.clone();
         if (dto.hasBody()) {
             String responseCode = dto.getBody().getResponseCode();
+            String reasonCode = dto.getBody().getReasonCode();
             if (Constants.RESPONSE_CODE_ACCEPTED.equals(responseCode)) {
                 isoRsp.set(39, Constants.ISO_RSP_APPROVED);
             } else {
-                isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+                // added check for KSTS,K000
+                if ((Constants.RESPONSE_CODE_KOMI_STATUS.equals(responseCode)) && (Constants.REASON_CODE_UNDEFINED.equals(reasonCode))) {
+                    isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
+                }
+                else {
+                    isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+                }
             }
             try {
                 isoRsp.setResponseMTI();
