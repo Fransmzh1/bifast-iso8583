@@ -149,8 +149,9 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
                     .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
                     .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
-                    .append(proxyRegistrationResponse.getRegistrationType())
-                    .append(proxyRegistrationResponse.getRegistrationId());
+                    // fix : add strpad with length
+                    .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationType(), 4))
+                    .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationId(), 35));
             isoRsp.set(62, sb.toString());
         }
         return isoRsp;
@@ -165,8 +166,9 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
                 .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))
                 .append(ISOUtil.strpad(dto.getBody().getReasonCode(), 35))
-                .append(proxyRegistrationResponse.getRegistrationType())
-                .append(proxyRegistrationResponse.getRegistrationId());
+                // fix : add strpad with length
+                .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationType(), 4))
+                .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationId(), 35));
         isoRsp.set(62, sb.toString());
         return isoRsp;
     }
