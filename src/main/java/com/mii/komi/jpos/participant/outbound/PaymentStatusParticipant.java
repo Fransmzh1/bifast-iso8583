@@ -129,7 +129,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
 
             StringBuilder sb2 = new StringBuilder();
             sb2.append(ISOUtil.strpad(paymentStatusResponse.getRecipientBank(), 35))
-                    .append(ISOUtil.zeropad(paymentStatusResponse.getCreditorName(), 140))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorName(), 140))
                     .append(ISOUtil.strpad(paymentStatusResponse.getCreditorType(), 35))
                     .append(ISOUtil.strpad(paymentStatusResponse.getCreditorId(), 35))
                     .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountNumber(), 34))
