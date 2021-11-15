@@ -4,6 +4,7 @@ import com.mii.komi.dto.outbound.AccountEnquiryOutboundRequest;
 import com.mii.komi.dto.outbound.AccountEnquiryOutboundResponse;
 import com.mii.komi.dto.outbound.AccountEnquiryOutboundResponseDummy;
 import com.mii.komi.dto.outbound.RestResponse;
+import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -41,41 +42,24 @@ public class KomiDummyController {
     })
     @RequestMapping(path = "/accountinquiry", produces = MediaType.APPLICATION_JSON_VALUE,  method = RequestMethod.POST)
     public ResponseEntity<RestResponse> accountEnquiry(
-            @RequestBody AccountEnquiryOutboundRequest request,
+            @RequestBody RootAccountEnquiry request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
 //        ResponseEntity rsp = queryTxnMgr(request, "AccountEnquiry");
+//        System.out.println("fajar " + request.getAccountEnquiryRequest().toString() +" " +request.getAccountEnquiryRequest().getNoRef());
         List<AccountEnquiryOutboundResponse> list = new ArrayList<>();
         AccountEnquiryOutboundResponse rspDummy = new AccountEnquiryOutboundResponse();
-        rspDummy.setAccountNumber("677589");
+        rspDummy.setAccountNumber(request.getAccountEnquiryRequest().getRecipientAccountNumber());
         rspDummy.setAccountType("CACC");
         rspDummy.setCreditorId("KTP-208472701");
         rspDummy.setCreditorName("Adiputro Erwin");
-        rspDummy.setNoRef("000000556773");
         rspDummy.setCreditorType("01");
         rspDummy.setResidentStatus("01");
         rspDummy.setTownName("0300");
-        rspDummy.setNoRef("20200420471644500811");
+        rspDummy.setNoRef(request.getAccountEnquiryRequest().getNoRef());
+        rspDummy.setProxyId(request.getAccountEnquiryRequest().getProxyId());
+        rspDummy.setProxyType(request.getAccountEnquiryRequest().getProxyType());
 
         list.add(rspDummy);
-        String rsp ="{\n" +
-                "   \"ResponseCode\": \"ACTC\",\n" +
-                "   \"ReasonCode\": \"U000\",\n" +
-                "   \"ReasonMessage\": \"Success/ Transaction Accepted\",\n" +
-                "   \"Date\": \"20211002\",\n" +
-                "   \"Time\": \"153500\",\n" +
-                "   \"Content\": [" +
-                "{\n" +
-                "\"NoRef\": \"000000556773\",\n" +
-                "\"AccountNumber\": \"677589\",\n" +
-                "\"AccountType\": \"CACC\",\n" +
-                "\"CreditorId\": \"KTP-208472701\",\n" +
-                "\"CreditorName\": \"Adiputro Erwin\",\n" +
-                "\"CreditorType\": \"01\",\n" +
-                "\"ResidentStatus\": \"01\",\n" +
-                "\"TownName\": \"0300\"\n" +
-                "}" +
-                "]" +
-                " }";
 
         String rjct ="{\n" +
                 "   \"ResponseCode\": \"RJCT\",\n" +
@@ -88,18 +72,8 @@ public class KomiDummyController {
                 "\"AccountNumber\": \"677589\"\n" +
                 "}] }";
 
-        String pnding = "{\n" +
-                "   \"ResponseCode\": \"KSTS\",\n" +
-                "   \"ReasonCode\": \"U000\",\n" +
-                "   \"ReasonMessage \": \"Internal Timeout\",\n" +
-                "   \"Date\": \"20211002\",\n" +
-                "   \"Time\": \"153500\",\n" +
-                "   \"Content\": [{\n" +
-                "\"NoRef\": \"202010204556773\",\n" +
-                "\"AccountNumber\": \"677589\"\n" +
-                "}] }";
-    String test = String.valueOf(RestResponse.success("Success/ Transaction Accepted",list));
-        System.out.println("fajar " + rsp + "  " +rsp.length());
+       
+
         return ResponseEntity.ok(RestResponse.success("Success/ Transaction Accepted",list));
     }
 
