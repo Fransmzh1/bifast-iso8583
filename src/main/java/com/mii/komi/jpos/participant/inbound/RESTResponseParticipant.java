@@ -1,6 +1,5 @@
 package com.mii.komi.jpos.participant.inbound;
 
-import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.util.Constants;
 import java.io.Serializable;
 import org.jpos.space.Space;

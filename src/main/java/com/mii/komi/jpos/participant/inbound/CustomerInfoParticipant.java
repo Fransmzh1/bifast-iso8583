@@ -88,11 +88,11 @@ public class CustomerInfoParticipant implements TransactionParticipant, BaseInbo
                 int endCursor = 20;
                 rsp.setNoRef(privateData.substring(cursor, endCursor));
 
-                cursor = cursor + endCursor;
+                cursor = endCursor;
                 endCursor = cursor + 4;
                 String rc = privateData.substring(cursor, endCursor);
 
-                cursor = cursor + endCursor;
+                cursor = endCursor;
                 endCursor = cursor + 35;
                 String rm = privateData.substring(cursor, endCursor);
 

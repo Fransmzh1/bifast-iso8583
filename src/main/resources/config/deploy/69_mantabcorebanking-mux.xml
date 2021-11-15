@@ -3,7 +3,6 @@
     <out>mantabcorebanking-in</out>
     <key>11</key>
     <unhandled>unhandled</unhandled>
-    <ready>mantabcorebanking.ready</ready>
     <request-listener class="com.mii.komi.jpos.ISORequestHandler" logger="Q2" realm="isorequestlistener">
         <property name="queue" value="txnmgr-komi" />
         <property name="timeout" value="60000" />

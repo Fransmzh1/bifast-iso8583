@@ -5,7 +5,6 @@
                   value="config/packager/iso87mantabcorebanking.xml" />
         <property name="host" value="127.0.0.1" />
         <property name="port" value="10001" />
-        <property name="timeout" value="300000" />
     </channel>
     <in>as400-channel-send</in>
     <out>as400-channel-receive</out>

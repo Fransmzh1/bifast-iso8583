@@ -1,7 +1,5 @@
 package com.mii.komi.jpos.participant.inbound;
 
-import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
-import com.mii.komi.dto.inbound.AccountEnquiryInboundResponse;
 import com.mii.komi.dto.inbound.BalanceInquiryRequest;
 import com.mii.komi.dto.inbound.BalanceInquiryResponse;
 import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
@@ -82,7 +80,6 @@ public class BalanceInquiryParticipant implements TransactionParticipant, BaseIn
     @Override
     public ResponseEntity<BalanceInquiryResponse> buildFailedResponseMsg(BaseInboundRequestDTO request, ISOMsg isoMsg) {
         BalanceInquiryResponse rsp = new BalanceInquiryResponse();
-        AccountEnquiryInboundRequest originalRequest = (AccountEnquiryInboundRequest) request;
         rsp.setNoRef(request.getNoRef());
         if (isoMsg != null) {
             if (isoMsg.hasField(62)) {
@@ -91,11 +88,11 @@ public class BalanceInquiryParticipant implements TransactionParticipant, BaseIn
                 int endCursor = 20;
                 rsp.setNoRef(privateData.substring(cursor, endCursor));
 
-                cursor = cursor + endCursor;
+                cursor = endCursor;
                 endCursor = cursor + 4;
                 String rc = privateData.substring(cursor, endCursor);
 
-                cursor = cursor + endCursor;
+                cursor = endCursor;
                 endCursor = cursor + 35;
                 String rm = privateData.substring(cursor, endCursor);
                 
