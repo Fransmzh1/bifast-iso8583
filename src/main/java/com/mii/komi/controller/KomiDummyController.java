@@ -46,7 +46,7 @@ public class KomiDummyController {
             @RequestBody RootAccountEnquiry request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
 //        ResponseEntity rsp = queryTxnMgr(request, "AccountEnquiry");
-        System.out.println("fajar " + rjctRefNum +" " +request.getAccountEnquiryRequest().getNoRef());
+//        System.out.println("fajar " + rjctRefNum +" " +request.getAccountEnquiryRequest().getNoRef());
         if(request!=null && !request.getAccountEnquiryRequest().getNoRef().equalsIgnoreCase(rjctRefNum)){
             List<AccountEnquiryOutboundResponse> list = new ArrayList<>();
             AccountEnquiryOutboundResponse rspDummy = new AccountEnquiryOutboundResponse();
