@@ -1,9 +1,6 @@
 package com.mii.komi.controller;
 
-import com.mii.komi.dto.outbound.AccountEnquiryOutboundRequest;
-import com.mii.komi.dto.outbound.AccountEnquiryOutboundResponse;
-import com.mii.komi.dto.outbound.AccountEnquiryOutboundResponseDummy;
-import com.mii.komi.dto.outbound.RestResponse;
+import com.mii.komi.dto.outbound.*;
 import com.mii.komi.dto.outbound.requestroot.RootAccountEnquiry;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +8,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.jpos.iso.ISOException;
 import org.jpos.util.NameRegistrar;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +31,9 @@ import java.util.List;
 @Api(tags = {"ISO8583 Adapter API"})
 public class KomiDummyController {
 
+    @Value("${rjct.refNum}")
+    private String rjctRefNum;
+
     @ApiOperation(value = "Account Enquiry", nickname = "Account Enquiry API")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully get data"),
@@ -45,36 +46,31 @@ public class KomiDummyController {
             @RequestBody RootAccountEnquiry request,
             HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
 //        ResponseEntity rsp = queryTxnMgr(request, "AccountEnquiry");
-//        System.out.println("fajar " + request.getAccountEnquiryRequest().toString() +" " +request.getAccountEnquiryRequest().getNoRef());
-        List<AccountEnquiryOutboundResponse> list = new ArrayList<>();
-        AccountEnquiryOutboundResponse rspDummy = new AccountEnquiryOutboundResponse();
-        rspDummy.setAccountNumber(request.getAccountEnquiryRequest().getRecipientAccountNumber());
-        rspDummy.setAccountType("CACC");
-        rspDummy.setCreditorId("KTP-208472701");
-        rspDummy.setCreditorName("Adiputro Erwin");
-        rspDummy.setCreditorType("01");
-        rspDummy.setResidentStatus("01");
-        rspDummy.setTownName("0300");
-        rspDummy.setNoRef(request.getAccountEnquiryRequest().getNoRef());
-        rspDummy.setProxyId(request.getAccountEnquiryRequest().getProxyId());
-        rspDummy.setProxyType(request.getAccountEnquiryRequest().getProxyType());
+        System.out.println("fajar " + rjctRefNum +" " +request.getAccountEnquiryRequest().getNoRef());
+        if(request!=null && !request.getAccountEnquiryRequest().getNoRef().equalsIgnoreCase(rjctRefNum)){
+            List<AccountEnquiryOutboundResponse> list = new ArrayList<>();
+            AccountEnquiryOutboundResponse rspDummy = new AccountEnquiryOutboundResponse();
+            rspDummy.setAccountNumber(request.getAccountEnquiryRequest().getRecipientAccountNumber());
+            rspDummy.setAccountType("CACC");
+            rspDummy.setCreditorId("KTP-208472701");
+            rspDummy.setCreditorName("Adiputro Erwin");
+            rspDummy.setCreditorType("01");
+            rspDummy.setResidentStatus("01");
+            rspDummy.setTownName("0300");
+            rspDummy.setNoRef(request.getAccountEnquiryRequest().getNoRef());
+            rspDummy.setProxyId(request.getAccountEnquiryRequest().getProxyId());
+            rspDummy.setProxyType(request.getAccountEnquiryRequest().getProxyType());
 
-        list.add(rspDummy);
-
-        String rjct ="{\n" +
-                "   \"ResponseCode\": \"RJCT\",\n" +
-                "   \"ReasonCode\": \"U149\",\n" +
-                "   \"ReasonMessage \": \"DuplicateTransaction\"\n" +
-                "   \"Date\": \"20211002\",\n" +
-                "   \"Time\": \"153500\",\n" +
-                "   \"Content\": [{\n" +
-                "\"NoRef\": \"202010204556773\",\n" +
-                "\"AccountNumber\": \"677589\"\n" +
-                "}] }";
-
-       
-
-        return ResponseEntity.ok(RestResponse.success("Success/ Transaction Accepted",list));
+            list.add(rspDummy);
+            return ResponseEntity.ok(RestResponse.success("Success/ Transaction Accepted",list));
+        }else{
+            List<AccountEnquiryOutboundRequestReject> list = new ArrayList<>();
+            AccountEnquiryOutboundRequestReject rspReject = new AccountEnquiryOutboundRequestReject();
+            rspReject.setAccountNumber(request.getAccountEnquiryRequest().getSenderAccountNumber());
+            rspReject.setNoRef(request.getAccountEnquiryRequest().getNoRef());
+            list.add(rspReject);
+            return ResponseEntity.ok(RestResponse.failed("U149","DuplicateTransaction","RJCT",list));
+        }
     }
 
 }
