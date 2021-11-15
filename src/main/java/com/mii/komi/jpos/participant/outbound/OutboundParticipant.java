@@ -44,14 +44,16 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = (ISOMsg) req.clone();
-        if(rr.getStatusCodeValue() >= 400 && rr.getStatusCodeValue() <= 499) {
+
+        // modify : 500 = REJECTED
+        if(rr.getStatusCodeValue() >= 400 && rr.getStatusCodeValue() <= 500) {
             isoRsp.set(39, Constants.ISO_RSP_REJECTED);
-        } else if (rr.getStatusCodeValue() >= 500) {
+        } else if (rr.getStatusCodeValue() > 500) {
             isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
         }
+
         try {
             isoRsp.setResponseMTI();
-            isoRsp.unset(48);
             return isoRsp;
         } catch (ISOException ex) {
             Logger.getLogger(OutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,10 +66,17 @@ public abstract class OutboundParticipant implements TransactionParticipant, Bas
         ISOMsg isoRsp = (ISOMsg) req.clone();
         if (dto.hasBody()) {
             String responseCode = dto.getBody().getResponseCode();
+            String reasonCode = dto.getBody().getReasonCode();
             if (Constants.RESPONSE_CODE_ACCEPTED.equals(responseCode)) {
                 isoRsp.set(39, Constants.ISO_RSP_APPROVED);
             } else {
-                isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+                // added check for KSTS,K000
+                if ((Constants.RESPONSE_CODE_KOMI_STATUS.equals(responseCode)) && (Constants.REASON_CODE_UNDEFINED.equals(reasonCode))) {
+                    isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
+                }
+                else {
+                    isoRsp.set(39, Constants.ISO_RSP_REJECTED);
+                }
             }
             try {
                 isoRsp.setResponseMTI();

@@ -20,6 +20,7 @@ import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,7 +40,6 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
                 ISOMsg rspMsg = (ISOMsg) reqMsg.clone();
                 rspMsg.setResponseMTI();
                 rspMsg.set(39, Constants.ISO_RSP_REJECTED);
-                rspMsg.unset(48);
                 ctx.put(Constants.ISO_RESPONSE, rspMsg);
                 return ABORTED | NO_JOIN;
             }
@@ -54,13 +54,18 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             ResponseEntity<RestResponse<ProxyRegistrationResponse>> httpResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, httpResponse);
+
+            // handle http 500
+            if (httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) return ABORTED;
+
             return PREPARED;
         } catch (DataNotFoundException ex) {
             ex.printStackTrace();
             return ABORTED;
         } catch (HttpRequestException | NameRegistrar.NotFoundException ex) {
+            // use constants
             ctx.put(Constants.HTTP_RESPONSE,
-                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
+                    ResponseEntity.internalServerError().body(RestResponse.failed(Constants.REASON_CODE_OTHER, ex.getMessage(), Constants.RESPONSE_CODE_REJECT)));
             return ABORTED;
         } catch (ISOException ex) {
             ex.printStackTrace();
@@ -143,16 +148,50 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
+        
+        // handles: body with no-content, body n/a
+        String responseCode;
+        String reasonCode;
+        ProxyRegistrationResponse proxyRegistrationResponse = null;
+        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
+            proxyRegistrationResponse = (ProxyRegistrationResponse) rr.getBody().getContent().get(0);
+            responseCode = rr.getBody().getResponseCode();
+            reasonCode = rr.getBody().getReasonCode();
+        }
+        else {
+            proxyRegistrationResponse = new ProxyRegistrationResponse(); // empty response
+            proxyRegistrationResponse.setNoRef(req.getString(63)); // set noRef from request
+            try {
+                responseCode = rr.getBody().getResponseCode();
+                reasonCode = rr.getBody().getReasonCode();
+            }
+            catch (Exception e) {
+                responseCode = Constants.RESPONSE_CODE_REJECT;
+                reasonCode = Constants.REASON_CODE_OTHER;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
+                .append(ISOUtil.strpad(responseCode, 4))
+                .append(ISOUtil.strpad(reasonCode, 35))
+                // fix : add strpad with length
+                .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationType(), 4))
+                .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationId(), 35));
+        isoRsp.set(62, sb.toString());
+
+        /*
         if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             ProxyRegistrationResponse proxyRegistrationResponse = (ProxyRegistrationResponse) rr.getBody().getContent().get(0);
             StringBuilder sb = new StringBuilder();
             sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
                     .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
                     .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
-                    .append(proxyRegistrationResponse.getRegistrationType())
-                    .append(proxyRegistrationResponse.getRegistrationId());
+                    // fix : add strpad with length
+                    .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationType(), 4))
+                    .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationId(), 35));
             isoRsp.set(62, sb.toString());
         }
+        */
         return isoRsp;
     }
 
@@ -165,8 +204,9 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
                 .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))
                 .append(ISOUtil.strpad(dto.getBody().getReasonCode(), 35))
-                .append(proxyRegistrationResponse.getRegistrationType())
-                .append(proxyRegistrationResponse.getRegistrationId());
+                // fix : add strpad with length
+                .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationType(), 4))
+                .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationId(), 35));
         isoRsp.set(62, sb.toString());
         return isoRsp;
     }

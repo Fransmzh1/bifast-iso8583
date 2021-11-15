@@ -32,12 +32,16 @@ public class RestTemplateResponseErrorHandler
     @Override
     public void handleError(ClientHttpResponse httpResponse)
             throws IOException {
+        // modify : 
         if (httpResponse.getStatusCode().series() == HttpStatus.Series.SERVER_ERROR) {
             // handle SERVER_ERROR
             if (httpResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 if (httpResponse.getBody() != null) {
+                    // suppress this error, handle outside catch
+                    /*
                     InputStream is = httpResponse.getBody();
                     throw new HttpRequestException(Utility.convertInputStreamToString(is));
+                    */
                 }
             }
         } else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {

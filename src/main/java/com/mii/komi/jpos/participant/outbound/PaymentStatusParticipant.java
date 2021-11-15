@@ -71,11 +71,11 @@ public class PaymentStatusParticipant extends OutboundParticipant {
         PaymentStatusRequest req = new PaymentStatusRequest();
         int cursor = 0;
         int endCursor = 20;
-        req.setNoRef(privateData.substring(cursor, endCursor));
+        req.setNoRef(privateData.substring(cursor, endCursor).trim());
 
         cursor = endCursor;
         endCursor = cursor + 20;
-        req.setOriginalNoRef(privateData.substring(cursor, endCursor));
+        req.setOriginalNoRef(privateData.substring(cursor, endCursor).trim());
 
         root.setPaymentStatusRequest(req);
 
@@ -129,7 +129,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
 
             StringBuilder sb2 = new StringBuilder();
             sb2.append(ISOUtil.strpad(paymentStatusResponse.getRecipientBank(), 35))
-                    .append(ISOUtil.zeropad(paymentStatusResponse.getCreditorName(), 140))
+                    .append(ISOUtil.strpad(paymentStatusResponse.getCreditorName(), 140))
                     .append(ISOUtil.strpad(paymentStatusResponse.getCreditorType(), 35))
                     .append(ISOUtil.strpad(paymentStatusResponse.getCreditorId(), 35))
                     .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountNumber(), 34))

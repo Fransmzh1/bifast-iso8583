@@ -33,6 +33,8 @@ public class Constants {
     public static String REASON_CODE_SUCCESS = "U000";
     
     public static String REASON_CODE_UNDEFINED = "K000";
+
+    public static String REASON_CODE_OTHER = "U904";
     
     public static String QUEUE_KEY = "QUEUE_KEY";
     
