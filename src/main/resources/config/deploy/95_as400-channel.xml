@@ -1,10 +1,11 @@
 <channel-adaptor name='as400-channel' logger="Q2">
-    <channel class="org.jpos.iso.channel.NACChannel"
+    <channel class="org.jpos.iso.channel.WBKChannel"
              packager="org.jpos.iso.packager.GenericPackager">
         <property name="packager-config"
                   value="config/packager/iso87mantabcorebanking.xml" />
         <property name="host" value="127.0.0.1" />
         <property name="port" value="10001" />
+        <filter class='org.jpos.iso.filter.DebugFilter' direction='both' />
     </channel>
     <in>as400-channel-send</in>
     <out>as400-channel-receive</out>

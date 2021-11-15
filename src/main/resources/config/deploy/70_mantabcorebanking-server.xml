@@ -3,10 +3,10 @@
     <attr name="port" type="java.lang.Integer">10001</attr>
     <attr name="minSessions" type="java.lang.Integer">1</attr>
     <attr name="maxSessions" type="java.lang.Integer">100</attr>
-    <channel class="org.jpos.iso.channel.NACChannel" packager="org.jpos.iso.packager.GenericPackager" logger="Q2">
+    <channel class="org.jpos.iso.channel.WBKChannel" packager="org.jpos.iso.packager.GenericPackager" logger="Q2">
        <property name="packager-config" value="config/packager/iso87mantabcorebanking.xml" />
+       <filter class='org.jpos.iso.filter.DebugFilter' direction='both' />
     </channel>
     <in>mantabcorebanking-in</in>
     <out>mantabcorebanking-out</out>
 </srv>
-

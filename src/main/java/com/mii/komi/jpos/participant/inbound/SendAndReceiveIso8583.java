@@ -10,10 +10,12 @@ import org.jpos.core.Configuration;
 import org.jpos.core.ConfigurationException;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
+import org.jpos.iso.ISOUtil;
 import org.jpos.transaction.Context;
 import static org.jpos.transaction.TransactionConstants.NO_JOIN;
 import static org.jpos.transaction.TransactionConstants.PREPARED;
 import org.jpos.transaction.TransactionParticipant;
+import org.jpos.util.Log;
 
 /**
  *
@@ -22,7 +24,7 @@ import org.jpos.transaction.TransactionParticipant;
 public class SendAndReceiveIso8583 implements TransactionParticipant, Configurable {
 
     private Configuration cfg;
-    
+
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
@@ -30,10 +32,10 @@ public class SendAndReceiveIso8583 implements TransactionParticipant, Configurab
         try {
             ISOMsg rsp = ISO8583Service.sendMessage(cfg.get("destination"), reqMsg);
             ctx.put(Constants.ISO_RESPONSE, rsp);
-            if(rsp == null) {
+            if (rsp == null) {
                 return ABORTED | NO_JOIN;
             } else {
-                if(Constants.ISO_RSP_APPROVED.equals(rsp.getString(39))) {
+                if (Constants.ISO_RSP_APPROVED.equals(rsp.getString(39))) {
                     return PREPARED | NO_JOIN;
                 } else {
                     return ABORTED | NO_JOIN;

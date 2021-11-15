@@ -12,6 +12,7 @@ import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
 import org.jpos.transaction.AbortParticipant;
 import org.jpos.transaction.Context;
+import org.jpos.util.Log;
 
 /**
  *
@@ -19,6 +20,8 @@ import org.jpos.transaction.Context;
  */
 public class ISOResponseParticipant implements AbortParticipant {
 
+    Log log = Log.getLog("Q2", "iso-response");
+    
     @Override
     public int prepare(long id, Serializable context) {
         return PREPARED;
@@ -48,7 +51,7 @@ public class ISOResponseParticipant implements AbortParticipant {
                 if(sourceKey.isConnected()) {
                     sourceKey.send(rspMsg);
                 } else {
-                    System.out.println("Source is not connected, cannot send response");
+                    log.error("Source is not connected, cannot send response");
                 }
             } catch (ISOException ex) {
                 Logger.getLogger(ISOResponseParticipant.class.getName()).log(Level.SEVERE, null, ex);
