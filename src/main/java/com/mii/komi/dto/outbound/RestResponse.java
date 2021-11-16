@@ -71,6 +71,16 @@ public class RestResponse<T> extends BaseDTO {
         rr.setReasonMessage(message);
         rr.setResponseCode(responseCode);
         return rr;
+
+    }public static RestResponse failed(String reasonCode, String message, String responseCode, List o) {
+        RestResponse rr = new RestResponse(new ArrayList<>());
+        rr.setDate(dateFormatter.format(LocalDate.now()));
+        rr.setTime(timeFormatter.format(LocalTime.now()));
+        rr.setReasonCode(reasonCode);
+        rr.setReasonMessage(message);
+        rr.setResponseCode(responseCode);
+        rr.setContent(o);
+        return rr;
     }
 
     /**
