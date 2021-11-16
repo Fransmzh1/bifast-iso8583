@@ -150,8 +150,8 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
         
         // handles: body with no-content, body n/a
-        String responseCode;
-        String reasonCode;
+        String responseCode = null;
+        String reasonCode = null;
         ProxyRegistrationResponse proxyRegistrationResponse = null;
         if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             proxyRegistrationResponse = (ProxyRegistrationResponse) rr.getBody().getContent().get(0);
@@ -166,9 +166,10 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
                 reasonCode = rr.getBody().getReasonCode();
             }
             catch (Exception e) {
-                responseCode = Constants.RESPONSE_CODE_REJECT;
-                reasonCode = Constants.REASON_CODE_OTHER;
+                // nothing
             }
+            if (responseCode == null) responseCode = Constants.RESPONSE_CODE_REJECT;
+            if (reasonCode == null) reasonCode = Constants.REASON_CODE_OTHER;
         }
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
@@ -178,20 +179,6 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationType(), 4))
                 .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationId(), 35));
         isoRsp.set(62, sb.toString());
-
-        /*
-        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
-            ProxyRegistrationResponse proxyRegistrationResponse = (ProxyRegistrationResponse) rr.getBody().getContent().get(0);
-            StringBuilder sb = new StringBuilder();
-            sb.append(ISOUtil.strpad(proxyRegistrationResponse.getNoRef(), 20))
-                    .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
-                    .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
-                    // fix : add strpad with length
-                    .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationType(), 4))
-                    .append(ISOUtil.strpad(proxyRegistrationResponse.getRegistrationId(), 35));
-            isoRsp.set(62, sb.toString());
-        }
-        */
         return isoRsp;
     }
 

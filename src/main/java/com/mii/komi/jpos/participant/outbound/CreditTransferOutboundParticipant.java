@@ -20,6 +20,7 @@ import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -52,14 +53,21 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
             HttpEntity<RootCreditTransfer> entity = new HttpEntity<RootCreditTransfer>(rootCreditTransfer, restSender.getHeaders());
             ResponseEntity<RestResponse<CreditTransferOutboundResponse>> httpResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
+            
+            HttpStatus status = httpResponse.getStatusCode();
             ctx.put(Constants.HTTP_RESPONSE, httpResponse);
+            
+            // handle http 500
+            if (status == HttpStatus.INTERNAL_SERVER_ERROR) return ABORTED;
+            
             return PREPARED;
         } catch (DataNotFoundException ex) {
             ex.printStackTrace();
             return ABORTED;
         } catch (HttpRequestException | NameRegistrar.NotFoundException ex) {
+            // use constants
             ctx.put(Constants.HTTP_RESPONSE,
-                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "KSTS")));
+                    ResponseEntity.internalServerError().body(RestResponse.failed(Constants.REASON_CODE_OTHER, ex.getMessage(), Constants.RESPONSE_CODE_REJECT)));
             return ABORTED;
         } catch (ISOException ex) {
             ex.printStackTrace();
@@ -178,30 +186,47 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
-        isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
+
+        String responseCode = null;
+        String reasonCode = null;
+        String reasonMessage = "";
+        CreditTransferOutboundResponse creditTransferResponse = null;
         if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
-            CreditTransferOutboundResponse creditTransferResponse = (CreditTransferOutboundResponse) rr.getBody().getContent().get(0);
-            StringBuilder sb = new StringBuilder();
-            sb.append(ISOUtil.strpad(creditTransferResponse.getNoRef(), 20))
-                    .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
-                    .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
-                    .append(ISOUtil.strpad("", 35))
-                    .append(ISOUtil.strpad(rr.getBody().getReasonMessage(), 140))
-                    .append(ISOUtil.strpad("", 34))
-                    .append(ISOUtil.strpad("", 35));
-            isoRsp.set(62, sb.toString());
+            creditTransferResponse = (CreditTransferOutboundResponse) rr.getBody().getContent().get(0);
+            responseCode = rr.getBody().getResponseCode();
+            reasonCode = rr.getBody().getReasonCode();
+            reasonMessage = rr.getBody().getReasonMessage();
         }
+        else {
+            creditTransferResponse = new CreditTransferOutboundResponse();
+            creditTransferResponse.setNoRef(req.getString(63));
+            try {
+                responseCode = rr.getBody().getResponseCode();
+                reasonCode = rr.getBody().getReasonCode();
+                reasonMessage = rr.getBody().getReasonMessage();
+            }
+            catch (Exception e) {
+                // nothing
+            }
+            if (responseCode == null) responseCode = Constants.RESPONSE_CODE_REJECT;
+            if (reasonCode == null) reasonCode = Constants.REASON_CODE_OTHER;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(ISOUtil.strpad(creditTransferResponse.getNoRef(), 20))
+                .append(ISOUtil.strpad(responseCode, 4))
+                .append(ISOUtil.strpad(reasonCode, 35))
+                .append(ISOUtil.strpad("", 35))
+                .append(ISOUtil.strpad(reasonMessage, 140))
+                .append(ISOUtil.strpad(creditTransferResponse.getAccountNumber(), 34))
+                .append(ISOUtil.strpad(creditTransferResponse.getCreditorName(), 35));
+        isoRsp.set(62, sb.toString());
         return isoRsp;
     }
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> dto) {
         ISOMsg isoRsp = super.buildResponseMsg(req, dto);
-        if (Constants.RESPONSE_CODE_KOMI_STATUS.equals(dto.getBody().getResponseCode())
-                && Constants.REASON_CODE_UNDEFINED.equals(dto.getBody().getReasonCode())) {
-            isoRsp.set(39, Constants.ISO_RSP_UNDEFINED);
-        }
-
         CreditTransferOutboundResponse creditTransferResponse = (CreditTransferOutboundResponse) dto.getBody().getContent().get(0);
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(creditTransferResponse.getNoRef(), 20))

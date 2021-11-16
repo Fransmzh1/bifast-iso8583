@@ -110,8 +110,8 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
 
         // handles : body with no-content, body n/a
-        String responseCode;
-        String reasonCode;
+        String responseCode = null;
+        String reasonCode = null;
         ProxyResolutionResponse proxyResolutionResponse = null;
         if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             proxyResolutionResponse = (ProxyResolutionResponse) rr.getBody().getContent().get(0);
@@ -126,9 +126,10 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
                 reasonCode = rr.getBody().getReasonCode();
             }
             catch (Exception e) {
-                responseCode = Constants.RESPONSE_CODE_REJECT;
-                reasonCode = Constants.REASON_CODE_OTHER;
+                // nothing
             }
+            if (responseCode == null) responseCode = Constants.RESPONSE_CODE_REJECT;
+            if (reasonCode == null) reasonCode = Constants.REASON_CODE_OTHER;
         }
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(proxyResolutionResponse.getNoRef(), 20))
@@ -148,17 +149,6 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(proxyResolutionResponse.getResidentialStatus(), 35))
                 .append(ISOUtil.strpad(proxyResolutionResponse.getTownName(), 35));
         isoRsp.set(62, sb.toString());
-
-        /*
-        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
-            ProxyResolutionResponse proxyResolutionResponse = (ProxyResolutionResponse) rr.getBody().getContent().get(0);
-            StringBuilder sb = new StringBuilder();
-            sb.append(ISOUtil.strpad(proxyResolutionResponse.getNoRef(), 20))
-                    .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
-                    .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35));
-            isoRsp.set(62, sb.toString());
-        }
-        */
         return isoRsp;
     }
 

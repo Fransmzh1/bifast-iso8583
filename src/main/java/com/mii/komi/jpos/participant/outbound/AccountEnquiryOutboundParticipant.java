@@ -160,8 +160,8 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
 
         // handles : body with no-content, body n/a
-        String responseCode;
-        String reasonCode;
+        String responseCode = null;
+        String reasonCode = null;
         AccountEnquiryOutboundResponse accountEnquiryRsp = null;
 
         if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
@@ -176,9 +176,10 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                 responseCode = rr.getBody().getResponseCode();
                 reasonCode = rr.getBody().getReasonCode();
             } catch (Exception e) {
-                responseCode = Constants.RESPONSE_CODE_REJECT;
-                reasonCode = Constants.REASON_CODE_OTHER;                
+                // nothing
             }
+            if (responseCode == null) responseCode = Constants.RESPONSE_CODE_REJECT;
+            if (reasonCode == null) reasonCode = Constants.REASON_CODE_OTHER;                
         }
 
         StringBuilder sb = new StringBuilder();
@@ -196,27 +197,6 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
         isoRsp.set(62, sb.toString());
         return isoRsp;
-    /*
-        ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
-        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
-            AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) rr.getBody().getContent().get(0);
-            StringBuilder sb = new StringBuilder();
-            sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
-                    .append(ISOUtil.strpad(rr.getBody().getResponseCode(), 4))
-                    .append(ISOUtil.strpad(rr.getBody().getReasonCode(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getAccountNumber(), 34))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorId(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorType(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
-            isoRsp.set(62, sb.toString());
-        }
-        return isoRsp;
-        */
     }
 
 }
