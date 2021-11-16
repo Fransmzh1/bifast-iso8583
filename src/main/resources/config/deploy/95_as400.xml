@@ -1,4 +1,4 @@
-<channel-adaptor name='as400-channel' logger="Q2">
+<channel-adaptor name='as400' logger="Q2">
     <channel class="org.jpos.iso.channel.WBKChannel"
              packager="org.jpos.iso.packager.GenericPackager">
         <property name="packager-config"
@@ -7,7 +7,7 @@
         <property name="port" value="10001" />
         <filter class='org.jpos.iso.filter.DebugFilter' direction='both' />
     </channel>
-    <in>as400-channel-send</in>
-    <out>as400-channel-receive</out>
+    <in>as400-send</in>
+    <out>as400-receive</out>
     <reconnect-delay>10000</reconnect-delay>
 </channel-adaptor>

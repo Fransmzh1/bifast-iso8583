@@ -4,10 +4,16 @@ import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jpos.iso.BaseChannel;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
+import org.jpos.iso.ISOServer;
 import org.jpos.iso.ISOUtil;
+import org.jpos.q2.iso.ChannelAdaptor;
 import org.jpos.q2.iso.QMUX;
+import org.jpos.q2.iso.QServer;
 import org.jpos.util.NameRegistrar;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +32,31 @@ public class ISO8583Service {
 
     private static int SEQ_NUMBER = 0;
 
+    public static boolean isConnected(String targetName) {
+        boolean connected = false;
+        try {
+            Object o = NameRegistrar.get(targetName);
+            if (o instanceof QServer) {
+                ISOServer isoServer = NameRegistrar.get("server." + targetName);
+                if (isoServer.getActiveConnections() > 0) {
+                    connected = true;
+                }
+            } else if (o instanceof ChannelAdaptor) {
+                QMUX mux = NameRegistrar.get("mux." + targetName + "-mux");
+                if (mux.isConnected()) {
+                    connected = true;
+                }
+            }
+            return connected;
+        } catch (NameRegistrar.NotFoundException ex) {
+            return false;
+        }
+    }
+
     public static ISOMsg sendMessage(String targetName, ISOMsg isoMsg) throws ISOException {
         try {
-            QMUX mux = NameRegistrar.get("mux." + targetName + "-mux");
-            if (mux.isConnected()) {
+            if (isConnected(targetName)) {
+                QMUX mux = NameRegistrar.get("mux." + targetName + "-mux");
                 ISOMsg isoMsgRsp = mux.request(isoMsg, 30000);
                 if (isoMsgRsp == null) {
                     isoMsgRsp = (ISOMsg) isoMsg.clone();
@@ -76,7 +103,7 @@ public class ISO8583Service {
         isomsg.set(63, requestDTO.getNoRef());
         return isomsg;
     }
-    
+
     public static ISOMsg buildAdministrativeMsg(String processingCode, BaseInboundRequestDTO requestDTO) throws ISOException {
         LocalDateTime currentGMT = LocalDateTime.now(ZoneId.of("GMT"));
         LocalDateTime current = LocalDateTime.now();

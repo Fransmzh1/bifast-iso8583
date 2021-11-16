@@ -1,8 +1,8 @@
 <mux class="org.jpos.q2.iso.QMUX" logger="Q2" name="as400-mux">
-    <in>as400-channel-receive</in>
-    <out>as400-channel-send</out>
+    <in>as400-receive</in>
+    <out>as400-send</out>
     <key>7,11</key>
-    <ready>as400-channel.ready</ready>
+    <ready>as400.ready</ready>
     <request-listener class="org.jpos.bsh.BSHRequestListener" logger="Q2">
         <property name="source" value="config/serversimulator.bsh" />
     </request-listener>

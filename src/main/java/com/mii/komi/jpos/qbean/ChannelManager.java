@@ -8,13 +8,18 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+import org.jpos.iso.BaseChannel;
 import org.jpos.iso.ISODate;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
+import org.jpos.iso.ISOPackager;
+import org.jpos.iso.ISOServer;
 import org.jpos.iso.ISOUtil;
 import org.jpos.iso.packager.ISO87APackager;
 import org.jpos.q2.QBeanSupport;
+import org.jpos.q2.iso.ChannelAdaptor;
 import org.jpos.q2.iso.QMUX;
+import org.jpos.q2.iso.QServer;
 import org.jpos.space.LocalSpace;
 import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
@@ -29,7 +34,7 @@ import org.jpos.util.NameRegistrar.NotFoundException;
  */
 public class ChannelManager extends QBeanSupport implements SpaceListener {
 
-    private Log log;
+    private Log log = Log.getLog("Q2", "channel-manager");
 
     private static ChannelManager _cMSingleTon = null;
     private long MAX_TIME_OUT;
@@ -37,7 +42,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
     private LocalSpace sp;
     private String in;
     private String out;
-    private boolean channelType;
+    private ISOPackager packager;
     
     public static int stanSequence = 1;
 
@@ -95,7 +100,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
             msg.set(7, date.get("bit7"));
             msg.set(11, ISOUtil.zeropad(stanSequence, 6));
             msg.set(70, "301");
-            msg.setPackager(new ISO87APackager());
+            msg.setPackager(packager);
 
             byte[] messageBody = msg.pack();
 
@@ -127,7 +132,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
             msg.set(7, ISODate.getDateTime(new Date()));
             msg.set(11, ISOUtil.zeropad(stanSequence, 6));
             msg.set(70, "001");
-            msg.setPackager(new ISO87APackager());
+            msg.setPackager(packager);
             byte[] messageBody = msg.pack();
             ChannelManager.logISOMsg(msg);
             try {
@@ -152,21 +157,44 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
         }
     }
 
-    protected void startService() throws ISOException {
+    protected void startService() {
         final ISOMsg m = new ISOMsg();
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
                 Space space = SpaceFactory.getSpace();
-                if (mux.isConnected()) {
-                    Object signedOnObject = space.rd(mux.getName() + "-signed-on", 10000);
+                boolean connected = false;
+                String destinationName = cfg.get("destination");
+                try {
+                    Object o = NameRegistrar.get(destinationName);
+                    if(o instanceof QServer) {
+                        ISOServer isoServer = NameRegistrar.get("server." + destinationName);
+                        if(isoServer.getActiveConnections() > 0) {
+                            connected = true;
+                            packager = isoServer.getLastConnectedISOChannel().getPackager();
+                        }
+                    } else if(o instanceof ChannelAdaptor) {
+                        if(mux.isConnected()) {
+                            connected = true;
+                            BaseChannel ca = NameRegistrar.get("channel." + destinationName);
+                            packager = ca.getPackager();
+                        }
+                    }
+                } catch (NotFoundException ex) {
+                    log.error("Error Invalid Destination Name '"+destinationName+"', "
+                            + "must be same as ChannelAdaptor name");
+                }
+                
+                if (connected) {
+                    Object signedOnObject = space.rd(mux.getName() + "-signed-on", 5000);
                     if (signedOnObject != null) {
                         sendEchoTest();
                     } else {
                         sendSignOnRequest(m);
                     }
                 } else {
-                    space.in(mux.getName() + "-signed-on");
+                    log.info("Not connected to Host '" + destinationName + "'");
+                    space.in(mux.getName() + "-signed-on", 5000);
                 }
             }
         }, 0, cfg.getLong("interval"));
