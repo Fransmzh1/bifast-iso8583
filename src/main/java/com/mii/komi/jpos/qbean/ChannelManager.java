@@ -172,12 +172,16 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                         if(isoServer.getActiveConnections() > 0) {
                             connected = true;
                             packager = isoServer.getLastConnectedISOChannel().getPackager();
+                        } else {
+                            log.info("No Host connected to port " + isoServer.getPort());
                         }
                     } else if(o instanceof ChannelAdaptor) {
+                        BaseChannel ca = NameRegistrar.get("channel." + destinationName);
                         if(mux.isConnected()) {
                             connected = true;
-                            BaseChannel ca = NameRegistrar.get("channel." + destinationName);
                             packager = ca.getPackager();
+                        } else {
+                            log.info("Not connected to '" + ca.getHost() + "'");
                         }
                     }
                 } catch (NotFoundException ex) {
@@ -193,7 +197,6 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                         sendSignOnRequest(m);
                     }
                 } else {
-                    log.info("Not connected to Host '" + destinationName + "'");
                     space.in(mux.getName() + "-signed-on", 5000);
                 }
             }
