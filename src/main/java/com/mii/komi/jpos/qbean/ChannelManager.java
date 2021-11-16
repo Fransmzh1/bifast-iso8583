@@ -37,6 +37,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
     private LocalSpace sp;
     private String in;
     private String out;
+    private boolean channelType;
     
     public static int stanSequence = 1;
 
