@@ -22,6 +22,7 @@ import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,14 +56,20 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
             ResponseEntity<RestResponse<AccountEnquiryOutboundResponse>> accountEnquiryResponse
                     = restTemplate.exchange(endpointKomi, HttpMethod.POST, entity, typeRef);
             ctx.put(Constants.HTTP_RESPONSE, accountEnquiryResponse);
+
+            // handle http 500
+            if (accountEnquiryResponse.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) return ABORTED;
+
             return PREPARED;
         } catch (DataNotFoundException ex) {
+            // use constants
             ctx.put(Constants.HTTP_RESPONSE,
-                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
+                    ResponseEntity.internalServerError().body(RestResponse.failed(Constants.REASON_CODE_OTHER, ex.getMessage(), Constants.RESPONSE_CODE_REJECT)));
             return ABORTED;
         } catch (HttpRequestException ex) {
+            // use constants
             ctx.put(Constants.HTTP_RESPONSE,
-                    ResponseEntity.internalServerError().body(RestResponse.failed("K000", ex.getMessage(), "RJCT")));
+                    ResponseEntity.internalServerError().body(RestResponse.failed(Constants.REASON_CODE_OTHER, ex.getMessage(), Constants.RESPONSE_CODE_REJECT)));
             return ABORTED;
         } catch (ISOException ex) {
             Logger.getLogger(AccountEnquiryOutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,29 +82,26 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
 
     @Override
     public ISOMsg buildResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> response) {
-        try {
-            ISOMsg isoRsp = super.buildResponseMsg(req, response);
-            AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getBody().getContent().get(0);
-            StringBuilder sb = new StringBuilder();
-            sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
-                    .append(ISOUtil.strpad(response.getBody().getResponseCode(), 4))
-                    .append(ISOUtil.strpad(response.getBody().getReasonCode(), 35))
-                    .append(ISOUtil.zeropad(accountEnquiryRsp.getAccountNumber(), 34))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorId(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorType(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
-                    .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
-            isoRsp.set(62, sb.toString());
-            return isoRsp;
-        } catch (ISOException ex) {
-            Logger.getLogger(AccountEnquiryOutboundParticipant.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
+        // remove try..catch since it is unreachable
+        ISOMsg isoRsp = super.buildResponseMsg(req, response);
+        AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) response.getBody().getContent().get(0);
+        StringBuilder sb = new StringBuilder();
+        sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
+                .append(ISOUtil.strpad(response.getBody().getResponseCode(), 4))
+                .append(ISOUtil.strpad(response.getBody().getReasonCode(), 35))
+                // fix: zeropad change to strpad
+                .append(ISOUtil.strpad(accountEnquiryRsp.getAccountNumber(), 34))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorId(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorType(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
+        isoRsp.set(62, sb.toString());
+        return isoRsp;
+}
 
     @Override
     public RootAccountEnquiry buildRequestMsg(ISOMsg isoMsg) {
@@ -154,6 +158,46 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
     @Override
     public ISOMsg buildFailedResponseMsg(ISOMsg req, ResponseEntity<RestResponse<BaseOutboundDTO>> rr) {
         ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
+
+        // handles : body with no-content, body n/a
+        String responseCode;
+        String reasonCode;
+        AccountEnquiryOutboundResponse accountEnquiryRsp = null;
+
+        if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
+            accountEnquiryRsp = (AccountEnquiryOutboundResponse) rr.getBody().getContent().get(0);
+            responseCode = rr.getBody().getResponseCode();
+            reasonCode = rr.getBody().getReasonCode();
+        }
+        else {
+            accountEnquiryRsp = new AccountEnquiryOutboundResponse();
+            accountEnquiryRsp.setNoRef(req.getString(63));
+            try {
+                responseCode = rr.getBody().getResponseCode();
+                reasonCode = rr.getBody().getReasonCode();
+            } catch (Exception e) {
+                responseCode = Constants.RESPONSE_CODE_REJECT;
+                reasonCode = Constants.REASON_CODE_OTHER;                
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(ISOUtil.strpad(accountEnquiryRsp.getNoRef(), 20))
+                .append(ISOUtil.strpad(responseCode, 4))
+                .append(ISOUtil.strpad(reasonCode, 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getAccountNumber(), 34))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getAccountType(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorName(), 140))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorId(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getCreditorType(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
+        isoRsp.set(62, sb.toString());
+        return isoRsp;
+    /*
+        ISOMsg isoRsp = super.buildFailedResponseMsg(req, rr);
         if (rr.hasBody() && rr.getBody().getContent() != null && rr.getBody().getContent().size() > 0) {
             AccountEnquiryOutboundResponse accountEnquiryRsp = (AccountEnquiryOutboundResponse) rr.getBody().getContent().get(0);
             StringBuilder sb = new StringBuilder();
@@ -172,6 +216,7 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
             isoRsp.set(62, sb.toString());
         }
         return isoRsp;
+        */
     }
 
 }
