@@ -1,5 +1,10 @@
 import org.jpos.iso.ISOUtil;
-
+// untuk test kondisi timeout dari core
+/*
+long start = System.currentTimeMillis();
+        Thread.sleep(60000);
+        System.out.println("Sleep time in ms = "+(System.currentTimeMillis()-start));
+*/
 if(message.isRequest()) {
     if("0200".equals(message.getMTI())) {
         if("389100".equals(message.getString(3))) {
