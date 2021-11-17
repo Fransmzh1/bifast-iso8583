@@ -124,7 +124,7 @@ public class DebitTransferParticipant implements TransactionParticipant, BaseInb
         debitTransferRsp.setAccountNumber(originalRequest.getCreditorAccountNumber());
         try{
             if (rsp != null) {
-                if (rsp.hasField(62) && Constants.ISO_RSP_APPROVED.equalsIgnoreCase(rsp.getString(39))) {
+                if (rsp.hasField(62)) {
                     String privateData = rsp.getString(62);
                     int cursor = 0;
                     int endCursor = 20;

@@ -81,32 +81,38 @@ public class BalanceInquiryParticipant implements TransactionParticipant, BaseIn
     public ResponseEntity<BalanceInquiryResponse> buildFailedResponseMsg(BaseInboundRequestDTO request, ISOMsg isoMsg) {
         BalanceInquiryResponse rsp = new BalanceInquiryResponse();
         rsp.setNoRef(request.getNoRef());
-        if (isoMsg != null) {
-            if (isoMsg.hasField(62)) {
-                String privateData = isoMsg.getString(62);
-                int cursor = 0;
-                int endCursor = 20;
-                rsp.setNoRef(privateData.substring(cursor, endCursor));
+        try {
+            if (isoMsg != null) {
+                if (isoMsg.hasField(62)) {
+                    String privateData = isoMsg.getString(62);
+                    int cursor = 0;
+                    int endCursor = 20;
+                    rsp.setNoRef(privateData.substring(cursor, endCursor));
 
-                cursor = endCursor;
-                endCursor = cursor + 4;
-                String rc = privateData.substring(cursor, endCursor);
+                    cursor = endCursor;
+                    endCursor = cursor + 4;
+                    String rc = privateData.substring(cursor, endCursor);
 
-                cursor = endCursor;
-                endCursor = cursor + 35;
-                String rm = privateData.substring(cursor, endCursor);
-                
-                rsp.setStatus(rc);
-                rsp.setReason(rm);
+                    cursor = endCursor;
+                    endCursor = cursor + 35;
+                    String rm = privateData.substring(cursor, endCursor);
+
+                    rsp.setStatus(rc);
+                    rsp.setReason(rm);
+                } else {
+                    rsp.setStatus(Constants.RESPONSE_CODE_REJECT);
+                    rsp.setReason("U904");
+                }
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
             } else {
-                rsp.setStatus(Constants.RESPONSE_CODE_REJECT);
-                rsp.setReason("U904");
+                rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
+                rsp.setReason("K000");
+                return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
-        } else {
+        }catch (StringIndexOutOfBoundsException s){
             rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
             rsp.setReason("K000");
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).build();
         }
     }
 
