@@ -138,43 +138,54 @@ public class AccountEnquiryInboundParticipant implements TransactionParticipant,
     public ResponseEntity<AccountEnquiryInboundResponse> buildFailedResponseMsg(BaseInboundRequestDTO req, ISOMsg isoMsg) {
         AccountEnquiryInboundResponse rsp = new AccountEnquiryInboundResponse();
         AccountEnquiryInboundRequest originalRequest = (AccountEnquiryInboundRequest) req;
-        rsp.setNoRef(req.getNoRef());
-        rsp.setAccountNumber(originalRequest.getAccountNumber());
-        if (isoMsg != null) {
-            if (isoMsg.hasField(62)) {
-                String privateData = isoMsg.getString(62);
-                int cursor = 0;
-                int endCursor = 20;
-                rsp.setNoRef(privateData.substring(cursor, endCursor));
+        try {
+            rsp.setNoRef(req.getNoRef());
+            rsp.setAccountNumber(originalRequest.getAccountNumber());
+            if (isoMsg != null) {
+                if (isoMsg.hasField(62)) {
+                    String privateData = isoMsg.getString(62);
+                    int cursor = 0;
+                    int endCursor = 20;
+                    rsp.setNoRef(privateData.substring(cursor, endCursor));
 
-                cursor = cursor + endCursor;
-                endCursor = cursor + 4;
-                String rc = privateData.substring(cursor, endCursor);
+                    cursor = cursor + endCursor;
+                    endCursor = cursor + 4;
+                    String rc = privateData.substring(cursor, endCursor);
 
-                cursor = cursor + endCursor;
-                endCursor = cursor + 35;
-                String rm = privateData.substring(cursor, endCursor);
+                    cursor = cursor + endCursor;
+                    endCursor = cursor + 35;
+                    String rm = privateData.substring(cursor, endCursor);
 
-                cursor = cursor + endCursor;
-                endCursor = cursor + 34;
-                rsp.setAccountNumber(privateData.substring(cursor, endCursor));
+                    cursor = cursor + endCursor;
+                    endCursor = cursor + 34;
+                    rsp.setAccountNumber(privateData.substring(cursor, endCursor));
 
-                cursor = cursor + endCursor;
-                endCursor = cursor + 35;
-                rsp.setAccountType(privateData.substring(cursor, endCursor));
-                
-                rsp.setStatus(rc);
-                rsp.setReason(rm);
+                    cursor = cursor + endCursor;
+                    endCursor = cursor + 35;
+                    rsp.setAccountType(privateData.substring(cursor, endCursor));
+
+                    rsp.setStatus(rc);
+                    rsp.setReason(rm);
+                } else if(isoMsg.getString(39).equalsIgnoreCase(Constants.ISO_RSP_REJECTED)){
+                    rsp.setStatus(Constants.RESPONSE_CODE_REJECT);
+                    rsp.setReason("U904");
+                }else if(isoMsg.getString(39).equalsIgnoreCase(Constants.ISO_RSP_TIMEOUT)){
+                    rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
+                    rsp.setReason("K000");
+                    return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).build();
+                }
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
             } else {
-                rsp.setStatus(Constants.RESPONSE_CODE_REJECT);
-                rsp.setReason("U904");
+                rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
+                rsp.setReason("K000");
+                return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
-        } else {
+        }catch (StringIndexOutOfBoundsException s){
             rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
             rsp.setReason("K000");
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).build();
         }
+
     }
 
 }

@@ -25,6 +25,8 @@ public class SendAndReceiveIso8583 implements TransactionParticipant, Configurab
 
     private Configuration cfg;
 
+    Log log = Log.getLog("Q2", "SendAndReceiveIso8583");
+
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
@@ -32,15 +34,13 @@ public class SendAndReceiveIso8583 implements TransactionParticipant, Configurab
         try {
             ISOMsg rsp = ISO8583Service.sendMessage(cfg.get("destination"), reqMsg);
             ctx.put(Constants.ISO_RESPONSE, rsp);
-            if (rsp == null) {
-                return ABORTED | NO_JOIN;
-            } else {
+
                 if (Constants.ISO_RSP_APPROVED.equals(rsp.getString(39))) {
                     return PREPARED | NO_JOIN;
                 } else {
                     return ABORTED | NO_JOIN;
                 }
-            }
+
         } catch (ISOException ex) {
             Logger.getLogger(SendAndReceiveIso8583.class.getName()).log(Level.SEVERE, null, ex);
             return ABORTED | NO_JOIN;

@@ -49,4 +49,7 @@ public class Constants {
     public static String ISO_RSP_UNDEFINED = "81";
     
     public static String ISO_RSP_APPROVED = "00";
+
+    public static String ISO_RSP_TIMEOUT = "91";
+
 }

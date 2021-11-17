@@ -142,5 +142,17 @@ public class AccountEnquiryOutboundRequest extends BaseOutboundDTO {
     public void setProxyType(String proxyType) {
         this.proxyType = proxyType;
     }
-    
+
+    @Override
+    public String toString() {
+        return "AccountEnquiryOutboundRequest{" +
+                "senderAccountNumber='" + senderAccountNumber + '\'' +
+                ", recipientBank='" + recipientBank + '\'' +
+                ", recipientAccountNumber='" + recipientAccountNumber + '\'' +
+                ", amount='" + amount + '\'' +
+                ", categoryPurpose='" + categoryPurpose + '\'' +
+                ", proxyId='" + proxyId + '\'' +
+                ", proxyType='" + proxyType + '\'' +
+                '}';
+    }
 }

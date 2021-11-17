@@ -124,36 +124,46 @@ public class DebitReversalParticipant implements TransactionParticipant, BaseInb
         DebitReversalInboundRequest originalRequest = (DebitReversalInboundRequest) request;
         debitTransferRsp.setNoRef(request.getNoRef());
         debitTransferRsp.setAccountNumber(originalRequest.getCreditorAccountNumber());
-        if (rsp != null) {
-            if (rsp.hasField(62)) {
-                String privateData = rsp.getString(62);
-                int cursor = 0;
-                int endCursor = 20;
-                debitTransferRsp.setNoRef(privateData.substring(cursor, endCursor));
+        try{
+            if (rsp != null) {
+                if (rsp.hasField(62) && Constants.ISO_RSP_APPROVED.equalsIgnoreCase(rsp.getString(39))) {
+                    String privateData = rsp.getString(62);
+                    int cursor = 0;
+                    int endCursor = 20;
+                    debitTransferRsp.setNoRef(privateData.substring(cursor, endCursor));
 
-                cursor = endCursor;
-                endCursor = cursor + 4;
-                String rc = privateData.substring(cursor, endCursor);
+                    cursor = endCursor;
+                    endCursor = cursor + 4;
+                    String rc = privateData.substring(cursor, endCursor);
 
-                cursor = endCursor;
-                endCursor = cursor + 35;
-                String rm = privateData.substring(cursor, endCursor);
+                    cursor = endCursor;
+                    endCursor = cursor + 35;
+                    String rm = privateData.substring(cursor, endCursor);
 
-                cursor = endCursor;
-                endCursor = cursor + 34;
-                debitTransferRsp.setAccountNumber(privateData.substring(cursor, endCursor));
-                
-                debitTransferRsp.setStatus(rc);
-                debitTransferRsp.setReason(rm);
+                    cursor = endCursor;
+                    endCursor = cursor + 34;
+                    debitTransferRsp.setAccountNumber(privateData.substring(cursor, endCursor));
+
+                    debitTransferRsp.setStatus(rc);
+                    debitTransferRsp.setReason(rm);
+                } else if(rsp.getString(39).equalsIgnoreCase(Constants.ISO_RSP_REJECTED)){
+                    debitTransferRsp.setStatus(Constants.RESPONSE_CODE_REJECT);
+                    debitTransferRsp.setReason("U904");
+                }else if(rsp.getString(39).equalsIgnoreCase(Constants.ISO_RSP_TIMEOUT)){
+                    debitTransferRsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
+                    debitTransferRsp.setReason("K000");
+                    return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).build();
+                }
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
             } else {
-                debitTransferRsp.setStatus(Constants.RESPONSE_CODE_REJECT);
-                debitTransferRsp.setReason("U904");
+                debitTransferRsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
+                debitTransferRsp.setReason("K000");
+                return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).build();
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rsp);
-        } else {
+        }catch (StringIndexOutOfBoundsException s){
             debitTransferRsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
             debitTransferRsp.setReason("K000");
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(rsp);
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).build();
         }
     }
 
