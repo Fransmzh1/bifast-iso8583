@@ -56,7 +56,7 @@ if(message.isRequest()) {
 
             String status = "ACTC";
             String reason = ISOUtil.strpad("U000", 35);
-            String balance = ISOUtil.zeropad(689000000.00, 18);
+            String balance = ISOUtil.zeropad("689000000.00", 18);
 
             message.set(62, noref + status + reason + balance);
         }

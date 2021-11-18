@@ -53,13 +53,13 @@ public class InboundAccountEnquiryParticipant extends GenericInboundParticipantI
         ISOMsg isoRsp = ctx.get(Constants.ISO_RESPONSE);
         AccountEnquiryInboundRequest request = (AccountEnquiryInboundRequest) ctx.get(Constants.HTTP_REQUEST);
         AccountEnquiryInboundResponse rsp = new AccountEnquiryInboundResponse();
-        
         rsp.setTransactionId(request.getTransactionId());
         rsp.setDateTime(request.getDateTime());
         rsp.setMerchantType(isoRsp.getString(18));
         rsp.setTerminalId(isoRsp.getString(41));
+
         String privateData = isoRsp.getString(62);
-        
+
         int cursor = 0;
         int endCursor = 20;
         rsp.setNoRef(privateData.substring(cursor, endCursor).trim());
@@ -72,33 +72,34 @@ public class InboundAccountEnquiryParticipant extends GenericInboundParticipantI
         endCursor = cursor + 35;
         rsp.setReason(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 34;
-        rsp.setAccountNumber(privateData.substring(cursor, endCursor).trim());
+        if (Constants.ISO_RSP_APPROVED.equals(isoRsp.getString(39))) {
+            cursor = endCursor;
+            endCursor = cursor + 34;
+            rsp.setAccountNumber(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setAccountType(privateData.substring(cursor, endCursor).trim());
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setAccountType(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 140;
-        rsp.setCreditorName(privateData.substring(cursor, endCursor).trim());
+            cursor = endCursor;
+            endCursor = cursor + 140;
+            rsp.setCreditorName(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setCreditorId(privateData.substring(cursor, endCursor).trim());
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setCreditorId(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setCreditorType(privateData.substring(cursor, endCursor).trim());
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setCreditorType(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setResidentStatus(privateData.substring(cursor, endCursor).trim());
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setResidentStatus(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        rsp.setTownName(privateData.substring(cursor).trim());
-        
+            cursor = endCursor;
+            rsp.setTownName(privateData.substring(cursor).trim());
+        }
         return ResponseEntity.ok(rsp);
     }
 

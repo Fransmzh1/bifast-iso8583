@@ -20,9 +20,9 @@ import org.springframework.http.ResponseEntity;
  * @author vinch
  */
 public class InboundCustomerInfoParticipant extends GenericInboundParticipantImpl {
-    
+
     public static String CUSTOMER_INFO_PC = "909200";
-    
+
     Log log = Log.getLog("Q2", this.getClass().getName());
 
     @Override
@@ -47,8 +47,8 @@ public class InboundCustomerInfoParticipant extends GenericInboundParticipantImp
     public ResponseEntity buildSpesificRspBody(long id, Serializable context) {
         Context ctx = (Context) context;
         ISOMsg isoRsp = ctx.get(Constants.ISO_RESPONSE);
-        
-        CustomerAccountInfoInboundRequest request = (CustomerAccountInfoInboundRequest)ctx.get(Constants.HTTP_REQUEST);
+
+        CustomerAccountInfoInboundRequest request = (CustomerAccountInfoInboundRequest) ctx.get(Constants.HTTP_REQUEST);
         CustomerAccountInfoInboundResponse rsp = new CustomerAccountInfoInboundResponse();
         rsp.setTransactionId(request.getTransactionId());
         rsp.setDateTime(request.getDateTime());
@@ -69,68 +69,67 @@ public class InboundCustomerInfoParticipant extends GenericInboundParticipantImp
         endCursor = cursor + 35;
         rsp.setReason(privateData.substring(cursor, endCursor).trim());
 
-        cursor = endCursor;
-        endCursor = cursor + 1;
-        List<String> emailAddressList = new ArrayList<String>();
-        int mailCount = Integer.parseInt(privateData.substring(cursor, endCursor));
-        if (mailCount > 0) {
-            for (int i = 0; i < mailCount; i++) {
-                cursor = endCursor;
-                endCursor = cursor + 50;
-                emailAddressList.add(privateData.substring(cursor, endCursor).trim());
+        if (Constants.ISO_RSP_APPROVED.equals(isoRsp.getString(39))) {
+            cursor = endCursor;
+            endCursor = cursor + 1;
+            List<String> emailAddressList = new ArrayList<String>();
+            int mailCount = Integer.parseInt(privateData.substring(cursor, endCursor));
+            if (mailCount > 0) {
+                for (int i = 0; i < mailCount; i++) {
+                    cursor = endCursor;
+                    endCursor = cursor + 50;
+                    emailAddressList.add(privateData.substring(cursor, endCursor).trim());
+                }
             }
-        }
-        rsp.setEmailAddressList(emailAddressList);
-        
-        cursor = endCursor;
-        endCursor = cursor + 1;
-        List<String> phoneNumberList = new ArrayList<String>();
-        int phoneCount = Integer.parseInt(privateData.substring(cursor, endCursor));
-        if (phoneCount > 0) {
-            for (int i = 0; i < phoneCount; i++) {
-                cursor = endCursor;
-                endCursor = cursor + 35;
-                phoneNumberList.add(privateData.substring(cursor, endCursor).trim());
+            rsp.setEmailAddressList(emailAddressList);
+
+            cursor = endCursor;
+            endCursor = cursor + 1;
+            List<String> phoneNumberList = new ArrayList<String>();
+            int phoneCount = Integer.parseInt(privateData.substring(cursor, endCursor));
+            if (phoneCount > 0) {
+                for (int i = 0; i < phoneCount; i++) {
+                    cursor = endCursor;
+                    endCursor = cursor + 35;
+                    phoneNumberList.add(privateData.substring(cursor, endCursor).trim());
+                }
             }
+            rsp.setPhoneNumberList(phoneNumberList);
+
+            cursor = 0;
+            endCursor = 34;
+            rsp.setAccountNumber(extPrivateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setAccountType(extPrivateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 140;
+            rsp.setCustomerName(extPrivateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setCustomerType(extPrivateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setCustomerId(extPrivateData.substring(cursor, endCursor).trim());
+
+            // adam: added customerIdType
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setCustomerIdType(extPrivateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setResidentStatus(extPrivateData.substring(cursor, endCursor).trim());
+
+            cursor = endCursor;
+            endCursor = cursor + 35;
+            rsp.setTownName(extPrivateData.substring(cursor, endCursor).trim());
         }
-        rsp.setPhoneNumberList(phoneNumberList);
-        
-        cursor = 0;
-        endCursor = 34;
-        rsp.setAccountNumber(extPrivateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setAccountType(extPrivateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 140;
-        rsp.setCustomerName(extPrivateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setCustomerType(extPrivateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setCustomerId(extPrivateData.substring(cursor, endCursor).trim());
-
-        // adam: added customerIdType
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setCustomerIdType(extPrivateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setResidentStatus(extPrivateData.substring(cursor, endCursor).trim());
-        
-        cursor = endCursor;
-        endCursor = cursor + 35;
-        rsp.setTownName(extPrivateData.substring(cursor, endCursor).trim());
-
         return ResponseEntity.ok(rsp);
     }
-    
-    
-    
+
 }

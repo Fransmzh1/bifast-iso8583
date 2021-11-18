@@ -1,7 +1,5 @@
 package com.mii.komi.jpos.participant.inbound;
 
-import com.mii.komi.dto.inbound.DebitTransferInboundRequest;
-import com.mii.komi.dto.inbound.DebitTransferInboundResponse;
 import com.mii.komi.dto.inbound.SettlementRequest;
 import com.mii.komi.dto.inbound.SettlementResponse;
 import com.mii.komi.service.ISO8583Service;

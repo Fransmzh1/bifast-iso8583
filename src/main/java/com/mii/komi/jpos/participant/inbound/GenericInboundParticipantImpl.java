@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
  * @author vinch
  */
 public abstract class GenericInboundParticipantImpl implements BaseInboundParticipant, TransactionParticipant {
-    
+
     @Override
     public int prepare(long id, Serializable context) {
         Context ctx = (Context) context;
@@ -23,29 +23,46 @@ public abstract class GenericInboundParticipantImpl implements BaseInboundPartic
         ctx.put(Constants.ISO_REQUEST, isoMsg);
         return PREPARED;
     }
-    
+
     @Override
     public void commit(long id, Serializable context) {
         Context ctx = (Context) context;
         ctx.put(Constants.HTTP_RESPONSE, buildResponseMsg(id, context));
     }
-    
+
     @Override
     public void abort(long id, Serializable context) {
         Context ctx = (Context) context;
         ctx.put(Constants.HTTP_RESPONSE, buildFailedResponseMsg(id, context));
     }
-    
+
     @Override
     public ResponseEntity buildResponseMsg(long id, Serializable context) {
         Context ctx = (Context) context;
         String status = ctx.get(Constants.STATUS);
+        ISOMsg isoRsp = ctx.get(Constants.ISO_RESPONSE);
         BaseInboundRequestDTO request = ctx.get(Constants.HTTP_REQUEST);
         BaseInboundResponseDTO rsp = new BaseInboundResponseDTO();
         rsp.setTransactionId(request.getTransactionId());
         rsp.setDateTime(request.getDateTime());
         if (Constants.STATUS_RESPONSE_ACCEPTED.equals(status)) {
-            return buildSpesificRspBody(id, context);
+            if (!isoRsp.hasField(62)) {
+                rsp.setTransactionId(request.getTransactionId());
+                rsp.setDateTime(request.getDateTime());
+                rsp.setMerchantType(request.getMerchantType());
+                rsp.setTerminalId(request.getTerminalId());
+                rsp.setNoRef(request.getNoRef());
+                if (Constants.ISO_RSP_REJECTED.equals(isoRsp.getString(39))) {
+                    rsp.setStatus(Constants.RESPONSE_CODE_REJECT);
+                    rsp.setReason(Constants.REASON_CODE_OTHER);
+                } else if (Constants.ISO_RSP_UNDEFINED.equals(isoRsp.getString(39))) {
+                    rsp.setStatus(Constants.RESPONSE_CODE_KOMI_STATUS);
+                    rsp.setReason(Constants.REASON_CODE_UNDEFINED);
+                }
+                return ResponseEntity.ok(rsp);
+            } else {
+                return buildSpesificRspBody(id, context);
+            }
         } else if (Constants.STATUS_NOT_CONNECTED.equals(status)) {
             rsp.setTransactionId(request.getTransactionId());
             rsp.setDateTime(request.getDateTime());

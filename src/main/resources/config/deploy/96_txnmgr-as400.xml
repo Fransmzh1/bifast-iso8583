@@ -45,6 +45,7 @@
     <group name="SendAndReceiveToCoreBanking">
         <participant class="com.mii.komi.jpos.participant.inbound.SendAndReceiveIso8583" logger="Q2">
             <property name="destination" value="mantabcorebanking" />
+            <property name="timeout" value="30000" />
             <property name="mandatory" value="3,7,11,41,39,48" />
         </participant>
     </group>
