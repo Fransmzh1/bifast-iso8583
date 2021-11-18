@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponses;
 import javax.servlet.http.HttpServletRequest;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
+import org.jpos.q2.iso.QMUX;
 import org.jpos.util.NameRegistrar;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,16 +44,23 @@ public class ISO8583RestController {
         ISOMsg isoReq = jsonToISOMsg(request);
 
         // Send ISOMsg to socket channel
-        ISOMsg rspMsg = ISO8583Service.sendMessage("as400", isoReq);
-        if (rspMsg == null) {
-            rspMsg = (ISOMsg) isoReq.clone();
+        QMUX mux = NameRegistrar.get("mux." + "as400" + "-mux");
+        String httpResponse;
+        if (ISO8583Service.isConnected("as400")) {
+            ISOMsg rspMsg = mux.request(isoReq, 30000);
+            if (rspMsg == null) {
+                rspMsg = (ISOMsg) isoReq.clone();
+                rspMsg.setResponseMTI();
+                rspMsg.set(39, "68");
+            }
+            // Convert ISOMsg response to JSON HTTP Response
+            httpResponse = ISOMsgToJson(rspMsg);
+        } else {
+            ISOMsg rspMsg = (ISOMsg) isoReq.clone();
             rspMsg.setResponseMTI();
-            rspMsg.set(39, "68");
+            rspMsg.set(39, "93");
+            httpResponse = ISOMsgToJson(rspMsg);
         }
-
-        // Convert ISOMsg response to JSON HTTP Response
-        String httpResponse = ISOMsgToJson(rspMsg);
-
         return ResponseEntity.ok(httpResponse);
     }
 

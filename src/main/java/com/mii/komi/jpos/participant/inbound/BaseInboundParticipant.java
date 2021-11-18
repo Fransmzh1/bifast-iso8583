@@ -1,9 +1,8 @@
 package com.mii.komi.jpos.participant.inbound;
 
-import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
-import com.mii.komi.dto.outbound.BaseOutboundDTO;
-import org.jpos.iso.ISOException;
+import java.io.Serializable;
 import org.jpos.iso.ISOMsg;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
@@ -11,10 +10,12 @@ import org.jpos.iso.ISOMsg;
  */
 public interface BaseInboundParticipant {
     
-    public ISOMsg buildRequestMsg(BaseInboundRequestDTO request) throws ISOException;
+    public ISOMsg buildRequestMsg(long id, Serializable context);
     
-    public Object buildFailedResponseMsg(BaseInboundRequestDTO request, ISOMsg rsp);
+    public ResponseEntity buildFailedResponseMsg(long id, Serializable context);
     
-    public Object buildResponseMsg(BaseInboundRequestDTO request, ISOMsg rsp);
+    public ResponseEntity buildResponseMsg(long id, Serializable context);
+    
+    ResponseEntity buildSpesificRspBody(long id, Serializable context);
     
 }

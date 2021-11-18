@@ -16,6 +16,16 @@ public class Constants {
     
     public static String SOURCE_KEY = "ISO_SOURCE";
     
+    public static String STATUS = "STATUS";
+    
+    public static String STATUS_NO_RESPONSE = "STATUS_NO_RESPONSE";
+    
+    public static String STATUS_NOT_CONNECTED = "STATUS_NOT_CONNECTED";
+    
+    public static String STATUS_BAD_RESPONSE = "STATUS_BAD_RESPONSE";
+    
+    public static String STATUS_RESPONSE_ACCEPTED = "STATUS_RESPONSE_ACCEPTED";
+    
     public static String SELECTOR_KEY = "SELECTOR_KEY";
     
     public static String REQUEST = "Request";
@@ -51,5 +61,7 @@ public class Constants {
     public static String ISO_RSP_APPROVED = "00";
 
     public static String ISO_RSP_TIMEOUT = "91";
+    
+    public static String ISO_NOT_CONNECTED = "93";
 
 }

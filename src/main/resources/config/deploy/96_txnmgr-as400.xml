@@ -4,9 +4,9 @@
     <property name="sessions" value="5" />
     <property name="debug" value="true" />
     <participant class="com.mii.komi.jpos.participant.inbound.RESTSelector" name="Selector" logger="Q2">
+        <property name="CreditTransfer" value="CreditTransfer SendAndReceiveToCoreBanking" />
         <property name="AccountEnquiry" value="AccountEnquiry SendAndReceiveToCoreBanking" />
         <property name="DebitTransfer" value="DebitTransfer SendAndReceiveToCoreBanking" />
-        <property name="CreditTransfer" value="CreditTransfer SendAndReceiveToCoreBanking" />
         <property name="DebitReversal" value="DebitReversal SendAndReceiveToCoreBanking" />
         <property name="Settlement" value="Settlement SendAndReceiveToCoreBanking" />
         <property name="BalanceInquiry" value="BalanceInquiry SendAndReceiveToCoreBanking" />
@@ -14,37 +14,38 @@
     </participant>
     <participant class="com.mii.komi.jpos.participant.inbound.RESTResponseParticipant" logger="Q2"/>
     
+    <group name="CreditTransfer">
+        <participant class="com.mii.komi.jpos.participant.inbound.InboundCreditParticipant" logger="Q2" />
+    </group>
+    
     <group name="AccountEnquiry">
-        <participant class="com.mii.komi.jpos.participant.inbound.AccountEnquiryInboundParticipant" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.InboundAccountEnquiryParticipant" logger="Q2" />
     </group>
     
     <group name="DebitTransfer">
-        <participant class="com.mii.komi.jpos.participant.inbound.DebitTransferParticipant" logger="Q2" />
-    </group>
-    
-    <group name="CreditTransfer">
-        <participant class="com.mii.komi.jpos.participant.inbound.CreditTransferParticipant" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.InboundDebitParticipant" logger="Q2" />
     </group>
     
     <group name="DebitReversal">
-        <participant class="com.mii.komi.jpos.participant.inbound.DebitReversalParticipant" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.InboundDebitReversalParticipant" logger="Q2" />
     </group>
     
     <group name="Settlement">
-        <participant class="com.mii.komi.jpos.participant.inbound.SettlementParticipant" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.InboundSettlementParticipant" logger="Q2" />
     </group>
     
     <group name="BalanceInquiry">
-        <participant class="com.mii.komi.jpos.participant.inbound.BalanceInquiryParticipant" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.InboundBalanceInquiryParticipant" logger="Q2" />
     </group>
     
     <group name="CustomerInfo">
-        <participant class="com.mii.komi.jpos.participant.inbound.CustomerInfoParticipant" logger="Q2" />
+        <participant class="com.mii.komi.jpos.participant.inbound.InboundCustomerInfoParticipant" logger="Q2" />
     </group>
     
     <group name="SendAndReceiveToCoreBanking">
         <participant class="com.mii.komi.jpos.participant.inbound.SendAndReceiveIso8583" logger="Q2">
             <property name="destination" value="mantabcorebanking" />
+            <property name="mandatory" value="3,7,11,41,39,48" />
         </participant>
     </group>
 </txnmgr>

@@ -4,9 +4,6 @@ import com.mii.komi.dto.inbound.BaseInboundRequestDTO;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jpos.iso.BaseChannel;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOServer;
@@ -15,6 +12,7 @@ import org.jpos.q2.iso.ChannelAdaptor;
 import org.jpos.q2.iso.QMUX;
 import org.jpos.q2.iso.QServer;
 import org.jpos.util.NameRegistrar;
+import org.jpos.util.NameRegistrar.NotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,33 +50,22 @@ public class ISO8583Service {
             return false;
         }
     }
-
-    public static ISOMsg sendMessage(String targetName, ISOMsg isoMsg) throws ISOException {
-        try {
-            if (isConnected(targetName)) {
-                QMUX mux = NameRegistrar.get("mux." + targetName + "-mux");
-                ISOMsg isoMsgRsp = mux.request(isoMsg, 30000);
-                if (isoMsgRsp == null) {
-                    isoMsgRsp = (ISOMsg) isoMsg.clone();
-                    isoMsgRsp.setResponseMTI();
-                    isoMsgRsp.set(39, "91");
-                }
-                return isoMsgRsp;
-            } else {
-                ISOMsg isoMsgRsp = (ISOMsg) isoMsg.clone();
-                isoMsgRsp = (ISOMsg) isoMsg.clone();
-                isoMsgRsp.setResponseMTI();
-                isoMsgRsp.set(39, "93");
-                return isoMsgRsp;
+    
+    public static int[] getInts (String name, String delimeter) {
+        String[] ss = name.split(delimeter);
+        int[] ii = new int[ss.length];
+        for (int i=0; i<ss.length; i++)
+            ii[i] = Integer.parseInt(ss[i].trim());
+        return ii;
+    }
+    
+    public static boolean validateMandatoryFields(ISOMsg isoMsg, int[] mandatoryFields) {
+        for(int m : mandatoryFields) {
+            if(!isoMsg.hasField(m)) {
+                return false;
             }
-        } catch (NameRegistrar.NotFoundException ex) {
-            ex.printStackTrace();
-            ISOMsg isoMsgRsp = (ISOMsg) isoMsg.clone();
-            isoMsgRsp = (ISOMsg) isoMsg.clone();
-            isoMsgRsp.setResponseMTI();
-            isoMsgRsp.set(39, "91");
-            return isoMsgRsp;
         }
+        return true;
     }
 
     public static ISOMsg buildFinancialMsg(String processingCode, BaseInboundRequestDTO requestDTO) throws ISOException {

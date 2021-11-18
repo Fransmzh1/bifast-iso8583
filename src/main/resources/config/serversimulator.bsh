@@ -89,7 +89,6 @@ if(message.isRequest()) {
     }
 
     message.setResponseMTI ();
-    message.unset(48);
 
     Random random = new Random (System.currentTimeMillis());
     message.set (37, Integer.toString(Math.abs(random.nextInt()) % 1000000));
