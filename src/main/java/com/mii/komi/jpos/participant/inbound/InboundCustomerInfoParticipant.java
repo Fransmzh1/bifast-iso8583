@@ -83,6 +83,10 @@ public class InboundCustomerInfoParticipant extends GenericInboundParticipantImp
             }
             rsp.setEmailAddressList(emailAddressList);
 
+            // skip empty email
+            cursor = endCursor;
+            endCursor = cursor + (50 * (9 - mailCount));
+
             cursor = endCursor;
             endCursor = cursor + 1;
             List<String> phoneNumberList = new ArrayList<String>();
@@ -95,6 +99,8 @@ public class InboundCustomerInfoParticipant extends GenericInboundParticipantImp
                 }
             }
             rsp.setPhoneNumberList(phoneNumberList);
+
+            // skip empty phone, not necessary
 
             cursor = 0;
             endCursor = 34;
