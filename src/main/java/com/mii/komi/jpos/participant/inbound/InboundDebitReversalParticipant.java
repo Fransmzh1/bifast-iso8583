@@ -50,7 +50,7 @@ public class InboundDebitReversalParticipant extends GenericInboundParticipantIm
 
             content48.append(noRef).append(originalNoRef).append(originalDateTime).append(categoryPurpose)
                     .append(debtorName).append(debtorType).append(debtorId).append(debtorAccountNumber)
-                    .append(debtorAccountNumber).append(debtorAccountType).append(debtorResidentStatus)
+                    .append(debtorAccountType).append(debtorResidentStatus)
                     .append(debtorTownName).append(amount).append(feeTransfer);
             StringBuilder content123 = new StringBuilder();
             String recipientBank = ISOUtil.strpad(debitRequest.getRecipientBank(), 35);
