@@ -86,6 +86,40 @@ public class Utility {
         return ISOUtil.zeropad(sig, 16) + dec;
     }
 
+    public static String getISODateTime(String jsondatetime) {
+        // input : yyyy-MM-ddTHH:mm:ss.SSS
+        // output : MMddHHmmss
+        int cursor = 0;
+        int endCursor = cursor + 2;
+        String mil = jsondatetime.substring(cursor, endCursor);
+
+        cursor = endCursor;
+        endCursor = cursor + 2;
+        String year = jsondatetime.substring(cursor, endCursor);
+
+        cursor = endCursor + 1;
+        endCursor = cursor + 2;
+        String month = jsondatetime.substring(cursor, endCursor);
+
+        cursor = endCursor + 1;
+        endCursor = cursor + 2;
+        String date = jsondatetime.substring(cursor, endCursor);
+
+        cursor = endCursor + 1;
+        endCursor = cursor + 2;
+        String hour = jsondatetime.substring(cursor, endCursor);
+
+        cursor = endCursor + 1;
+        endCursor = cursor + 2;
+        String minute = jsondatetime.substring(cursor, endCursor);
+
+        cursor = endCursor + 1;
+        endCursor = cursor + 2;
+        String second = jsondatetime.substring(cursor, endCursor);
+
+        return month + date + hour + minute + second;
+    }
+
     public static String getExceptionStackTraceAsString(Exception e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);

@@ -32,7 +32,7 @@ public class InboundDebitParticipant extends GenericInboundParticipantImpl {
             StringBuilder content48 = new StringBuilder();
             String noRef = ISOUtil.strpad(debitRequest.getNoRef(), 20);
             String originalNoRef = ISOUtil.strpad(debitRequest.getOriginalNoRef(), 20);
-            String originalDateTime = ISOUtil.strpad("0000000000", 10);
+            String originalDateTime = ISOUtil.strpad(Utility.getISODateTime(debitRequest.getOriginalDateTime()), 10);
             String categoryPurpose = ISOUtil.zeropad(debitRequest.getCategoryPurpose(), 2);
             String debtorName = ISOUtil.strpad(debitRequest.getDebtorName(), 140);
             String debtorType = ISOUtil.strpad(debitRequest.getDebtorType(), 35);
