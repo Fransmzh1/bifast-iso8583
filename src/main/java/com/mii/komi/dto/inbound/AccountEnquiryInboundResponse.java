@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * @author Erwin Sugianto Santoso - MII
  */
 public class AccountEnquiryInboundResponse extends BaseInboundResponseDTO {
-    
+
+    @JsonInclude(Include.NON_NULL)
     private String accountNumber;
     
     @JsonInclude(Include.NON_NULL)
