@@ -33,8 +33,8 @@ public class InboundSettlementParticipant extends GenericInboundParticipantImpl 
             String noRef = ISOUtil.strpad(settlementRequest.getNoRef(), 20);
             String originalNoRef = ISOUtil.strpad(settlementRequest.getOriginalNoRef(), 20);
             String status = ISOUtil.strpad(settlementRequest.getStatus(), 4);
-            String reason = ISOUtil.zeropad(String.valueOf(settlementRequest.getReason()), 35);
-            String additionalInfo = ISOUtil.zeropad(settlementRequest.getAdditionalInfo(), 140);
+            String reason = ISOUtil.strpad(String.valueOf(settlementRequest.getReason()), 35);
+            String additionalInfo = ISOUtil.strpad(settlementRequest.getAdditionalInfo(), 140);
             sb.append(noRef).append(originalNoRef).append(status).append(reason).append(additionalInfo);
             ISOMsg isoMsg = ISO8583Service.buildFinancialMsg(SETTLEMENT_CONFIRMATION_PC, settlementRequest);
             isoMsg.set(48, sb.toString());
