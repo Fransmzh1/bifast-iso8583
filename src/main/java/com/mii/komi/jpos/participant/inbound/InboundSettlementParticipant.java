@@ -59,6 +59,7 @@ public class InboundSettlementParticipant extends GenericInboundParticipantImpl 
         rsp.setTerminalId(isoMsg.getString(41));
         rsp.setNoRef(request.getNoRef());
         rsp.setStatus(Constants.RESPONSE_CODE_ACCEPTED);
+        rsp.setReason(Constants.REASON_CODE_SUCCESS);
         return ResponseEntity.ok(rsp);
     }
 
