@@ -129,7 +129,7 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
 
             if (privateData.length() > endCursor) {
                 cursor = endCursor;
-                endCursor = cursor + 34;
+                endCursor = cursor + 35; // update from 34
                 req.setRecipientBank(privateData.substring(cursor, endCursor).trim());
 
                 cursor = endCursor;

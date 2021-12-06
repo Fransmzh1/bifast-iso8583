@@ -1,11 +1,178 @@
 import org.jpos.iso.ISOUtil;
+
 // untuk test kondisi timeout dari core
 /*
 long start = System.currentTimeMillis();
         Thread.sleep(60000);
         System.out.println("Sleep time in ms = "+(System.currentTimeMillis()-start));
 */
+
+
 if(message.isRequest()) {
+
+    String noRef_timeout = "TOT";
+    String noRef_none = "NON";
+    String acc0_none = "00102000751";
+    String acc02 = "00102000752";
+    String acc0_blocked = "00101000757";
+    String acc0_dormant = "00101000755";
+    String merc_i = "6017";
+    String term_i = "INET000001";
+    String merc_m = "6014";
+    String term_m = "MOB0000001";
+    String merc_b = "6666";
+    String term_b = "KOMI000001";
+    String merc_x = "9999";
+    String term_x = "XXXXXXXXXX";
+
+    String status = "ACTC";
+    String reason = "U000";
+    String result = "00";
+
+    int emailCount = 3;
+    String emaila = ISOUtil.strpad("aaa.aaa@mail.com", 50);
+    String emailb = ISOUtil.strpad("bbb.bbb@mail.com", 50);
+    String emailc = ISOUtil.strpad("ccc.ccc@mail.com", 50);
+    String emailEmpty = ISOUtil.strpad("", 50 * (9 - emailCount));
+
+    int phoneCount = 2;
+    String phone1 = ISOUtil.strpad("08111100001111", 35);
+    String phone2 = ISOUtil.strpad("08222200002222", 35);
+    String phoneEmpty = ISOUtil.strpad("", 50 * (9 - phoneCount));
+
+    String accType = ISOUtil.strpad("SVGS", 35);
+    String custName = ISOUtil.strpad("Purnama Erwin", 140);
+    String custType = ISOUtil.strpad("01", 35);
+    String nid = ISOUtil.strpad("KTP-100001", 35);
+    String nidType = ISOUtil.strpad("01", 35);
+    String resType = ISOUtil.strpad("01", 35);
+    String town = ISOUtil.strpad("0300", 35);
+
+    String req = null;
+    String noRef = null;
+    String res = null;
+    String resex = null;
+
+    String mti = message.getMTI();
+    String pc = null;
+    String merc = null;
+    String term = null;
+
+    if ("0200".equals(message.getMTI())) {
+        noRef = message.getString(63);
+
+        if (noRef.startsWith(noRef_timeout)) return;
+
+        pc = message.getString(3);
+        req = message.getString(48);
+
+        if (("109000".equals(pc)) || ("109100".equals(pc)) || ("209000".equals(pc)) || ("209100".equals(pc))) {
+            // debit & debitreversal, credit & creditreversal
+            String reqex = message.getString(123);
+            String key = reqex.substring(526).trim();
+
+            result = key.substring(0, 2);
+            status = key.substring(2, 6);
+            reason = key.substring(6, 10);
+
+            String accNo = req.substring(262, 262 + 34).trim();
+            res = ISOUtil.strpad("reason description", 140) + accNo;
+        }
+        else if ("310000".equals(pc)) {
+            // balanceinquiry
+        }
+        else if ("389100".equals(pc)) {
+            // accountinquiry
+            String accNo = req.substring(75);
+            String key = req.substring(20, 55).trim();
+
+            result = key.substring(0, 2);
+            status = key.substring(2, 6);
+            reason = key.substring(6, 10);
+
+            res = accNo + accType + custName + nid + nidType + resType + town;
+        }
+        else if ("489100".equals(pc)) {
+            // settlement
+        }
+
+        // incorrect merchant, terminal
+        merc = message.getString(18);
+        term = message.getString(41);
+
+        if ((merc.equals(merc_x)) || (term.equals(term_x))) {
+            status = "RJCT";
+            reason = "U103";
+            result = "80";
+        }
+
+        // not connected
+        if (noRef.startsWith(noRef_none)) {
+            status = "RJCT";
+            reason = "U904";
+            result = "80";
+        }
+
+        res = noRef + status + ISOUtil.strpad(reason, 35) + res;
+        message.set(62, res);
+        if (resex != null) message.set(123, resex);
+    }
+    else {
+        if ("0600".equals(message.getMTI())) {
+            noRef = message.getString(63);
+
+            // timeout
+            if (noRef.startsWith(noRef_timeout)) return;
+
+            if ("909200".equals(message.getString(3))) {
+                // customerinfo
+                String req = message.getString(48);
+                String accNo = req.substring(20, 20 + 34).trim();
+
+                if ((accNo.equals(acc0_blocked)) || (accNo.equals(acc0_dormant))) {
+                    status = "RJCT";
+                    reason = "U102";
+                    result = "80";
+                }
+                if (accNo.equals(acc0_none)) {
+                    status = "RJCT";
+                    reason = "U101";
+                    result = "80";
+                }
+
+                res = emailCount + emaila + emailb + emailc + emailEmpty + phoneCount + phone1 + phone2 + phoneEmpty;
+                resex = ISOUtil.strpad(accNo, 34) + accType + custName + custType + nid + nidType + resType + town; 
+            }
+
+            // incorrect merchant, terminal
+            merc = message.getString(18);
+            term = message.getString(41);
+
+            if ((merc.equals(merc_x)) || (term.equals(term_x))) {
+                status = "RJCT";
+                reason = "U103";
+                result = "80";
+            }
+
+            // not connected
+            if (noRef.startsWith(noRef_none)) {
+                status = "RJCT";
+                reason = "U904";
+                result = "80";
+            }
+
+            res = noRef + status + ISOUtil.strpad(reason, 35) + res;
+            message.set(62, res);
+            message.set(123, resex);
+        }
+    }
+
+
+    message.setResponseMTI();
+    message.set(39, result);
+    source.send(message);
+
+    /*
     if("0200".equals(message.getMTI())) {
         if("389100".equals(message.getString(3))) {
             String reqData = message.getString(48);
@@ -61,18 +228,33 @@ if(message.isRequest()) {
             message.set(62, noref + status + reason + balance);
         }
     } else if("0600".equals(message.getMTI())) {
+
         if("909200".equals(message.getString(3))) {
+            // customer-info
             String reqData = message.getString(48);
             String noref = reqData.substring(0,20);
-            String status = "ACTC";
-            String reason = ISOUtil.strpad("U000", 35);
+
+            String accNo = reqData.substring(20, 20 + 34).trim();
+            if ((acc0_blocked.equals(accNo)) || (acc0_dormant.equals(accNo))) {
+                status = "RJCT";
+                reason = ISOUtil.strpad("U102", 35);
+                result = "80";
+            }
+            else {
+                status = "ACTC";
+                reason = ISOUtil.strpad("U000", 35);
+            }
+
             int emailAddressCount = 2;
             String emailAddress1 = ISOUtil.strpad("testemail1@mailtestserver.com", 50);
             String emailAddress2 = ISOUtil.strpad("apaajatest@gmail.com", 50);
+            String emailEmpty = ISOUtil.strpad("", 50 * (9 - emailAddressCount));
+
             int phoneNumberCount = 3;
             String phonenumber1 = ISOUtil.strpad("0888001100229", 35);
             String phonenumber2 = ISOUtil.strpad("0812293810000", 35);
             String phonenumber3 = ISOUtil.strpad("081100092841", 35);
+            String phoneEmpty = ISOUtil.strpad("", 35 * (9 - phoneNumberCount));
             
             String accountNumber = reqData.substring(20, 20 + 34);
             String accountType = ISOUtil.strpad("SVGS", 35);
@@ -83,13 +265,19 @@ if(message.isRequest()) {
             String residentStatus = ISOUtil.strpad("01", 35);
             String townName = ISOUtil.strpad("0300", 35);
 
-            message.set(62, noref + status + reason + emailAddressCount + emailAddress1 + emailAddress2 + phoneNumberCount + phonenumber1 + phonenumber2 + phonenumber3);
+            message.set(62, noref + status + reason 
+                + emailAddressCount + emailAddress1 + emailAddress2 + emailEmpty 
+                + phoneNumberCount + phonenumber1 + phonenumber2 + phonenumber3 + phoneEmpty);
             message.set(123, accountNumber + accountType + customerName + customerType + customerId + customerIdType + residentStatus + townName);
         }
     }
 
+    
     message.setResponseMTI ();
 
+    message.set(39, result);
+
+    
     Random random = new Random (System.currentTimeMillis());
     message.set (37, Integer.toString(Math.abs(random.nextInt()) % 1000000));
 
@@ -97,6 +285,8 @@ if(message.isRequest()) {
         message.set (39, "01");
     else
         message.set (39, "00");
+    
 
     source.send (message);
+    */
 }
