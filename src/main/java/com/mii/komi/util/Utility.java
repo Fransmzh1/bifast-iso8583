@@ -36,6 +36,7 @@ public class Utility {
         return textBuilder.toString();
     }
 
+    /* no longer used
     public static String getOriginalDateTimeFromOriginalNoRef(String originalNoRef) {
         int cursor = 0;
         int endCursor = cursor + 3;
@@ -68,6 +69,7 @@ public class Utility {
         String originalDateTime = month + day + hour + minute + second;
         return originalDateTime;
     }
+    */
 
     public static String getJSONMoney(String isomoney) {
         String sig = isomoney.substring(0, 16);
@@ -77,10 +79,11 @@ public class Utility {
 
     public static String getISOMoney(String jsonmoney) throws ISOException {
         // assume client will make sure input is valid number with format ################.00 (num(16,2))
-        // just in-case, set to zero otherwise
+        /* remove protection - invalid amount should generate exception
         if (jsonmoney.length() < 3) {
             return "000000000000000000"; // else returns zero
         }
+        */
         String dec = jsonmoney.substring(jsonmoney.length() - 2);
         String sig = jsonmoney.substring(0, jsonmoney.length() - 3);
         return ISOUtil.zeropad(sig, 16) + dec;

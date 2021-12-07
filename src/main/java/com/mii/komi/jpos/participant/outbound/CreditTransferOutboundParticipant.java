@@ -199,7 +199,7 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
         }
         else {
             creditTransferResponse = new CreditTransferOutboundResponse();
-            creditTransferResponse.setNoRef(req.getString(63));
+            creditTransferResponse.setNoRef(req.getString(63).substring(0, 20).trim());
             try {
                 responseCode = rr.getBody().getResponseCode();
                 reasonCode = rr.getBody().getReasonCode();

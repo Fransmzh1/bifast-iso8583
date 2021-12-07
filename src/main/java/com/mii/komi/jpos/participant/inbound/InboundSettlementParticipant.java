@@ -57,9 +57,25 @@ public class InboundSettlementParticipant extends GenericInboundParticipantImpl 
         rsp.setDateTime(request.getDateTime());
         rsp.setMerchantType(isoMsg.getString(18));
         rsp.setTerminalId(isoMsg.getString(41));
-        rsp.setNoRef(request.getNoRef());
-        rsp.setStatus(Constants.RESPONSE_CODE_ACCEPTED);
-        rsp.setReason(Constants.REASON_CODE_SUCCESS);
+
+        String res = isoMsg.getString(62);
+        
+        int cursor = 0;
+        int endCursor = 20;
+        rsp.setNoRef(res.substring(cursor, endCursor).trim());
+        
+        cursor = endCursor;
+        endCursor = cursor + 4;
+        rsp.setStatus(res.substring(cursor, endCursor).trim());
+
+        cursor = endCursor;
+        endCursor = cursor + 35;
+        rsp.setReason(res.substring(cursor, endCursor).trim());
+
+        cursor = endCursor;
+        endCursor = cursor + 140;
+        rsp.setAdditionalInfo(res.substring(cursor, endCursor).trim());
+
         return ResponseEntity.ok(rsp);
     }
 

@@ -59,7 +59,9 @@ if(message.isRequest()) {
     String term = null;
 
     if ("0200".equals(message.getMTI())) {
-        noRef = message.getString(63);
+        noRef = message.getString(63).substring(0, 20).trim();
+        // test extended #63
+        message.set(63, ISOUtil.strpad(noRef, 21));
 
         if (noRef.startsWith(noRef_timeout)) return;
 
@@ -94,6 +96,12 @@ if(message.isRequest()) {
         }
         else if ("489100".equals(pc)) {
             // settlement
+            String key = req.substring(59, 59 + 140);
+            result = key.substring(0, 2);
+            status = key.substring(2, 6);
+            reason = key.substring(6, 10);
+
+            res = ISOUtil.strpad("some additional info", 140);
         }
 
         // incorrect merchant, terminal
@@ -119,7 +127,9 @@ if(message.isRequest()) {
     }
     else {
         if ("0600".equals(message.getMTI())) {
-            noRef = message.getString(63);
+            noRef = message.getString(63).substring(0, 20).trim();
+            // test extended #63
+            message.set(63, ISOUtil.strpad(noRef, 21));
 
             // timeout
             if (noRef.startsWith(noRef_timeout)) return;

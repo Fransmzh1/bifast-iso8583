@@ -171,7 +171,7 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
         }
         else {
             accountEnquiryRsp = new AccountEnquiryOutboundResponse();
-            accountEnquiryRsp.setNoRef(req.getString(63));
+            accountEnquiryRsp.setNoRef(req.getString(63).substring(0, 20).trim());
             try {
                 responseCode = rr.getBody().getResponseCode();
                 reasonCode = rr.getBody().getReasonCode();
