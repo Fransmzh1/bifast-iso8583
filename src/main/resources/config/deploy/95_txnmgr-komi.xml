@@ -30,31 +30,31 @@
     
     <group name="OutboundAccountInquiry">
         <participant class="com.mii.komi.jpos.participant.outbound.AccountEnquiryOutboundParticipant" logger="Q2">
-            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/AccountEnquiryRequest" />
+            <property name="endpoint" value="http://10.11.100.116:9002/komi-outbound/service" />
         </participant>
     </group>
     
     <group name="PaymentStatus">
         <participant class="com.mii.komi.jpos.participant.outbound.PaymentStatusParticipant" logger="Q2">
-            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/PaymentStatus" />
+            <property name="endpoint" value="http://10.11.100.116:9002/komi-outbound/service" />
         </participant>
     </group>
     
     <group name="CreditTransfer">
         <participant class="com.mii.komi.jpos.participant.outbound.CreditTransferOutboundParticipant" logger="Q2">
-            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/CreditTransfer" />
+            <property name="endpoint" value="http://10.11.100.116:9002/komi-outbound/service" />
         </participant>
     </group>
     
     <group name="ProxyManagement">
         <participant class="com.mii.komi.jpos.participant.outbound.ProxyRegistrationParticipant" logger="Q2">
-            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/ProxyRegistrationRequest" />
+            <property name="endpoint" value="http://10.11.100.116:9002/komi-outbound/service" />
         </participant>
     </group>
     
     <group name="ProxyResolution">
         <participant class="com.mii.komi.jpos.participant.outbound.ProxyResolutionParticipant" logger="Q2">
-            <property name="endpoint" value="http://demo8364822.mockable.io/komi-outbound/service/ProxyResolutionRequest" />
+            <property name="endpoint" value="http://10.11.100.116:9002/komi-outbound/service" />
         </participant>
     </group>
     

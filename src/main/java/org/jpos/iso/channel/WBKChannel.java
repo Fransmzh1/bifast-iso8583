@@ -16,15 +16,27 @@ public class WBKChannel extends NACChannel {
     
     @Override
     protected void sendMessageLength(int len) throws IOException {
+        /*
         len += lenlen;
-        int sentLent1 = len >> 8;
+        int sentLent1 = len >> 8; // high byte
         serverOut.write (sentLent1);
-        int sentLent2 = len;
+        int sentLent2 = len & 0xFF; // low byte
         serverOut.write (sentLent2);
         if(getHost() != null) {
-            log.info("Send Hexa Message Length to " +getHost()+ " : " + Integer.toHexString(sentLent1) + "" + Integer.toHexString(sentLent2));
+            log.info("Send Hexa Message Length to " +getHost()+ " : " + Integer.toHexString(sentLent1).toUpperCase() + "" + Integer.toHexString(sentLent2).toUpperCase());
         } else {
-            log.info("Send Hexa Message Length : " + Integer.toHexString(sentLent1) + "" + Integer.toHexString(sentLent2));
+            log.info("Send Hexa Message Length : " + Integer.toHexString(sentLent1).toUpperCase() + "" + Integer.toHexString(sentLent2).toUpperCase());
+        }
+        */
+        byte[] bb = new byte[2];
+        len += lenlen;
+        bb[0] = (byte) (len >> 8);
+        bb[1] = (byte) (len & 0xFF);
+        serverOut.write(bb);
+        if(getHost() != null) {
+            log.info("Send Hexa Message Length to " + getHost()+ " : " + ISOUtil.hexString(bb));
+        } else {
+            log.info("Send Hexa Message Length : " + ISOUtil.hexString(bb));
         }
     }
     

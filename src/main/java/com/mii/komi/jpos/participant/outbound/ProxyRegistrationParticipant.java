@@ -139,6 +139,7 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
 
             root.setProxyRegistrationRequest(req);
         } catch (StringIndexOutOfBoundsException ex) {
+            ex.printStackTrace();
             root.setProxyRegistrationRequest(null);
         }
 
