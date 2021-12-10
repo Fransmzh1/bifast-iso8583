@@ -9,6 +9,8 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.jpos.iso.ISOException;
@@ -36,7 +38,11 @@ public class Utility {
         return textBuilder.toString();
     }
 
-    /* no longer used
+    public static String getOriginalDateTime() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMddHHmmss"));
+    }
+
+    /*
     public static String getOriginalDateTimeFromOriginalNoRef(String originalNoRef) {
         int cursor = 0;
         int endCursor = cursor + 3;

@@ -87,7 +87,7 @@ public class ISO8583Service {
         //isomsg.set(37, ISOUtil.zeropad(requestDTO.getTransactionId(), 12));
         isomsg.set(41, requestDTO.getTerminalId());
         //isomsg.set(49, ISO_IDR_CURRENCY_CODE);
-        isomsg.set(63, ISOUtil.strpad(requestDTO.getNoRef(), 20));
+        isomsg.set(63, requestDTO.getNoRef());
         return isomsg;
     }
 
@@ -110,7 +110,7 @@ public class ISO8583Service {
         //isomsg.set(37, ISOUtil.zeropad(requestDTO.getTransactionId(), 12));
         isomsg.set(41, requestDTO.getTerminalId());
         //isomsg.set(49, ISO_IDR_CURRENCY_CODE);
-        isomsg.set(63, ISOUtil.strpad(requestDTO.getNoRef(), 20));
+        isomsg.set(63, requestDTO.getNoRef());
         return isomsg;
     }
 

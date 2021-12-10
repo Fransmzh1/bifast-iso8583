@@ -161,7 +161,7 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
         }
         else {
             proxyRegistrationResponse = new ProxyRegistrationResponse(); // empty response
-            proxyRegistrationResponse.setNoRef(req.getString(63).substring(0, 20).trim()); // set noRef from request
+            proxyRegistrationResponse.setNoRef(req.getString(63)); // set noRef from request
             try {
                 responseCode = rr.getBody().getResponseCode();
                 reasonCode = rr.getBody().getReasonCode();

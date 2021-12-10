@@ -120,7 +120,7 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
         }
         else {
             proxyResolutionResponse = new ProxyResolutionResponse(); // empty response
-            proxyResolutionResponse.setNoRef(req.getString(63).substring(0, 20).trim()); // set noRef from request
+            proxyResolutionResponse.setNoRef(req.getString(63)); // set noRef from request
             try {
                 responseCode = rr.getBody().getResponseCode();
                 reasonCode = rr.getBody().getReasonCode();

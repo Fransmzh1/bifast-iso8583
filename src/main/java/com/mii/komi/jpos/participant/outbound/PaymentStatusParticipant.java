@@ -105,7 +105,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
         }
         else {
             paymentStatusResponse = new PaymentStatusResponse();
-            paymentStatusResponse.setNoRef(req.getString(63).substring(0, 20).trim());
+            paymentStatusResponse.setNoRef(req.getString(63));
             try {
                 responseCode = rr.getBody().getResponseCode();
                 reasonCode = rr.getBody().getReasonCode();
@@ -122,7 +122,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(reasonCode, 35))
                 .append(originalNoRef)
                 //.append(ISOUtil.strpad(Utility.getOriginalDateTimeFromOriginalNoRef(originalNoRef), 10))
-                .append(ISOUtil.strpad("", 10))
+                .append(ISOUtil.strpad(Utility.getOriginalDateTime(), 10))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCategoryPurpose(), 2))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorName(), 140))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorType(), 35))
@@ -164,7 +164,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(dto.getBody().getReasonCode(), 35))
                 .append(originalNoRef)
                 //.append(ISOUtil.strpad(Utility.getOriginalDateTimeFromOriginalNoRef(originalNoRef), 10))
-                .append(ISOUtil.strpad("", 10))
+                .append(ISOUtil.strpad(Utility.getOriginalDateTime(), 10))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCategoryPurpose(), 2))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorName(), 140))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorType(), 35))

@@ -59,9 +59,7 @@ if(message.isRequest()) {
     String term = null;
 
     if ("0200".equals(message.getMTI())) {
-        noRef = message.getString(63).substring(0, 20).trim();
-        // test extended #63
-        message.set(63, ISOUtil.strpad(noRef, 21));
+        noRef = message.getString(63);
 
         if (noRef.startsWith(noRef_timeout)) return;
 
@@ -127,9 +125,7 @@ if(message.isRequest()) {
     }
     else {
         if ("0600".equals(message.getMTI())) {
-            noRef = message.getString(63).substring(0, 20).trim();
-            // test extended #63
-            message.set(63, ISOUtil.strpad(noRef, 21));
+            noRef = message.getString(63);
 
             // timeout
             if (noRef.startsWith(noRef_timeout)) return;
