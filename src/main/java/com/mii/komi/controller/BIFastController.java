@@ -92,7 +92,24 @@ public class BIFastController {
         ResponseEntity rsp = queryTxnMgr(request, "CreditTransfer");
         return rsp;
     }
-    
+
+/*
+    @ApiOperation(value = "Credit Reversal Request", nickname = "Credit Reversal API")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully POST data"),
+        @ApiResponse(code = 401, message = "You're not authorized to access this endpoint"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page Not Found")
+    })
+    @PostMapping(path = "/creditreversal", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity creditreversal(
+            @RequestBody CreditReversalRequest request,
+            HttpServletRequest httpServletRequest) throws ISOException, NameRegistrar.NotFoundException {
+        ResponseEntity rsp = queryTxnMgr(request, "CreditReversal");
+        return rsp;
+    }
+*/    
+
     @ApiOperation(value = "Debit Reversal Request", nickname = "Debit Reversal API")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Successfully POST data"),

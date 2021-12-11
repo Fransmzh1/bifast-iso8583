@@ -1,9 +1,11 @@
 package com.mii.komi.jpos.participant.inbound;
 
+import java.io.Serializable;
+
 import com.mii.komi.service.ISO8583Service;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Utility;
-import java.io.Serializable;
+
 import org.jpos.core.Configurable;
 import org.jpos.core.Configuration;
 import org.jpos.core.ConfigurationException;
@@ -11,8 +13,6 @@ import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.q2.iso.QMUX;
 import org.jpos.transaction.Context;
-import static org.jpos.transaction.TransactionConstants.NO_JOIN;
-import static org.jpos.transaction.TransactionConstants.PREPARED;
 import org.jpos.transaction.TransactionParticipant;
 import org.jpos.util.Log;
 import org.jpos.util.NameRegistrar;

@@ -1,9 +1,9 @@
 package org.jpos.iso.channel;
 
 import java.io.IOException;
+
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOUtil;
-import org.jpos.iso.channel.NACChannel;
 import org.jpos.util.Log;
 
 /**

@@ -80,6 +80,11 @@ if(message.isRequest()) {
         }
         else if ("310000".equals(pc)) {
             // balanceinquiry
+            result = "00";
+            status = "ACTC";
+            reason = "U000";
+
+            res = "000000001000000000";
         }
         else if ("389100".equals(pc)) {
             // accountinquiry
@@ -94,7 +99,7 @@ if(message.isRequest()) {
         }
         else if ("489100".equals(pc)) {
             // settlement
-            String key = req.substring(59, 59 + 140);
+            String key = req.substring(79, 79 + 140);
             result = key.substring(0, 2);
             status = key.substring(2, 6);
             reason = key.substring(6, 10);
@@ -119,7 +124,7 @@ if(message.isRequest()) {
             result = "80";
         }
 
-        res = noRef + status + ISOUtil.strpad(reason, 35) + res;
+        res = ISOUtil.strpad(noRef, 20) + status + ISOUtil.strpad(reason, 35) + res;
         message.set(62, res);
         if (resex != null) message.set(123, resex);
     }
@@ -167,7 +172,7 @@ if(message.isRequest()) {
                 result = "80";
             }
 
-            res = noRef + status + ISOUtil.strpad(reason, 35) + res;
+            res = ISOUtil.strpad(noRef, 20) + status + ISOUtil.strpad(reason, 35) + res;
             message.set(62, res);
             message.set(123, resex);
         }

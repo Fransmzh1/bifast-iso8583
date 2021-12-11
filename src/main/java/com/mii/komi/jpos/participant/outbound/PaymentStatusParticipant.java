@@ -1,5 +1,7 @@
 package com.mii.komi.jpos.participant.outbound;
 
+import java.io.Serializable;
+
 import com.mii.komi.dto.outbound.BaseOutboundDTO;
 import com.mii.komi.dto.outbound.PaymentStatusRequest;
 import com.mii.komi.dto.outbound.PaymentStatusResponse;
@@ -10,15 +12,11 @@ import com.mii.komi.exception.HttpRequestException;
 import com.mii.komi.jpos.qbean.RestSender;
 import com.mii.komi.util.Constants;
 import com.mii.komi.util.Utility;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.transaction.Context;
-import static org.jpos.transaction.TransactionConstants.ABORTED;
-import static org.jpos.transaction.TransactionConstants.PREPARED;
 import org.jpos.util.NameRegistrar;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;

@@ -1,6 +1,5 @@
 package com.mii.komi.dto.outbound.requestroot;
 
-import com.mii.komi.dto.inbound.AccountEnquiryInboundRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mii.komi.dto.outbound.AccountEnquiryOutboundRequest;
 
