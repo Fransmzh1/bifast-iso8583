@@ -173,11 +173,14 @@ public class CreditTransferOutboundParticipant extends OutboundParticipant {
             endCursor = cursor + 35;
             req.setCreditorProxyType(privateAdditionalData.substring(cursor, endCursor).trim());
 
+            // force length
             cursor = endCursor;
-            req.setPaymentInformation(privateAdditionalData.substring(cursor).trim());
+            endCursor = cursor + 140;
+            req.setPaymentInformation(privateAdditionalData.substring(cursor, endCursor).trim());
 
             root.setCreditTransferRequest(req);
         } catch (StringIndexOutOfBoundsException ex) {
+            ex.printStackTrace();
             root.setCreditTransferRequest(null);
         }
         return root;

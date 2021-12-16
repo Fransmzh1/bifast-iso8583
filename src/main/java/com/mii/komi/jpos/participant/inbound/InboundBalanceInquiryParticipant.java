@@ -67,8 +67,10 @@ public class InboundBalanceInquiryParticipant extends GenericInboundParticipantI
         rsp.setReason(privateData.substring(cursor, endCursor).trim());
 
         if (Constants.ISO_RSP_APPROVED.equals(isoRsp.getString(39))) {
+            // force length
             cursor = endCursor;
-            rsp.setBalance(Utility.getJSONMoney(privateData.substring(cursor).trim()));
+            endCursor = cursor + 18;
+            rsp.setBalance(Utility.getJSONMoney(privateData.substring(cursor, endCursor)));
         }
         
         return ResponseEntity.ok(rsp);

@@ -103,8 +103,10 @@ public class InboundCreditReversalParticipant extends GenericInboundParticipantI
             endCursor = cursor + 140;
             rsp.setAdditionalInfo(privateData.substring(cursor, endCursor).trim());
 
+            // force length
             cursor = endCursor;
-            rsp.setAccountNumber(privateData.substring(cursor).trim());
+            endCursor = cursor + 34;
+            rsp.setAccountNumber(privateData.substring(cursor, endCursor).trim());
         }
         
         return ResponseEntity.ok(rsp);

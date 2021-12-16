@@ -134,7 +134,9 @@ public class ProxyRegistrationParticipant extends OutboundParticipant {
             endCursor = cursor + 35;
             req.setResidentialStatus(privateData.substring(cursor, endCursor).trim());
 
+            // force length
             cursor = endCursor;
+            endCursor = cursor + 35;
             req.setTownName(privateData.substring(cursor).trim());
 
             root.setProxyRegistrationRequest(req);

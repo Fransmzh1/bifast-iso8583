@@ -108,8 +108,10 @@ public class InboundDebitReversalParticipant extends GenericInboundParticipantIm
             endCursor = cursor + 140;
             rsp.setAdditionalInfo(privateData.substring(cursor, endCursor).trim());
 
+            // force only 34 char
             cursor = endCursor;
-            rsp.setAccountNumber(privateData.substring(cursor).trim());
+            endCursor = cursor + 34;
+            rsp.setAccountNumber(privateData.substring(cursor, endCursor).trim());
         }
 
         return ResponseEntity.ok(rsp);

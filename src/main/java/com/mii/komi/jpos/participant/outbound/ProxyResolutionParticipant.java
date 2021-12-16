@@ -94,11 +94,14 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
             endCursor = cursor + 12;
             req.setProxyType(privateData.substring(cursor, endCursor).trim());
 
+            // force length
             cursor = endCursor;
-            req.setProxyValue(privateData.substring(cursor).trim());
+            endCursor = cursor + 140;
+            req.setProxyValue(privateData.substring(cursor, endCursor).trim());
 
             root.setProxyResolutionRequest(req);
         } catch (StringIndexOutOfBoundsException ex) {
+            ex.printStackTrace();
             root.setProxyResolutionRequest(null);
         }
 

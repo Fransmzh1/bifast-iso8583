@@ -97,14 +97,14 @@ public class InboundAccountEnquiryParticipant extends GenericInboundParticipantI
             endCursor = cursor + 35;
             rsp.setResidentStatus(privateData.substring(cursor, endCursor).trim());
 
+            // force length
             cursor = endCursor;
-            rsp.setTownName(privateData.substring(cursor).trim());
-        }else if(Constants.ISO_RSP_REJECTED.equals(isoRsp.getString(39))){
-            cursor = endCursor;
-            endCursor = cursor + 34;
-            if(!privateData.substring(cursor, endCursor).trim().isEmpty()){
-                rsp.setAccountNumber(privateData.substring(cursor, endCursor).trim());
-            }
+            endCursor = cursor + 35;
+            rsp.setTownName(privateData.substring(cursor, endCursor).trim());
+
+        } 
+        else if(Constants.ISO_RSP_REJECTED.equals(isoRsp.getString(39))) {
+            rsp.setAccountNumber(request.getAccountNumber());
         }
         return ResponseEntity.ok(rsp);
     }
