@@ -2,4 +2,7 @@
 <qbean name="komi-restsender" logger="Q2" realm="komi-restsender"
        class="com.mii.komi.jpos.qbean.RestSender">
     <property name="authorization" value="Q0I6cGFzc3dvcmQ=" />
+    <!-- Duration, example PT30S = 30seconds -->
+    <property name="readTimeoutDuration" value="PT30S" />
+    <property name="connectTimeoutDuration" value="PT30S" />
 </qbean>

@@ -1,9 +1,12 @@
 package com.mii.komi.jpos.qbean;
 
 import com.mii.komi.exception.RestTemplateResponseErrorHandler;
+
+import java.time.Duration;
 import java.util.Arrays;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.util.NameRegistrar;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
@@ -23,8 +26,15 @@ public class RestSender extends QBeanSupport {
 
     @Override
     protected void startService() {
+        /*
         restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
+        */
+        restTemplate = new RestTemplateBuilder()
+            .errorHandler(new RestTemplateResponseErrorHandler())
+            .setConnectTimeout(Duration.parse(cfg.get("connectTimeoutDuration")))
+            .setReadTimeout(Duration.parse(cfg.get("readTimeoutDuration")))
+            .build();
     }
 
     public HttpHeaders getHeaders() {
