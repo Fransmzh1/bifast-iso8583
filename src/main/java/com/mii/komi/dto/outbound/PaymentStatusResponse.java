@@ -149,7 +149,7 @@ public class PaymentStatusResponse extends BaseOutboundDTO {
     }
 
     public String getAmount() {
-        return Optional.ofNullable(amount).orElse("0");
+        return Optional.ofNullable(amount).orElse("0.00");
     }
 
     public void setAmount(String amount) {
@@ -157,7 +157,7 @@ public class PaymentStatusResponse extends BaseOutboundDTO {
     }
 
     public String getFeeTransfer() {
-        return Optional.ofNullable(feeTransfer).orElse("0");
+        return Optional.ofNullable(feeTransfer).orElse("0.00");
     }
 
     public void setFeeTransfer(String feeTransfer) {

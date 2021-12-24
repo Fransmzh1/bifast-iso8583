@@ -128,9 +128,23 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountNumber(), 34))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountType(), 35))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorResidentialStatus(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorTownName(), 35))
+                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorTownName(), 35));
+        try {
+            sb.append(Utility.getISOMoney(paymentStatusResponse.getAmount()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            sb.append("000000000000000000");
+        }
+        try {
+            sb.append(Utility.getISOMoney(paymentStatusResponse.getFeeTransfer()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            sb.append("000000000000000000");
+        }
+        /*
                 .append(ISOUtil.strpad(paymentStatusResponse.getAmount(), 18))
                 .append(ISOUtil.strpad(paymentStatusResponse.getFeeTransfer(), 18));
+        */
         isoRsp.set(62, sb.toString());
 
         StringBuilder sb2 = new StringBuilder();
@@ -156,6 +170,7 @@ public class PaymentStatusParticipant extends OutboundParticipant {
         PaymentStatusResponse paymentStatusResponse = (PaymentStatusResponse) dto.getBody().getContent().get(0);
         String privateData = req.getString(48);
         String originalNoRef = privateData.substring(20, 40);
+       
         StringBuilder sb = new StringBuilder();
         sb.append(ISOUtil.strpad(paymentStatusResponse.getNoRef(), 20))
                 .append(ISOUtil.strpad(dto.getBody().getResponseCode(), 4))
@@ -170,9 +185,21 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountNumber(), 34))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorAccountType(), 35))
                 .append(ISOUtil.strpad(paymentStatusResponse.getDebtorResidentialStatus(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorTownName(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getAmount(), 18))
-                .append(ISOUtil.strpad(paymentStatusResponse.getFeeTransfer(), 18));
+                .append(ISOUtil.strpad(paymentStatusResponse.getDebtorTownName(), 35));
+        try {
+            sb.append(Utility.getISOMoney(paymentStatusResponse.getAmount()));
+        } catch (Exception e) {
+            // not empty nor null. invalid format
+            e.printStackTrace();
+            sb.append("000000000000000000");
+        }
+        try {
+            sb.append(Utility.getISOMoney(paymentStatusResponse.getFeeTransfer()));
+        } catch (Exception e) {
+            // not empty nor null. invalid format
+            e.printStackTrace();
+            sb.append("000000000000000000");
+        }
         isoRsp.set(62, sb.toString());
 
         StringBuilder sb2 = new StringBuilder();
