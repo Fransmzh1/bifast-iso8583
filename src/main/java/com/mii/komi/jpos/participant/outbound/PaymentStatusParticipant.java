@@ -155,7 +155,8 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountNumber(), 34))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountType(), 35))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorResidentialStatus(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorTownName(), 140))
+                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorTownName(), 35))
+                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorProxyId(), 140))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorProxyType(), 35))
                 .append(ISOUtil.strpad(paymentStatusResponse.getPaymentInformation(), 140));
         isoRsp.set(123, sb2.toString());
@@ -210,7 +211,8 @@ public class PaymentStatusParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountNumber(), 34))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorAccountType(), 35))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorResidentialStatus(), 35))
-                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorTownName(), 140))
+                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorTownName(), 35))
+                .append(ISOUtil.strpad(paymentStatusResponse.getCreditorProxyId(), 140))
                 .append(ISOUtil.strpad(paymentStatusResponse.getCreditorProxyType(), 35))
                 .append(ISOUtil.strpad(paymentStatusResponse.getPaymentInformation(), 140));
         isoRsp.set(123, sb2.toString());
