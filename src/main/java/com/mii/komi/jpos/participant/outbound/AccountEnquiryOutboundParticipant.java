@@ -98,7 +98,8 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
+                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getRecipientBank(), 35));
         isoRsp.set(62, sb.toString());
         return isoRsp;
 }
@@ -194,7 +195,8 @@ public class AccountEnquiryOutboundParticipant extends OutboundParticipant {
                 .append(ISOUtil.strpad(accountEnquiryRsp.getResidentStatus(), 35))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getTownName(), 35))
                 .append(ISOUtil.strpad(accountEnquiryRsp.getProxyId(), 140))
-                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35));
+                .append(ISOUtil.strpad(accountEnquiryRsp.getProxyType(), 35))
+                .append(ISOUtil.strpad(accountEnquiryRsp.getRecipientBank(), 35));
         isoRsp.set(62, sb.toString());
         return isoRsp;
     }

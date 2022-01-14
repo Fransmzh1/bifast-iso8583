@@ -12,6 +12,9 @@ public class AccountEnquiryOutboundResponse extends BaseOutboundDTO {
     
     @JsonProperty("AccountNumber")
     private String accountNumber;
+
+    @JsonProperty("RecipientBank")
+    private String recipientBank;
     
     @JsonProperty("ProxyType")
     private String proxyType;
@@ -49,6 +52,20 @@ public class AccountEnquiryOutboundResponse extends BaseOutboundDTO {
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    /**
+     * @return the recipientBank
+     */
+    public String getRecipientBank() {
+        return Optional.ofNullable(recipientBank).orElse("");
+    }
+
+    /**
+     * @param recipientBank the recipientBank to set
+     */
+    public void setRecipientBank(String recipientBank) {
+        this.recipientBank = recipientBank;
     }
 
     /**

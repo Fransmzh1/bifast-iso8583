@@ -1,7 +1,7 @@
 <mux class="org.jpos.q2.iso.QMUX" logger="Q2" name="mantabcorebanking-mux">
     <in>mantabcorebanking-out</in>
     <out>mantabcorebanking-in</out>
-    <key>11</key>
+    <key>3,11,63</key>
     <unhandled>unhandled</unhandled>
     <request-listener class="com.mii.komi.jpos.ISORequestHandler" logger="Q2" realm="isorequestlistener">
         <property name="queue" value="txnmgr-komi" />
