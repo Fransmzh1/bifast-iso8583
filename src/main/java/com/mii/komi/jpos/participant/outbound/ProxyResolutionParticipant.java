@@ -83,8 +83,7 @@ public class ProxyResolutionParticipant extends OutboundParticipant {
 
             cursor = endCursor;
             endCursor = cursor + 4;
-            // not used
-            //req.setLookupType(privateData.substring(cursor, endCursor));
+            req.setLookupType(privateData.substring(cursor, endCursor));
 
             cursor = endCursor;
             endCursor = cursor + 34;

@@ -21,6 +21,10 @@ public class ProxyResolutionRequest extends BaseOutboundDTO {
     @JsonProperty("ProxyValue")
     private String proxyValue;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("LookUpType")
+    private String lookupType;
+
     public String getSenderAccountNumber() {
         return senderAccountNumber.trim();
     }
@@ -45,5 +49,12 @@ public class ProxyResolutionRequest extends BaseOutboundDTO {
         this.proxyValue = proxyValue;
     }
 
+    public String getLookupType() {
+        return lookupType.trim();
+    }
+
+    public void setLookupType(String lookupType) {
+        this.lookupType = lookupType;
+    }
     
 }
