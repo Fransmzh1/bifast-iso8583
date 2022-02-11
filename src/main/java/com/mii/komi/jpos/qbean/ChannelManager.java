@@ -123,6 +123,47 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
      * @param source (Artajasa) channel
      * @param m message from client
      */
+    /**
+     * send
+     *  if reply == null or not 00
+     *      nothing - will drop
+     *  else
+     *      out signed-on
+     */
+    private void sendSignOnRequest(ISOMsg m) {
+        ISOMsg reply = null;
+        Space space = SpaceFactory.getSpace();
+        try {
+            ISOMsg msg = (ISOMsg) m.clone();
+            msg.setMTI("0800");
+            msg.set(7, ISODate.getDateTime(new Date()));
+            msg.set(11, ISOUtil.zeropad(stanSequence, 6));
+            msg.set(70, "001");
+            msg.setPackager(packager);
+            byte[] messageBody = msg.pack();
+            ChannelManager.logISOMsg(msg);
+            try {
+                space.out(mux.getName() + "-signing-on", true);
+                reply = sendMsg(msg);
+                addStanSeqence();
+                if ((reply != null) && (reply.getValue(39).equals("00"))) {
+                    space.out(mux.getName() + "-signed-on", true);
+                }
+                return;
+            } catch (Exception e) {
+                log.error(e);
+            }
+        } catch (ISOException e) {
+            log.error(e);
+        } catch (Throwable e) {
+            log.error(e);
+        }
+        // in-case of any error, clean-up
+        space.inp(mux.getName() + "-signing-on");
+        space.inp(mux.getName() + "-signed-on");
+    }
+
+/*
     private void sendSignOnRequest(ISOMsg m) {
         ISOMsg reply = null;
         Space space = SpaceFactory.getSpace();
@@ -156,7 +197,27 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
             space.in(mux.getName() + "-signed-on");
         }
     }
-
+*/
+    /**
+     * not-connected
+     *      log not-connected
+     *      rdp -signing-on
+     *      rdp -signed-on
+     * connected
+     *      if rdp -signing-on
+     *          if rdp -signed-on
+     *              send echo test
+     *          else
+     *              nothing, problem signing-on, will drop
+     *      else
+     *          send signon
+     *              set -signing-on
+     *              send
+     *              if successfull, set -signed-on
+     *              else nothing
+     *              on exception, cleanup -signing-on, -signed-on
+     *  
+     */
     protected void startService() {
         final ISOMsg m = new ISOMsg();
         Timer timer = new Timer();
@@ -188,7 +249,61 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                     log.error("Error Invalid Destination Name '"+destinationName+"', "
                             + "must be same as ChannelAdaptor name");
                 }
-                
+
+                if (connected) {
+                    Object signingon = space.rdp(mux.getName() + "-signing-on");
+                    if (signingon == null) {
+                        sendSignOnRequest(m);
+                    }
+                    else {
+                        Object signedon = space.rdp(mux.getName() + "-signed-on");
+                        if (signedon != null) {
+                            sendEchoTest();
+                        }
+                    }
+                } 
+                else {
+                    space.inp(mux.getName() + "-signing-on");
+                    space.inp(mux.getName() + "-signed-on");
+                }
+
+            }
+        }, 0, cfg.getLong("interval"));
+    }
+
+/*
+    protected void startService() {
+        final ISOMsg m = new ISOMsg();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                Space space = SpaceFactory.getSpace();
+                boolean connected = false;
+                String destinationName = cfg.get("destination");
+                try {
+                    Object o = NameRegistrar.get(destinationName);
+                    if(o instanceof QServer) {
+                        ISOServer isoServer = NameRegistrar.get("server." + destinationName);
+                        if(isoServer.getActiveConnections() > 0) {
+                            connected = true;
+                            packager = isoServer.getLastConnectedISOChannel().getPackager();
+                        } else {
+                            log.info("No Host connected to port " + isoServer.getPort());
+                        }
+                    } else if(o instanceof ChannelAdaptor) {
+                        BaseChannel ca = NameRegistrar.get("channel." + destinationName);
+                        if(mux.isConnected()) {
+                            connected = true;
+                            packager = ca.getPackager();
+                        } else {
+                            log.info("Not connected to '" + ca.getHost() + "'");
+                        }
+                    }
+                } catch (NotFoundException ex) {
+                    log.error("Error Invalid Destination Name '"+destinationName+"', "
+                            + "must be same as ChannelAdaptor name");
+                }
+
                 if (connected) {
                     Object signedOnObject = space.rd(mux.getName() + "-signed-on", 5000);
                     if (signedOnObject != null) {
@@ -199,15 +314,18 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                 } else {
                     space.in(mux.getName() + "-signed-on", 5000);
                 }
+
             }
         }, 0, cfg.getLong("interval"));
     }
+*/
 
     public ISOMsg sendMsg(ISOMsg m) throws Exception {
         return sendMsg(m, mux, MAX_TIME_OUT);
     }
 
     private ISOMsg sendMsg(ISOMsg m, QMUX mux, long timeout) throws Exception {
+
         long start = System.currentTimeMillis();
 
         ISOMsg resp = null;

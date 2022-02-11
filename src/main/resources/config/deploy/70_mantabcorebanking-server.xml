@@ -5,8 +5,16 @@
     <attr name="maxSessions" type="java.lang.Integer">100</attr>
     <channel class="org.jpos.iso.channel.WBKChannel" packager="org.jpos.iso.packager.GenericPackager" logger="Q2">
        <property name="packager-config" value="config/packager/iso87mantabcorebanking.xml" />
-       <filter class='com.mii.komi.jpos.filter.IncomingOutgoingDebugFilter' direction='both' />
+       <!-- timeout before session is dropped - disabled, used default -->
+       <!--
+       <property name="timeout" value="30000" />
+       -->
+	    <filter class='com.mii.komi.jpos.filter.IncomingOutgoingDebugFilter' direction='both' />
     </channel>
+    <!-- whitelist - disabled
+    <property name="allow" value="127.0.0.1"/>
+    -->
     <in>mantabcorebanking-in</in>
     <out>mantabcorebanking-out</out>
 </srv>
+
