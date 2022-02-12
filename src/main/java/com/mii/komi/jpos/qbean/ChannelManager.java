@@ -3,6 +3,7 @@ package com.mii.komi.jpos.qbean;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
@@ -15,6 +16,8 @@ import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOPackager;
 import org.jpos.iso.ISOServer;
+import org.jpos.iso.ISOServerClientDisconnectEvent;
+import org.jpos.iso.ISOServerEventListener;
 import org.jpos.iso.ISOUtil;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.q2.iso.ChannelAdaptor;
@@ -32,7 +35,7 @@ import org.jpos.util.NameRegistrar.NotFoundException;
  *
  * @author Erwin Sugianto Santoso - MII
  */
-public class ChannelManager extends QBeanSupport implements SpaceListener {
+public class ChannelManager extends QBeanSupport implements SpaceListener, ISOServerEventListener {
 
     private Log log = Log.getLog("Q2", "channel-manager");
 
@@ -124,11 +127,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
      * @param m message from client
      */
     /**
-     * send
-     *  if reply == null or not 00
-     *      nothing - will drop
-     *  else
-     *      out signed-on
+     * 
      */
     private void sendSignOnRequest(ISOMsg m) {
         ISOMsg reply = null;
@@ -158,7 +157,9 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
         } catch (Throwable e) {
             log.error(e);
         }
+
         // in-case of any error, clean-up
+        log.warn("Incomplete signon process, cleaning up.");
         space.inp(mux.getName() + "-signing-on");
         space.inp(mux.getName() + "-signed-on");
     }
@@ -199,26 +200,18 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
     }
 */
     /**
-     * not-connected
-     *      log not-connected
-     *      rdp -signing-on
-     *      rdp -signed-on
-     * connected
-     *      if rdp -signing-on
-     *          if rdp -signed-on
-     *              send echo test
-     *          else
-     *              nothing, problem signing-on, will drop
-     *      else
-     *          send signon
-     *              set -signing-on
-     *              send
-     *              if successfull, set -signed-on
-     *              else nothing
-     *              on exception, cleanup -signing-on, -signed-on
      *  
      */
     protected void startService() {
+
+        try {
+            ISOServer server = (ISOServer) NameRegistrar.get("server." + cfg.get("destination"));
+            server.addServerEventListener(this);
+            log.info("Registered server event listener.");
+        } catch (NotFoundException e) {
+            log.error("Failed registering server event listener : invalid destination name.");
+        }
+
         final ISOMsg m = new ISOMsg();
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -263,6 +256,7 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
                     }
                 } 
                 else {
+                    // cleanup for redundancy
                     space.inp(mux.getName() + "-signing-on");
                     space.inp(mux.getName() + "-signed-on");
                 }
@@ -406,6 +400,19 @@ public class ChannelManager extends QBeanSupport implements SpaceListener {
 
     @Override
     public void notify(Object key, Object value) {
+    }
+
+    /**
+     *  ensure tokens are removed on disconnect
+     */
+    @Override
+    public void handleISOServerEvent(EventObject ev) {
+        if (ev instanceof ISOServerClientDisconnectEvent) {            
+            Space space = SpaceFactory.getSpace();
+            space.inp(mux.getName() + "-signing-on");
+            space.inp(mux.getName() + "-signed-on");
+            return;
+        }
     }
 
 }
